@@ -15,8 +15,15 @@ const { Content } = await render(entry);
 
 <BaseLayout title={title} description={description} ogImage={ogpImage} ogType="article">
   <article class="prose max-w-none">
+    {tags.length > 0 && (
+      <div class="flex gap-2 mb-3 not-prose">
+        {tags.map((tag) => (
+          <span class="badge badge-outline">{tag}</span>
+        ))}
+      </div>
+    )}
     <h1>{title}</h1>
-    <div class="text-sm text-base-content/60 mb-4">
+    <div class="text-sm text-base-content/60 mb-6">
       <time datetime={pubDate.toISOString()}>
         {pubDate.toLocaleDateString("ja-JP")}
       </time>
@@ -24,12 +31,12 @@ const { Content } = await render(entry);
         <span> (更新: {updatedDate.toLocaleDateString("ja-JP")})</span>
       )}
     </div>
-    {tags.length > 0 && (
-      <div class="flex gap-2 mb-6 not-prose">
-        {tags.map((tag) => (
-          <span class="badge badge-outline">{tag}</span>
-        ))}
-      </div>
+    {ogpImage && (
+      <img
+        src={ogpImage}
+        alt={title}
+        class="w-full h-auto rounded-lg mb-8 not-prose"
+      />
     )}
     <Content />
   </article>
