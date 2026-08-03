@@ -1,6 +1,5 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { Image } from "astro:assets";
 
 interface Props {
   post: CollectionEntry<"blog">;
@@ -13,7 +12,7 @@ const { title, description, pubDate, tags, ogpImage } = post.data;
 <a href={`/blog/${post.id}`} class="card bg-base-200 hover:shadow-lg transition-shadow overflow-hidden">
   {ogpImage ? (
     <figure class="h-40">
-      <Image src={ogpImage} alt={title} width={600} height={340} class="w-full h-full object-cover" />
+      <img src={ogpImage} alt={title} width="600" height="340" class="w-full h-full object-cover" />
     </figure>
   ) : (
     <div class="h-40 flex items-end p-4 bg-gradient-to-br from-indigo-950 via-violet-900 to-indigo-950">
