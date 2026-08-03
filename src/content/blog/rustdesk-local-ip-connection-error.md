@@ -1,11 +1,16 @@
 ---
-title: "RustDeskのローカルIP指定で接続エラーになる問題"
-description: "RustDeskをローカルIP指定で使っていたら急に繋がらなくなった話。ARP解決の失敗だと分かり静的エントリでとりあえず解消したものの，根本原因を掘り下げたらデスクトップのWi-Fiアダプタの省電力設定が原因でした。"
+title: RustDeskのローカルIP指定で接続エラーになる問題
+description: RustDeskをローカルIP指定で使っていたら急に繋がらなくなった話。ARP解決の失敗だと分かり静的エントリでとりあえず解消したものの，根本原因を掘り下げたらデスクトップのWi-Fiアダプタの省電力設定が原因でした。
 pubDate: 2026-08-03
-tags: ["network", "rustdesk", "arp", "windows"]
+updatedDate: 2026-08-03
+tags:
+  - ネットワーク
+  - RustDesk
+  - ARP
+  - Windows
+  - Wi-Fi
 draft: true
 ---
-
 ### はじめに
 
 自室のデスクトップのWindowsで個人開発をするにあたり，作業場所を自由にしたいという気持ちから，ASUS（「エイスース」と読むことを最近知りました）のノートPCを買ってRustDeskでリモデして作業できるようにしました。
@@ -16,7 +21,7 @@ draft: true
 
 ### 症状
 
-RustDeskで対象PCに繋ごうとすると，クライアント画面に「Failed to connect to \<IP:port\>: 後でもう一度お試しください」と出てしまう。
+RustDeskで対象PCに繋ごうとすると，クライアント画面に「Failed to connect to IP:port: 後でもう一度お試しください」と出てしまう。
 
 ### 切り分け
 
@@ -74,3 +79,4 @@ Power Saving機能はそもそも「バッテリー駆動時に無線チップ�
 - [Protocol Offloads for NDIS Power Management - Windows drivers | Microsoft Learn](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/protocol-offloads-for-ndis-power-management)（ARPオフロードがスリープ/休止状態向けの機能であること）
 - [802.11 Power Management with packet capture examples - dot11zen](https://dot11zen.blogspot.com/2018/02/80211-power-management-with-packet.html)（Wi-FiのPower Saving機能が入力フレームを取りこぼす仕組み）
 - [SFP+モジュールとNICの選び方 - yoshi0808.github.io](https://yoshi0808.github.io/new-technology/2022/05/28/sfp-plus/)（NICの発熱が問題になるのはポート数が多い機器の場合であること）
+
