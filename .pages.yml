@@ -1,0 +1,138 @@
+media:
+  - name: uploads
+    label: Uploads
+    input: public/uploads
+    output: /uploads
+
+content:
+  - name: blog
+    label: Blog
+    type: collection
+    path: src/content/blog
+    format: yaml-frontmatter
+    view:
+      fields: [title, pubDate, tags, draft]
+    fields:
+      - name: title
+        label: Title
+        type: string
+      - name: description
+        label: Description
+        type: text
+      - name: pubDate
+        label: Publish Date
+        type: date
+      - name: updatedDate
+        label: Updated Date
+        type: date
+        required: false
+      - name: tags
+        label: Tags
+        type: string
+        list: true
+      - name: ogpImage
+        label: OGP Image
+        type: image
+        required: false
+      - name: draft
+        label: Draft
+        type: boolean
+        default: false
+      - name: body
+        label: Body
+        type: rich-text
+
+  - name: works
+    label: Portfolio - Works
+    type: collection
+    path: src/content/works
+    format: yaml-frontmatter
+    view:
+      fields: [title, date, tags]
+    fields:
+      - name: title
+        label: Title
+        type: string
+      - name: description
+        label: Description
+        type: text
+      - name: url
+        label: URL
+        type: string
+        required: false
+      - name: repoUrl
+        label: Repository URL
+        type: string
+        required: false
+      - name: image
+        label: Image
+        type: image
+        required: false
+      - name: tags
+        label: Tags
+        type: string
+        list: true
+      - name: date
+        label: Date
+        type: date
+      - name: body
+        label: Body
+        type: rich-text
+        required: false
+
+  - name: certifications
+    label: Portfolio - Certifications
+    type: collection
+    path: src/content/certifications
+    format: yaml-frontmatter
+    view:
+      fields: [name, date]
+    fields:
+      - name: name
+        label: Name
+        type: string
+      - name: issuer
+        label: Issuer
+        type: string
+        required: false
+      - name: date
+        label: Date
+        type: date
+      - name: url
+        label: URL
+        type: string
+        required: false
+
+  - name: profile
+    label: Profile
+    type: file
+    path: src/content/profile/profile.md
+    format: yaml-frontmatter
+    fields:
+      - name: name
+        label: Name
+        type: string
+      - name: bio
+        label: Bio
+        type: text
+      - name: avatar
+        label: Avatar
+        type: image
+        required: false
+      - name: links
+        label: Links
+        type: object
+        list: true
+        fields:
+          - name: label
+            label: Label
+            type: string
+          - name: url
+            label: URL
+            type: string
+          - name: icon
+            label: Icon
+            type: select
+            options:
+              values: [github, x, qiita, link]
+            default: link

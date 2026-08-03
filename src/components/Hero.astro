@@ -1,0 +1,61 @@
+---
+import { Image } from "astro:assets";
+import heroBridge from "../assets/hero-bridge.png";
+import { getCollection } from "astro:content";
+import SocialIcon from "./SocialIcon.astro";
+
+const profiles = await getCollection("profile");
+const profile = profiles[0]?.data;
+---
+
+<section class="mb-12">
+  <div class="relative rounded-2xl overflow-hidden">
+    <Image
+      src={heroBridge}
+      alt="ありがとう 笑顔でかわす"
+      widths={[400, 800, 1200]}
+      sizes="(max-width: 768px) 100vw, 768px"
+      class="w-full h-56 sm:h-72 object-cover"
+    />
+    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/0"></div>
+    <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
+      <h1 class="text-3xl sm:text-4xl font-bold text-white [text-shadow:0_1px_4px_rgb(0_0_0_/_0.6)]">
+        笶顔でかわす
+      </h1>
+      {profile?.bio && (
+        <p class="mt-1 text-white/90 [text-shadow:0_1px_3px_rgb(0_0_0_/_0.6)] max-w-prose">
+          {profile.bio}
+        </p>
+      )}
+    </div>
+
+    {profile && profile.links.length > 0 && (
+      <div class="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 flex gap-3 flex-wrap">
+        {profile.links.map((link) => (
+          <a
+            href={link.url}
+            class="text-white/80 hover:text-white transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={link.label}
+            title={link.label}
+          >
+            <SocialIcon icon={link.icon} class="h-7 w-7" />
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+
+  {profile?.avatar && (
+    <div class="flex items-center gap-3 mt-4">
+      <Image
+        src={profile.avatar}
+        alt={profile.name}
+        width={56}
+        height={56}
+        class="rounded-full"
+      />
+    </div>
+  )}
+</section>

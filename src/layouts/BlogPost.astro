@@ -1,0 +1,41 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { render } from "astro:content";
+import BaseLayout from "./BaseLayout.astro";
+import { getImage } from "astro:assets";
+
+interface Props {
+  entry: CollectionEntry<"blog">;
+}
+
+const { entry } = Astro.props;
+const { title, description, pubDate, updatedDate, tags, ogpImage } = entry.data;
+
+const ogImageURL = ogpImage
+  ? (await getImage({ src: ogpImage })).src
+  : undefined;
+
+const { Content } = await render(entry);
+---
+
+<BaseLayout title={title} description={description} ogImage={ogImageURL} ogType="article">
+  <article class="prose max-w-none">
+    <h1>{title}</h1>
+    <div class="text-sm text-base-content/60 mb-4">
+      <time datetime={pubDate.toISOString()}>
+        {pubDate.toLocaleDateString("ja-JP")}
+      </time>
+      {updatedDate && (
+        <span> (更新: {updatedDate.toLocaleDateString("ja-JP")})</span>
+      )}
+    </div>
+    {tags.length > 0 && (
+      <div class="flex gap-2 mb-6 not-prose">
+        {tags.map((tag) => (
+          <span class="badge badge-outline">{tag}</span>
+        ))}
+      </div>
+    )}
+    <Content />
+  </article>
+</BaseLayout>

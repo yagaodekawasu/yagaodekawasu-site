@@ -1,0 +1,58 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import BlogCard from "../components/BlogCard.astro";
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 6);
+
+const works = (await getCollection("works")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+const featuredWork = works[0];
+---
+
+<BaseLayout title="笶顔でかわす" description="技術もそれ以外も書いているブログです。">
+  <Hero />
+
+  <section class="mb-12">
+    <h2 class="text-xl font-semibold mb-4">最近の記事</h2>
+    <div class="grid gap-6 sm:grid-cols-2">
+      {posts.map((post) => <BlogCard post={post} />)}
+    </div>
+    <a href="/blog" class="btn btn-link px-0 mt-4">記事一覧へ →</a>
+  </section>
+
+  {featuredWork && (
+    <section>
+      <h2 class="text-xl font-semibold mb-4">Portfolio</h2>
+      <a
+        href="/portfolio"
+        class="card sm:card-side bg-base-200 hover:shadow-lg transition-shadow overflow-hidden"
+      >
+        {featuredWork.data.image && (
+          <figure class="sm:w-2/5 bg-base-300 overflow-hidden">
+            <Image
+              src={featuredWork.data.image}
+              alt={featuredWork.data.title}
+              width={600}
+              height={600}
+              class="w-full h-full object-contain p-6"
+            />
+          </figure>
+        )}
+        <div class="card-body">
+          <span class="badge badge-outline w-fit">制作物</span>
+          <h3 class="card-title">{featuredWork.data.title}</h3>
+          <p class="text-base-content/70">{featuredWork.data.description}</p>
+          <div class="card-actions justify-end mt-2">
+            <span class="btn btn-sm btn-primary">Portfolioを見る →</span>
+          </div>
+        </div>
+      </a>
+    </section>
+  )}
+</BaseLayout>

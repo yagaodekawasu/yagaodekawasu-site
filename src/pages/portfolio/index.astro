@@ -1,0 +1,83 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+
+const works = (await getCollection("works")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+const certifications = (await getCollection("certifications")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+
+<BaseLayout title="Portfolio | 笶顔でかわす" description="制作物と資格の一覧です。">
+  <h1 class="text-3xl font-bold mb-6">Portfolio</h1>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold mb-4">制作物</h2>
+    <div class="grid gap-6 sm:grid-cols-2">
+      {works.map((work) => (
+        <div class="card bg-base-200">
+          {work.data.image && (
+            <figure class="h-48 bg-base-300 overflow-hidden">
+              <Image
+                src={work.data.image}
+                alt={work.data.title}
+                width={600}
+                height={600}
+                class="w-full h-full object-contain p-6"
+              />
+            </figure>
+          )}
+          <div class="card-body">
+            <h3 class="card-title">{work.data.title}</h3>
+            <p>{work.data.description}</p>
+            {work.data.tags.length > 0 && (
+              <div class="flex gap-2 flex-wrap">
+                {work.data.tags.map((tag) => (
+                  <span class="badge badge-outline badge-sm">{tag}</span>
+                ))}
+              </div>
+            )}
+            <div class="card-actions justify-end mt-2">
+              {work.data.url && (
+                <a href={work.data.url} class="btn btn-sm btn-primary" target="_blank" rel="noopener noreferrer">
+                  Visit
+                </a>
+              )}
+              {work.data.repoUrl && (
+                <a href={work.data.repoUrl} class="btn btn-sm btn-outline" target="_blank" rel="noopener noreferrer">
+                  Repo
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section>
+    <h2 class="text-2xl font-semibold mb-4">資格</h2>
+    <ul class="space-y-2">
+      {certifications.map((cert) => (
+        <li class="flex justify-between border-b border-base-300 pb-2">
+          <span>
+            {cert.data.url ? (
+              <a href={cert.data.url} class="link link-hover" target="_blank" rel="noopener noreferrer">
+                {cert.data.name}
+              </a>
+            ) : (
+              cert.data.name
+            )}
+            {cert.data.issuer && <span class="text-base-content/60"> ({cert.data.issuer})</span>}
+          </span>
+          <span class="text-base-content/60 text-sm">
+            {cert.data.date.toLocaleDateString("ja-JP")}
+          </span>
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>
