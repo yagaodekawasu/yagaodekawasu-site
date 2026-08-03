@@ -1,8 +1,10 @@
 ---
-title: "Hello World"
-description: "ブログを始めました。"
+title: Hello World
+description: ブログを始めました。
 pubDate: 2026-07-29
-tags: ["日記"]
+updatedDate: 2026-08-03
+tags:
+  - 日記
+draft: false
 ---
-
-はじめまして。このブログでは技術のことも、それ以外の雑多なことも書いていく予定です。
+はじめまして。このブログでは技術のことも、それ以外の雑多なことも書いていく予定です。よろしくお願いします。
