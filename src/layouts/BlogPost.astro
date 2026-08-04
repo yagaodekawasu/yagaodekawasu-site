@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { render } from "astro:content";
+import { render, getCollection } from "astro:content";
 import BaseLayout from "./BaseLayout.astro";
 
 interface Props {
@@ -11,9 +11,23 @@ const { entry } = Astro.props;
 const { title, description, pubDate, updatedDate, tags, ogpImage } = entry.data;
 
 const { Content } = await render(entry);
+
+const profiles = await getCollection("profile");
+const authorName = profiles[0]?.data.name;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: title,
+  description,
+  datePublished: pubDate.toISOString(),
+  ...(updatedDate && { dateModified: updatedDate.toISOString() }),
+  ...(ogpImage && { image: new URL(ogpImage, Astro.site).toString() }),
+  ...(authorName && { author: { "@type": "Person", name: authorName } }),
+};
 ---
 
-<BaseLayout title={title} description={description} ogImage={ogpImage} ogType="article">
+<BaseLayout title={title} description={description} ogImage={ogpImage} ogType="article" jsonLd={jsonLd}>
   <article class="prose max-w-none">
     {tags.length > 0 && (
       <div class="flex gap-2 mb-3 not-prose">

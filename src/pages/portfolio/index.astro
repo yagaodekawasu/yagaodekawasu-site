@@ -8,9 +8,21 @@ const works = (await getCollection("works")).sort(
 const certifications = (await getCollection("certifications")).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  itemListElement: works.map((work, i) => ({
+    "@type": "SoftwareApplication",
+    position: i + 1,
+    name: work.data.title,
+    description: work.data.description,
+    ...(work.data.url && { url: work.data.url }),
+  })),
+};
 ---
 
-<BaseLayout title="Portfolio | 笶顔でかわす" description="制作物と資格の一覧です。">
+<BaseLayout title="Portfolio | 笶顔でかわす" description="制作物と資格の一覧です。" jsonLd={jsonLd}>
   <h1 class="text-3xl font-bold mb-6">Portfolio</h1>
 
   <section class="mb-12">
