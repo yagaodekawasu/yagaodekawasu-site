@@ -8,10 +8,22 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 6);
 
-const works = (await getCollection("works")).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
-);
-const featuredWork = works[0];
+const MAX_FEATURED_WORKS = 4;
+
+const featuredWorks = (
+  await getCollection("works", ({ data }) => data.featured !== false)
+)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, MAX_FEATURED_WORKS);
+
+const hasLoop = featuredWorks.length > 1;
+const slides = hasLoop
+  ? [
+      { work: featuredWorks[featuredWorks.length - 1], isClone: true },
+      ...featuredWorks.map((work) => ({ work, isClone: false })),
+      { work: featuredWorks[0], isClone: true },
+    ]
+  : featuredWorks.map((work) => ({ work, isClone: false }));
 ---
 
 <BaseLayout title="笶顔でかわす" description="技術もそれ以外も書いているブログです。">
@@ -25,33 +37,224 @@ const featuredWork = works[0];
     <a href="/blog" class="btn btn-link px-0 mt-4">記事一覧へ →</a>
   </section>
 
-  {featuredWork && (
+  {featuredWorks.length > 0 && (
     <section>
       <h2 class="text-xl font-semibold mb-4">Portfolio</h2>
-      <a
-        href="/portfolio"
-        class="card sm:card-side bg-base-200 hover:shadow-lg transition-shadow overflow-hidden"
+      <div
+        data-carousel-root
+        data-real-count={featuredWorks.length}
+        class="flex items-center gap-2 sm:gap-3"
       >
-        {featuredWork.data.image && (
-          <figure class="sm:w-2/5 bg-base-300 overflow-hidden">
-            <img
-              src={featuredWork.data.image}
-              alt={featuredWork.data.title}
-              width="600"
-              height="600"
-              class="w-full h-full object-contain p-6"
-            />
-          </figure>
+        {hasLoop && (
+          <button
+            type="button"
+            data-carousel-prev
+            aria-label="前の作品"
+            class="btn btn-circle btn-sm sm:btn-md shrink-0"
+          >
+            ❮
+          </button>
         )}
-        <div class="card-body">
-          <span class="badge badge-outline w-fit">制作物</span>
-          <h3 class="card-title">{featuredWork.data.title}</h3>
-          <p class="text-base-content/70">{featuredWork.data.description}</p>
-          <div class="card-actions justify-end mt-2">
-            <span class="btn btn-sm btn-primary">Portfolioを見る →</span>
+
+        <div class="min-w-0 flex-1">
+          <div data-carousel-track class="carousel w-full gap-4 rounded-box">
+            {slides.map(({ work, isClone }) => (
+              <div
+                data-carousel-item
+                class="carousel-item w-[85%] shrink-0"
+                aria-hidden={isClone ? "true" : undefined}
+              >
+                <a
+                  href="/portfolio"
+                  tabindex={isClone ? -1 : undefined}
+                  class="card sm:card-side bg-base-200 hover:shadow-lg transition-shadow overflow-hidden w-full"
+                >
+                  {work.data.image && (
+                    <figure class="sm:w-1/2 bg-base-300 overflow-hidden">
+                      <img
+                        src={work.data.image}
+                        alt={work.data.title}
+                        width="600"
+                        height="600"
+                        class="w-full h-full object-contain p-2"
+                      />
+                    </figure>
+                  )}
+                  <div class="card-body">
+                    <span class="badge badge-outline w-fit">制作物</span>
+                    <h3 class="card-title">{work.data.title}</h3>
+                    <p class="text-base-content/70">{work.data.description}</p>
+                  </div>
+                </a>
+              </div>
+            ))}
           </div>
+
+          {hasLoop && (
+            <div data-carousel-dots class="flex justify-center gap-2 mt-4">
+              {featuredWorks.map((_, i) => (
+                <button
+                  type="button"
+                  data-dot
+                  aria-label={`${i + 1}枚目を表示`}
+                  class="h-2.5 w-2.5 rounded-full border border-base-content/40 transition-colors"
+                />
+              ))}
+            </div>
+          )}
         </div>
-      </a>
+
+        {hasLoop && (
+          <button
+            type="button"
+            data-carousel-next
+            aria-label="次の作品"
+            class="btn btn-circle btn-sm sm:btn-md shrink-0"
+          >
+            ❯
+          </button>
+        )}
+      </div>
+      <a href="/portfolio" class="btn btn-link px-0 mt-4">もっと見る →</a>
     </section>
   )}
+
+  <script>
+    function initCarousel(root: HTMLElement) {
+      const track = root.querySelector<HTMLElement>("[data-carousel-track]");
+      if (!track) return;
+
+      const items = Array.from(
+        track.querySelectorAll<HTMLElement>("[data-carousel-item]"),
+      );
+      const dotsContainer = root.querySelector<HTMLElement>(
+        "[data-carousel-dots]",
+      );
+      const dots = dotsContainer
+        ? Array.from(
+            dotsContainer.querySelectorAll<HTMLButtonElement>("[data-dot]"),
+          )
+        : [];
+      const prevButton = root.querySelector<HTMLButtonElement>(
+        "[data-carousel-prev]",
+      );
+      const nextButton = root.querySelector<HTMLButtonElement>(
+        "[data-carousel-next]",
+      );
+      const realCount = Number(root.dataset.realCount ?? "0");
+      if (realCount <= 1) return;
+
+      const firstRealIndex = 1;
+      const lastRealIndex = items.length - 2;
+
+      let current = firstRealIndex;
+      let isProgrammatic = false;
+
+      const displayToReal = (index: number) => {
+        if (index === 0) return realCount - 1;
+        if (index === items.length - 1) return 0;
+        return index - 1;
+      };
+
+      const setActiveDot = (index: number) => {
+        const real = displayToReal(index);
+        dots.forEach((dot, i) => {
+          dot.classList.toggle("bg-base-content", i === real);
+        });
+      };
+
+      const itemLeft = (item: HTMLElement) => {
+        const trackRect = track.getBoundingClientRect();
+        const itemRect = item.getBoundingClientRect();
+        return itemRect.left - trackRect.left + track.scrollLeft;
+      };
+
+      const scrollToIndex = (index: number, behavior: "instant" | "smooth") => {
+        const item = items[index];
+        if (!item) return;
+        isProgrammatic = true;
+        track.scrollTo({ left: itemLeft(item), behavior: behavior as ScrollBehavior });
+      };
+
+      const goTo = (index: number, behavior: "instant" | "smooth") => {
+        current = index;
+        setActiveDot(current);
+        scrollToIndex(current, behavior);
+      };
+
+      // 端(クローン)まで来たら、見た目が変わらない位置へ瞬間移動してから
+      // 実カードへ1コマだけスムーズ移動する。クローンが表示された状態から
+      // 実カードへ切り替わる瞬間が発生しないので、継ぎ目のないループになる
+      const goNext = () => {
+        if (current === lastRealIndex) {
+          scrollToIndex(0, "instant");
+          current = 0;
+        }
+        goTo(current + 1, "smooth");
+      };
+
+      const goPrev = () => {
+        if (current === firstRealIndex) {
+          scrollToIndex(items.length - 1, "instant");
+          current = items.length - 1;
+        }
+        goTo(current - 1, "smooth");
+      };
+
+      // 手動ドラッグでクローンまで到達してしまった場合だけの保険
+      const fixIfClone = () => {
+        if (current === 0) {
+          current = lastRealIndex;
+          scrollToIndex(current, "instant");
+          setActiveDot(current);
+        } else if (current === items.length - 1) {
+          current = firstRealIndex;
+          scrollToIndex(current, "instant");
+          setActiveDot(current);
+        }
+      };
+
+      const handleSettle = () => {
+        if (isProgrammatic) {
+          isProgrammatic = false;
+          return;
+        }
+        let nearest = current;
+        let minDist = Infinity;
+        items.forEach((item, i) => {
+          const dist = Math.abs(itemLeft(item) - track.scrollLeft);
+          if (dist < minDist) {
+            minDist = dist;
+            nearest = i;
+          }
+        });
+        current = nearest;
+        setActiveDot(current);
+        fixIfClone();
+      };
+
+      goTo(firstRealIndex, "instant");
+
+      if ("onscrollend" in window) {
+        track.addEventListener("scrollend", handleSettle);
+      } else {
+        let settleTimeout: number;
+        track.addEventListener("scroll", () => {
+          window.clearTimeout(settleTimeout);
+          settleTimeout = window.setTimeout(handleSettle, 100);
+        });
+      }
+
+      dots.forEach((dot, i) => {
+        dot.addEventListener("click", () => goTo(i + 1, "smooth"));
+      });
+
+      prevButton?.addEventListener("click", goPrev);
+      nextButton?.addEventListener("click", goNext);
+    }
+
+    document
+      .querySelectorAll<HTMLElement>("[data-carousel-root]")
+      .forEach(initCarousel);
+  </script>
 </BaseLayout>

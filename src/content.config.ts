@@ -24,6 +24,7 @@ const works = defineCollection({
     image: z.string().optional(),
     tags: z.array(z.string()).default([]),
     date: z.coerce.date(),
+    featured: z.boolean().optional(),
   }),
 });
 
