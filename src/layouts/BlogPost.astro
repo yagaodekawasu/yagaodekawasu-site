@@ -54,4 +54,51 @@ const jsonLd = {
     )}
     <Content />
   </article>
+
+  <script>
+    async function renderMermaid() {
+      const blocks = Array.from(
+        document.querySelectorAll<HTMLElement>(
+          'article pre[data-language="mermaid"]',
+        ),
+      );
+      if (blocks.length === 0) return;
+
+      const mermaid = (await import("mermaid")).default;
+
+      const currentTheme = () =>
+        document.documentElement.getAttribute("data-theme") === "dark"
+          ? "dark"
+          : "default";
+
+      const containers = blocks.map((pre) => {
+        const source = pre.textContent ?? "";
+        const div = document.createElement("div");
+        div.className = "mermaid not-prose flex justify-center my-6";
+        div.dataset.mermaidSource = source;
+        div.textContent = source;
+        pre.replaceWith(div);
+        return div;
+      });
+
+      const draw = async () => {
+        mermaid.initialize({ startOnLoad: false, theme: currentTheme() });
+        containers.forEach((div) => {
+          div.removeAttribute("data-processed");
+          div.textContent = div.dataset.mermaidSource ?? "";
+        });
+        await mermaid.run({ nodes: containers });
+      };
+
+      await draw();
+
+      // テーマ切り替えボタンでdata-theme属性が変わったら再描画する
+      new MutationObserver(draw).observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["data-theme"],
+      });
+    }
+
+    renderMermaid();
+  </script>
 </BaseLayout>

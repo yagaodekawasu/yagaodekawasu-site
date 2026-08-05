@@ -16,6 +16,7 @@
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.1.5",
     "daisyui": "^5.7.4",
+    "mermaid": "^11.16.1",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
