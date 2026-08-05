@@ -34,7 +34,6 @@ const slides = hasLoop
     <div class="grid gap-6 sm:grid-cols-2">
       {posts.map((post) => <BlogCard post={post} />)}
     </div>
-    <a href="/blog" class="btn btn-link px-0 mt-4">記事一覧へ →</a>
   </section>
 
   {featuredWorks.length > 0 && (
@@ -81,7 +80,6 @@ const slides = hasLoop
                     </figure>
                   )}
                   <div class="card-body">
-                    <span class="badge badge-outline w-fit">制作物</span>
                     <h3 class="card-title">{work.data.title}</h3>
                     <p class="text-base-content/70">{work.data.description}</p>
                   </div>
@@ -115,7 +113,6 @@ const slides = hasLoop
           </button>
         )}
       </div>
-      <a href="/portfolio" class="btn btn-link px-0 mt-4">もっと見る →</a>
     </section>
   )}
 

@@ -57,7 +57,7 @@ const ogImageURL = new URL(ogImage, Astro.site);
     </script>
   </head>
   <body class="min-h-screen bg-base-100 text-base-content flex flex-col">
-    <header class="navbar bg-base-100 border-b border-base-300 px-4">
+    <header class="navbar bg-base-100 border-b border-base-300 px-4 sticky top-0 z-50">
       <div class="flex-1">
         <a href="/" class="btn btn-ghost text-xl">笶顔でかわす</a>
       </div>
@@ -82,7 +82,7 @@ const ogImageURL = new URL(ogImage, Astro.site);
     </main>
 
     <footer class="footer footer-center p-4 text-base-content/60 text-sm border-t border-base-300">
-      <p>&copy; {new Date().getFullYear()} yagaodekawasu</p>
+      <p>&copy; {new Date().getFullYear()} yagaodekawasu. All rights reserved.</p>
     </footer>
 
     <script is:inline>
