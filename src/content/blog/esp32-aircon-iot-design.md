@@ -48,6 +48,7 @@ draft: false
 ちなみに，私のように既に温湿度計を持っている場合はHub Mini（定価 ¥5,480）という選択肢もあります。これはMatterに対応していない機種ですが，それに数百円積めばHub Mini Matter対応（定価 ¥5,980）というやつもあります。
 
 ↓商品一覧
+
 [SwitchBotホームオートメーション - あなたの家を最先端のスマートホームへ – SwitchBot (スイッチボット)](https://www.switchbot.jp/collections/home-automation)
 
 ### 案2: ESP32 + Home Assistant
@@ -166,10 +167,10 @@ Bluetoothプロキシ用のESP32は寝室・リビング共通の設備なので
 
 ……ってClaudeが言ってます。なんかカッコつけがちですね。では。
 
-[^1]: 以下の情報を元に作成。価格は純正品のものを記載。
-[ESP32-DevKitC-32E - 秋月電子通商](https://akizukidenshi.com/catalog/g/g115673/)
-[Raspberry Pi Pico W: 開発ツール・ボード 秋月電子通商-電子部品・ネット通販](https://akizukidenshi.com/catalog/g/g117947/)
-[Arduino Uno R4 WiFi - スイッチサイエンス](https://www.switch-science.com/products/9090)
-[Remote Transmitter - ESPHome公式ドキュメント](https://esphome.io/components/remote_transmitter/)
-[RP2040: Add remote_transmitter component - GitHub PR](https://github.com/esphome/esphome/pull/5974)
+[^1]: 以下の情報を元に作成。価格は純正品のものを記載。  
+[ESP32-DevKitC-32E - 秋月電子通商](https://akizukidenshi.com/catalog/g/g115673/)  
+[Raspberry Pi Pico W: 開発ツール・ボード 秋月電子通商-電子部品・ネット通販](https://akizukidenshi.com/catalog/g/g117947/)  
+[Arduino Uno R4 WiFi - スイッチサイエンス](https://www.switch-science.com/products/9090)  
+[Remote Transmitter - ESPHome公式ドキュメント](https://esphome.io/components/remote_transmitter/)  
+[RP2040: Add remote_transmitter component - GitHub PR](https://github.com/esphome/esphome/pull/5974)  
 [Raspberry Pi Pico Wで赤外線受信をやってみる - からくり無者](https://karakuri-musha.com/inside-technology/arduino-raspberrypi-picow-tips-irreceive-module01/)

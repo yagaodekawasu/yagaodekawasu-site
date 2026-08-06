@@ -1,0 +1,37 @@
+{
+  "https://diysmartmatter.com/archives/3106": {
+    "title": "SwitchBot Hub 2の赤外線リモコンがMatter対応",
+    "description": "SwitchBot Hub 2のファームウェアが更新されて、Matter対応デバイスが拡充しました。その結果、BLEで接続するカーテン、ブラインド、ロックに加えて、ボット、センサー類と、赤外線リモコンがMatter対応しました。Hub 2の...",
+    "image": "https://diysmartmatter.com/wp-content/uploads/2023/08/hub2matter.jpg"
+  },
+  "https://media.xsight.co.jp/article/663": {
+    "title": "はじめてのHome Assistant｜特徴とインストール方法をわかりやすく紹介",
+    "description": "スマートホーム化を検討している皆さん、「Home Assistant」という名前を耳にしたことはありますか？IoT機器が日々進化する中、それらを一元的に管理し、自分のライフスタイルに合わせた自動化（オートメーション）を構築できるオープンソー [&hellip;]",
+    "image": "https://media.xsight.co.jp/wp-content/uploads/2025/07/1-1.jpg"
+  },
+  "https://space-core.jp/media/10032/": {
+    "title": "スマートホームの新規格「Matter」を解説。スマートホーム市場に与える影響とは - SpaceCore（スペースコア）",
+    "description": "2022年10月4日に無線通信規格標準化団体（Connectivity Standards Alliance）は、「Matter（マター）」バージョン1.0と「Matter」認定プログラムをリリースしました。今回は、「Matter」とはどういったものなのか。「Matter」が必要になった背景やスマートホーム市場にどのような影響があるのかについて解説します。",
+    "image": "https://space-core.jp/wp-content/uploads/2022/10/matterlogo.png"
+  },
+  "https://www.espressif.com/ja-jp/products/socs/esp32": {
+    "title": "ESP32 Wi-Fi & Bluetooth SoC",
+    "description": "ESP32 is a feature-rich SoC with integrated Wi-Fi and Bluetooth connectivity for a wide-range of IoT applications.",
+    "image": null
+  },
+  "https://www.freee.co.jp/kb/kb-hanbai-kanri/allocation/": {
+    "title": "配賦とは？按分・割賦との違いや基準、効率化させるポイントまでわかりやすく解説 | 経営者から担当者にまで役立つバックオフィス基礎知識 | クラウド会計ソフト freee",
+    "description": "配賦（はいふ）とは、複数の部門・部署にまたがってかかる人件費や光熱費などの間接費用を、一定の基準に沿って割り当てる処理です。本記事では、配賦の目的やメリット、配賦の基準や流れについて解説します。",
+    "image": "https://www.freee.co.jp/kb/ogimages/fy26q2-0228.jpg"
+  },
+  "https://www.home-assistant.io/": {
+    "title": "Home Assistant",
+    "description": "Open source home automation that puts local control and privacy first. Powered by a worldwide community of tinkerers and DIY enthusiasts. Perfect to run on a Raspberry Pi or a local server.",
+    "image": "https://www.home-assistant.io/images/default-social.png"
+  },
+  "https://www.switchbot.jp/collections/home-automation": {
+    "title": "SwitchBot製品 | ホームオートメーション",
+    "description": "SwitchBotのホームオートメーションシリーズ。最新の技術とイノベーションで、あなたの家を次世代のスマートホームへ変革します。簡単なセットアップで、日常生活をより快適に、より便利に。スマートな生活の始まりを体験しましょう。",
+    "image": "http://www.switchbot.jp/cdn/shop/collections/switchbotzhi-pin-sumatohomu-505835_1200x1200.webp?v=1655872817"
+  }
+}
