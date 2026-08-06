@@ -62,7 +62,7 @@ draft: false
 
 [ESP32 Wi-Fi & Bluetooth SoC | Espressif Systems](https://www.espressif.com/ja-jp/products/socs/esp32)
 
-他のマイコンとの比較は下表の通りです[^1](以下の情報を元に作成。価格は純正品のものを記載。)。正直ChatGPTに相談した時はESP8266は候補として挙がっていなかったんですが，こうして見ると後述のBluetoothプロキシ以外の用途ではESP8266を使った方がコスパが良かったですね……今後に活かそうと思います。
+他のマイコンとの比較は下表の通りです[^1]。正直ChatGPTに相談した時はESP8266は候補として挙がっていなかったんですが，こうして見ると後述のBluetoothプロキシ以外の用途ではESP8266を使った方がコスパが良かったですね……今後に活かそうと思います。
 
 
 | 項目 | ESP32 DevKitC | Raspberry Pi Pico W | Arduino Uno R4 WiFi | ESP8266 (NodeMCU) |
@@ -179,7 +179,7 @@ Bluetoothプロキシ用のESP32は寝室・リビング共通の設備なので
 
 ……ってClaudeが言ってます。なんかカッコつけがちですね。では。
 
-[^1:] 以下の情報を元に作成。価格は純正品のものを記載。  
+[^1]: 以下の情報を元に作成。価格は純正品のものを記載。  
 [ESP32-DevKitC-32E - 秋月電子通商](https://akizukidenshi.com/catalog/g/g115673/)  
 [Raspberry Pi Pico W: 開発ツール・ボード 秋月電子通商-電子部品・ネット通販](https://akizukidenshi.com/catalog/g/g117947/)  
 [Arduino Uno R4 WiFi - スイッチサイエンス](https://www.switch-science.com/products/9090)  
