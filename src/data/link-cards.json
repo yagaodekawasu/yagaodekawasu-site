@@ -1,8 +1,38 @@
 {
+  "https://developer.mozilla.org/ja/docs/Web/API/Web_Serial_API": {
+    "title": "Web Serial API - Web API | MDN",
+    "description": "Web Serial API は、ウェブサイトがシリアルデバイスからデータを受信したり、シリアルデバイスにデータを送信したりする方法を提供します。対象は、シリアルポートで接続されたデバイスのことも、シリアルポートとして振る舞う USB や Bluetooth のデバイスのこともあります。",
+    "image": "https://developer.mozilla.org/mdn-social-image.46ac2375.png"
+  },
   "https://diysmartmatter.com/archives/3106": {
     "title": "SwitchBot Hub 2の赤外線リモコンがMatter対応",
     "description": "SwitchBot Hub 2のファームウェアが更新されて、Matter対応デバイスが拡充しました。その結果、BLEで接続するカーテン、ブラインド、ロックに加えて、ボット、センサー類と、赤外線リモコンがMatter対応しました。Hub 2の...",
     "image": "https://diysmartmatter.com/wp-content/uploads/2023/08/hub2matter.jpg"
+  },
+  "https://docs.docker.com/compose/how-tos/networking/#change-the-network-mode": {
+    "title": "Networking in Compose",
+    "description": "How Docker Compose sets up networking between containers",
+    "image": "https://docs.docker.com/images/thumbnail.webp"
+  },
+  "https://docs.docker.com/engine/containers/start-containers-automatically/": {
+    "title": "Start containers automatically",
+    "description": "How to start containers automatically",
+    "image": "https://docs.docker.com/images/thumbnail.webp"
+  },
+  "https://esphome.io/": {
+    "title": "ESPHome",
+    "description": "Smart Home Made Simple. ESPHome turns ESP32, ESP8266, and RP2040 microcontrollers into fully-featured smart home devices.",
+    "image": "https://esphome.io/images/og.webp"
+  },
+  "https://esphome.io/components/wifi/#access-point-mode": {
+    "title": "WiFi Component",
+    "description": "Instructions for setting up the WiFi configuration for your ESP node in ESPHome.",
+    "image": "https://esphome.io/images/og.webp"
+  },
+  "https://jisaku.com/posts/esphome-home-automation": {
+    "title": "【2026年】ESPHomeで始めるホームオートメーション｜ESP32でDIYスマートホーム",
+    "description": "ESPHomeとESP32でDIYスマートホームデバイスを作る方法。温湿度センサー、スマートスイッチ、人感センサーの作例を紹介。",
+    "image": "https://images.jisaku.com/eyecatch/esphome-home-automation.jpg"
   },
   "https://media.xsight.co.jp/article/663": {
     "title": "はじめてのHome Assistant｜特徴とインストール方法をわかりやすく紹介",
@@ -13,6 +43,11 @@
     "title": "スマートホームの新規格「Matter」を解説。スマートホーム市場に与える影響とは - SpaceCore（スペースコア）",
     "description": "2022年10月4日に無線通信規格標準化団体（Connectivity Standards Alliance）は、「Matter（マター）」バージョン1.0と「Matter」認定プログラムをリリースしました。今回は、「Matter」とはどういったものなのか。「Matter」が必要になった背景やスマートホーム市場にどのような影響があるのかについて解説します。",
     "image": "https://space-core.jp/wp-content/uploads/2022/10/matterlogo.png"
+  },
+  "https://www.eisbahn.jp/yoichiro/2025/03/web-serial-api.html": {
+    "title": "Web Serial APIでブラウザからシリアルデバイスを操作する | 天使やカイザーと呼ばれて",
+    "description": null,
+    "image": null
   },
   "https://www.espressif.com/ja-jp/products/socs/esp32": {
     "title": "ESP32 Wi-Fi & Bluetooth SoC",
@@ -29,9 +64,39 @@
     "description": "Open source home automation that puts local control and privacy first. Powered by a worldwide community of tinkerers and DIY enthusiasts. Perfect to run on a Raspberry Pi or a local server.",
     "image": "https://www.home-assistant.io/images/default-social.png"
   },
+  "https://www.home-assistant.io/blog/2023/09/17/a-refreshed-logo-for-home-assistant/": {
+    "title": "A refreshed logo for Home Assistant!",
+    "description": "We’re introducing a refreshed and refined logo for Home Assistant that feels familiar. We will be rolling it out in the next couple of weeks.",
+    "image": "https://www.home-assistant.io/images/frontpage/HA10_-_Website_banner.png"
+  },
+  "https://www.home-assistant.io/installation/": {
+    "title": "Installation",
+    "description": "Install Home Assistant",
+    "image": "https://www.home-assistant.io/images/default-social.png"
+  },
+  "https://www.ibm.com/jp-ja/think/topics/firmware": {
+    "title": "ファームウェアとは| IBM",
+    "description": "ファームウェアとは、テレビやスマートフォンなどの一般tねきなハードウェア・デバイスが円滑に動作するように設計されたプログラムの一種です。",
+    "image": "https://www.ibm.com/content/dam/connectedassets-adobe-cms/worldwide-content/stock-assets/getty/image/photography/c7/6c/2020-07-1821-56-49-kok03888.jpg/_jcr_content/renditions/cq5dam.web.1280.1280.jpeg"
+  },
+  "https://www.macnica.co.jp/business/maas/columns/143480/": {
+    "title": "【リアルタイムOS（RTOS）とは】特徴やメリットを入門者向けに分かりやすく解説 - スマートシティ/モビリティ - マクニカ",
+    "description": "リアルタイムOS（RTOS）について、その特徴やメリット、組み込みリアルタイムOSなどについて分かりやすく解説しています。また、特に自動車や医療機器に多く採用されている「QNX」について紹介します。",
+    "image": "https://www.macnica.co.jp/business/maas/columns/realtime-os-column-thumbnail.jpg"
+  },
   "https://www.switchbot.jp/collections/home-automation": {
     "title": "SwitchBot製品 | ホームオートメーション",
     "description": "SwitchBotのホームオートメーションシリーズ。最新の技術とイノベーションで、あなたの家を次世代のスマートホームへ変革します。簡単なセットアップで、日常生活をより快適に、より便利に。スマートな生活の始まりを体験しましょう。",
     "image": "http://www.switchbot.jp/cdn/shop/collections/switchbotzhi-pin-sumatohomu-505835_1200x1200.webp?v=1655872817"
+  },
+  "https://zenn.dev/kanekonkon/articles/9df90ce20fbbee": {
+    "title": "Docker composeの restart の設定のまとめ",
+    "description": null,
+    "image": "https://res.cloudinary.com/zenn/image/upload/s--XWXoPFLD--/c_fit%2Cg_north_west%2Cl_text:notosansjp-medium.otf_55:Docker%2520compose%25E3%2581%25AE%2520restart%2520%25E3%2581%25AE%25E8%25A8%25AD%25E5%25AE%259A%25E3%2581%25AE%25E3%2581%25BE%25E3%2581%25A8%25E3%2582%2581%2Cw_1010%2Cx_90%2Cy_100/g_south_west%2Cl_text:notosansjp-medium.otf_37:kanekonkon%2Cx_203%2Cy_121/g_south_west%2Ch_90%2Cl_fetch:aHR0cHM6Ly9zdGF0aWMuemVubi5zdHVkaW8vdXNlci11cGxvYWQvYXZhdGFyL2ZjNzkyMjhhMjUuanBlZw==%2Cr_max%2Cw_90%2Cx_87%2Cy_95/v1627283836/default/og-base-w1200-v2.png?_a=BACMTiAE"
+  },
+  "https://zenn.dev/sakaki_web/articles/9ba5be6a74c6d8": {
+    "title": "Docker Composeのnetwork_mode解説",
+    "description": null,
+    "image": "https://res.cloudinary.com/zenn/image/upload/s--eFg2vvGq--/c_fit%2Cg_north_west%2Cl_text:notosansjp-medium.otf_55:Docker%2520Compose%25E3%2581%25AEnetwork_mode%25E8%25A7%25A3%25E8%25AA%25AC%2Cw_1010%2Cx_90%2Cy_100/g_south_west%2Cl_text:notosansjp-medium.otf_37:sakaki%2Cx_203%2Cy_121/g_south_west%2Ch_90%2Cl_fetch:aHR0cHM6Ly9zdGF0aWMuemVubi5zdHVkaW8vdXNlci11cGxvYWQvYXZhdGFyLzUzZWMyNjZjN2UuanBlZw==%2Cr_max%2Cw_90%2Cx_87%2Cy_95/v1627283836/default/og-base-w1200-v2.png?_a=BACMTiAE"
   }
 }
