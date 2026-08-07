@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import { render, getCollection } from "astro:content";
 import BaseLayout from "./BaseLayout.astro";
+import TableOfContents from "../components/TableOfContents.astro";
 
 interface Props {
   entry: CollectionEntry<"blog">;
@@ -10,7 +11,7 @@ interface Props {
 const { entry } = Astro.props;
 const { title, description, pubDate, updatedDate, tags, ogpImage } = entry.data;
 
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
 
 const profiles = await getCollection("profile");
 const authorName = profiles[0]?.data.name;
@@ -52,6 +53,7 @@ const jsonLd = {
         class="w-full h-auto rounded-lg mb-8 not-prose"
       />
     )}
+    <TableOfContents headings={headings} />
     <Content />
   </article>
 
