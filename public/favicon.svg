@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-    <text x="64" y="100" font-family="'Yu Gothic', 'Noto Sans JP', 'Meiryo', sans-serif" font-size="108" font-weight="700" text-anchor="middle">笶</text>
+    <text x="64" y="64" dominant-baseline="central" font-family="'Yu Gothic', 'Noto Sans JP', 'Meiryo', sans-serif" font-size="108" font-weight="700" text-anchor="middle">笶</text>
     <style>
         text { fill: #000; }
         @media (prefers-color-scheme: dark) {
