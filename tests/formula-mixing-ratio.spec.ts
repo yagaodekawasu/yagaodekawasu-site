@@ -23,9 +23,20 @@ test.describe("簡易版", () => {
   });
 
   test("TC-S02: 入力値変更でリアルタイムに再計算される", async ({ page }) => {
-    await page.locator("#simple-total").fill("200");
+    await page.locator("#simple-total").selectOption("200");
     await expect(page.locator("#simple-result-hot")).toHaveText("56.7");
     await expect(page.locator("#simple-result-cool")).toHaveText("143.3");
+  });
+
+  test("TC-S07: 出来上がり量は20ml刻みのプルダウンになっている", async ({ page }) => {
+    const select = page.locator("#simple-total");
+    await expect(select).toHaveJSProperty("tagName", "SELECT");
+    const values = await select.locator("option").allTextContents();
+    expect(values).toEqual([
+      "20", "40", "60", "80", "100", "120", "140", "160", "180",
+      "200", "220", "240", "260", "280", "300",
+    ]);
+    await expect(select).toHaveValue("140");
   });
 
   test("TC-S03: お湯が湯冷まし以下の温度でエラーになる", async ({ page }) => {
@@ -69,6 +80,12 @@ test.describe("詳細版", () => {
   test("TC-D01: デフォルト値で正しい結果が表示される", async ({ page }) => {
     await expect(page.locator("#detail-result-hot")).toHaveText("46.7");
     await expect(page.locator("#detail-result-cool")).toHaveText("93.3");
+  });
+
+  test("TC-D07: 出来上がり量は20ml刻みのプルダウンになっている", async ({ page }) => {
+    const select = page.locator("#detail-total");
+    await expect(select).toHaveJSProperty("tagName", "SELECT");
+    await expect(select).toHaveValue("140");
   });
 
   test("TC-D02: 室温同期チェックボックスは初期状態でチェック済み・入力欄は無効化されている", async ({
@@ -120,7 +137,7 @@ test.describe("詳細版", () => {
 test.describe("入力値の永続化", () => {
   test("TC-P01: 簡易版の入力値がリロード後も保持される", async ({ page }) => {
     await gotoFresh(page);
-    await page.locator("#simple-total").fill("200");
+    await page.locator("#simple-total").selectOption("200");
     await page.reload();
 
     await expect(page.locator("#simple-total")).toHaveValue("200");

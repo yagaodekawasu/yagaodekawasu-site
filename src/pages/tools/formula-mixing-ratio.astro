@@ -1,5 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const TOTAL_OPTIONS = Array.from({ length: 15 }, (_, i) => (i + 1) * 20);
 ---
 
 <BaseLayout
@@ -25,7 +27,11 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
       <form id="simple-form" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <label class="form-control">
           <div class="label"><span class="label-text">出来上がり量（ml）</span></div>
-          <input type="number" step="20" id="simple-total" class="input input-bordered" value="140" />
+          <select id="simple-total" class="select select-bordered">
+            {TOTAL_OPTIONS.map((v) => (
+              <option value={v} selected={v === 140}>{v}</option>
+            ))}
+          </select>
         </label>
         <label class="form-control">
           <div class="label"><span class="label-text">目標の温度（℃）</span></div>
@@ -70,7 +76,11 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
       <form id="detail-form" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <label class="form-control">
           <div class="label"><span class="label-text">出来上がり量（ml）</span></div>
-          <input type="number" step="20" id="detail-total" class="input input-bordered" value="140" />
+          <select id="detail-total" class="select select-bordered">
+            {TOTAL_OPTIONS.map((v) => (
+              <option value={v} selected={v === 140}>{v}</option>
+            ))}
+          </select>
         </label>
         <label class="form-control">
           <div class="label"><span class="label-text">目標の温度（℃）</span></div>
@@ -420,6 +430,14 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
       saveInputs();
     });
     document.getElementById("detail-bottle-material")?.addEventListener("change", () => {
+      calcDetail();
+      saveInputs();
+    });
+    document.getElementById("simple-total")?.addEventListener("change", () => {
+      calcSimple();
+      saveInputs();
+    });
+    document.getElementById("detail-total")?.addEventListener("change", () => {
       calcDetail();
       saveInputs();
     });
