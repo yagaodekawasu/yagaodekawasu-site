@@ -4,11 +4,11 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 
 <BaseLayout
   title="調乳ヘルパー | 笶顔でかわす"
-  description="調乳する際のお湯（75℃以上）と湯冷ましを、目標の温度・量になるよう混ぜる比率を計算するツール。哺乳瓶の材質や粉ミルクの温度まで考慮した詳細版もあります。"
+  description="調乳する際のお湯（70℃以上）と湯冷ましを、目標の温度・量になるよう混ぜる比率を計算するツール。哺乳瓶の材質や粉ミルクの温度まで考慮した詳細版もあります。"
 >
   <h1 class="text-3xl font-bold mb-2">調乳ヘルパー</h1>
   <p class="text-base-content/70 mb-6">
-    お湯（75℃以上）と湯冷ましを混ぜて、目標の温度・出来上がり量にするための分量を計算します。
+    お湯（70℃以上）と湯冷ましを混ぜて、目標の温度・出来上がり量にするための分量を計算します。
   </p>
 
   <div role="tablist" class="tabs tabs-lifted mb-6">
@@ -25,11 +25,11 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
       <form id="simple-form" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <label class="form-control">
           <div class="label"><span class="label-text">出来上がり量（ml）</span></div>
-          <input type="number" step="any" id="simple-total" class="input input-bordered" value="140" />
+          <input type="number" step="20" id="simple-total" class="input input-bordered" value="140" />
         </label>
         <label class="form-control">
           <div class="label"><span class="label-text">目標の温度（℃）</span></div>
-          <input type="number" step="any" id="simple-target" class="input input-bordered" value="40" />
+          <input type="number" step="any" id="simple-target" class="input input-bordered" value="37" />
         </label>
         <label class="form-control">
           <div class="label"><span class="label-text">お湯の温度（℃）</span></div>
@@ -41,9 +41,6 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
         </label>
       </form>
 
-      <div id="simple-warning" class="alert alert-warning mt-4 hidden">
-        <span></span>
-      </div>
       <div id="simple-error" class="alert alert-error mt-4 hidden">
         <span></span>
       </div>
@@ -73,11 +70,11 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
       <form id="detail-form" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <label class="form-control">
           <div class="label"><span class="label-text">出来上がり量（ml）</span></div>
-          <input type="number" step="any" id="detail-total" class="input input-bordered" value="140" />
+          <input type="number" step="20" id="detail-total" class="input input-bordered" value="140" />
         </label>
         <label class="form-control">
           <div class="label"><span class="label-text">目標の温度（℃）</span></div>
-          <input type="number" step="any" id="detail-target" class="input input-bordered" value="40" />
+          <input type="number" step="any" id="detail-target" class="input input-bordered" value="37" />
         </label>
         <label class="form-control">
           <div class="label"><span class="label-text">お湯の温度（℃）</span></div>
@@ -134,9 +131,6 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
         粉ミルクの比熱・哺乳瓶材質の比熱・放熱の冷却係数は、いずれも一般的な目安値を固定で使用しています。実際の哺乳瓶の形状や環境によって誤差があります。
       </p>
 
-      <div id="detail-warning" class="alert alert-warning mt-4 hidden">
-        <span></span>
-      </div>
       <div id="detail-error" class="alert alert-error mt-4 hidden">
         <span></span>
       </div>
@@ -165,8 +159,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
     const CW = 4.186; // 水の比熱 J/g℃
     const CP = 1.67; // 粉ミルクの比熱 J/g℃（目安値）
     const COOLING_K = 0.03; // 調乳中の放熱を近似する冷却係数（1/分、目安値）
-    const MIN_HOT_TEMP = 70; // これ未満はエラーとする下限温度
-    const RECOMMENDED_HOT_TEMP = 75; // 推奨温度（未満は警告）
+    const MIN_HOT_TEMP = 70; // これ未満はエラーとする下限温度（WHOのお湯70℃以上という目安に基づく）
 
     const STORAGE_KEY = "formula-mixing-ratio-inputs";
     const PERSIST_IDS = [
@@ -270,12 +263,10 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
       const hot = num("simple-hot");
       const cool = num("simple-cool");
 
-      const warningEl = document.getElementById("simple-warning")!;
       const errorEl = document.getElementById("simple-error")!;
       const hotResultEl = document.getElementById("simple-result-hot")!;
       const coolResultEl = document.getElementById("simple-result-cool")!;
 
-      hideMessage(warningEl);
       hideMessage(errorEl);
 
       if ([total, target, hot, cool].some((v) => Number.isNaN(v))) {
@@ -307,13 +298,6 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
         return;
       }
 
-      if (hot < RECOMMENDED_HOT_TEMP) {
-        showMessage(
-          warningEl,
-          `調乳では${RECOMMENDED_HOT_TEMP}℃以上のお湯を使うことが推奨されています。`,
-        );
-      }
-
       renderResult(hotResultEl, coolResultEl, hotVolume, coolVolume);
     }
 
@@ -333,12 +317,10 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
       const roomTemp = num("detail-room-temp");
       const mixingTime = num("detail-mixing-time");
 
-      const warningEl = document.getElementById("detail-warning")!;
       const errorEl = document.getElementById("detail-error")!;
       const hotResultEl = document.getElementById("detail-result-hot")!;
       const coolResultEl = document.getElementById("detail-result-cool")!;
 
-      hideMessage(warningEl);
       hideMessage(errorEl);
 
       const values = [
@@ -390,13 +372,6 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
         );
         clearResult(hotResultEl, coolResultEl);
         return;
-      }
-
-      if (hot < RECOMMENDED_HOT_TEMP) {
-        showMessage(
-          warningEl,
-          `調乳では${RECOMMENDED_HOT_TEMP}℃以上のお湯を使うことが推奨されています。`,
-        );
       }
 
       renderResult(hotResultEl, coolResultEl, hotVolume, coolVolume);
