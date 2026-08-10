@@ -1,0 +1,455 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="調乳のお湯・湯冷まし 調合比率計算 | 笶顔でかわす"
+  description="調乳する際のお湯（75℃以上）と湯冷ましを、目標の温度・量になるよう混ぜる比率を計算するツール。哺乳瓶の材質や粉ミルクの温度まで考慮した詳細版もあります。"
+>
+  <h1 class="text-3xl font-bold mb-2">調乳のお湯・湯冷まし 調合比率計算</h1>
+  <p class="text-base-content/70 mb-6">
+    お湯（75℃以上）と湯冷ましを混ぜて、目標の温度・出来上がり量にするための分量を計算します。
+  </p>
+
+  <div role="tablist" class="tabs tabs-lifted mb-6">
+    <input
+      type="radio"
+      name="mode-tabs"
+      role="tab"
+      class="tab"
+      aria-label="簡易版"
+      id="tab-simple"
+      checked
+    />
+    <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+      <form id="simple-form" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <label class="form-control">
+          <div class="label"><span class="label-text">出来上がり量（ml）</span></div>
+          <input type="number" step="any" id="simple-total" class="input input-bordered" value="140" />
+        </label>
+        <label class="form-control">
+          <div class="label"><span class="label-text">目標の温度（℃）</span></div>
+          <input type="number" step="any" id="simple-target" class="input input-bordered" value="40" />
+        </label>
+        <label class="form-control">
+          <div class="label"><span class="label-text">お湯の温度（℃）</span></div>
+          <input type="number" step="any" id="simple-hot" class="input input-bordered" value="80" />
+        </label>
+        <label class="form-control">
+          <div class="label"><span class="label-text">湯冷ましの温度（℃）</span></div>
+          <input type="number" step="any" id="simple-cool" class="input input-bordered" value="20" />
+        </label>
+      </form>
+
+      <div id="simple-warning" class="alert alert-warning mt-4 hidden">
+        <span></span>
+      </div>
+      <div id="simple-error" class="alert alert-error mt-4 hidden">
+        <span></span>
+      </div>
+      <div id="simple-result" class="stats shadow mt-6 w-full">
+        <div class="stat">
+          <div class="stat-title">お湯</div>
+          <div class="stat-value text-primary" id="simple-result-hot">-</div>
+          <div class="stat-desc">ml</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">湯冷まし</div>
+          <div class="stat-value text-secondary" id="simple-result-cool">-</div>
+          <div class="stat-desc">ml</div>
+        </div>
+      </div>
+    </div>
+
+    <input
+      type="radio"
+      name="mode-tabs"
+      role="tab"
+      class="tab"
+      aria-label="詳細版"
+      id="tab-detail"
+    />
+    <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+      <form id="detail-form" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <label class="form-control">
+          <div class="label"><span class="label-text">出来上がり量（ml）</span></div>
+          <input type="number" step="any" id="detail-total" class="input input-bordered" value="140" />
+        </label>
+        <label class="form-control">
+          <div class="label"><span class="label-text">目標の温度（℃）</span></div>
+          <input type="number" step="any" id="detail-target" class="input input-bordered" value="40" />
+        </label>
+        <label class="form-control">
+          <div class="label"><span class="label-text">お湯の温度（℃）</span></div>
+          <input type="number" step="any" id="detail-hot" class="input input-bordered" value="80" />
+        </label>
+        <label class="form-control">
+          <div class="label"><span class="label-text">湯冷ましの温度（℃）</span></div>
+          <input type="number" step="any" id="detail-cool" class="input input-bordered" value="20" />
+        </label>
+        <label class="form-control">
+          <div class="label"><span class="label-text">粉ミルクの質量（g）</span></div>
+          <input type="number" step="any" id="detail-powder-mass" class="input input-bordered" value="18" />
+        </label>
+        <div class="form-control">
+          <div class="label"><span class="label-text">粉ミルクの温度（℃）</span></div>
+          <input type="number" step="any" id="detail-powder-temp" class="input input-bordered" value="25" disabled />
+          <label class="label cursor-pointer justify-start gap-2 mt-1">
+            <input type="checkbox" id="detail-powder-temp-sync" class="checkbox checkbox-sm" checked />
+            <span class="label-text">室温と同じにする</span>
+          </label>
+        </div>
+        <label class="form-control">
+          <div class="label"><span class="label-text">哺乳瓶の材質</span></div>
+          <select id="detail-bottle-material" class="select select-bordered">
+            <option value="0.84">ガラス</option>
+            <option value="1.9" selected>ポリプロピレン（PP）</option>
+            <option value="1.7">PPSU</option>
+            <option value="1.2">シリコーン</option>
+          </select>
+        </label>
+        <label class="form-control">
+          <div class="label"><span class="label-text">哺乳瓶の質量（g）</span></div>
+          <input type="number" step="any" id="detail-bottle-mass" class="input input-bordered" value="50" />
+        </label>
+        <div class="form-control">
+          <div class="label"><span class="label-text">哺乳瓶の温度（℃）</span></div>
+          <input type="number" step="any" id="detail-bottle-temp" class="input input-bordered" value="25" disabled />
+          <label class="label cursor-pointer justify-start gap-2 mt-1">
+            <input type="checkbox" id="detail-bottle-temp-sync" class="checkbox checkbox-sm" checked />
+            <span class="label-text">室温と同じにする</span>
+          </label>
+        </div>
+        <label class="form-control">
+          <div class="label"><span class="label-text">室温（℃）</span></div>
+          <input type="number" step="any" id="detail-room-temp" class="input input-bordered" value="25" />
+        </label>
+        <label class="form-control sm:col-span-2">
+          <div class="label"><span class="label-text">調乳にかかる時間（分）</span></div>
+          <input type="number" step="any" id="detail-mixing-time" class="input input-bordered" value="1" />
+        </label>
+      </form>
+
+      <p class="text-xs text-base-content/50 mt-3">
+        粉ミルクの比熱・哺乳瓶材質の比熱・放熱の冷却係数は、いずれも一般的な目安値を固定で使用しています。実際の哺乳瓶の形状や環境によって誤差があります。
+      </p>
+
+      <div id="detail-warning" class="alert alert-warning mt-4 hidden">
+        <span></span>
+      </div>
+      <div id="detail-error" class="alert alert-error mt-4 hidden">
+        <span></span>
+      </div>
+      <div id="detail-result" class="stats shadow mt-6 w-full">
+        <div class="stat">
+          <div class="stat-title">お湯</div>
+          <div class="stat-value text-primary" id="detail-result-hot">-</div>
+          <div class="stat-desc">ml</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">湯冷まし</div>
+          <div class="stat-value text-secondary" id="detail-result-cool">-</div>
+          <div class="stat-desc">ml</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert mt-8 text-sm">
+    <span>
+      このツールの計算結果はあくまで目安です。実際の調乳方法・お湯の温度・分量は、必ず粉ミルクのパッケージの表示や医療者の指示に従ってください。
+    </span>
+  </div>
+
+  <script>
+    const CW = 4.186; // 水の比熱 J/g℃
+    const CP = 1.67; // 粉ミルクの比熱 J/g℃（目安値）
+    const COOLING_K = 0.03; // 調乳中の放熱を近似する冷却係数（1/分、目安値）
+    const MIN_HOT_TEMP = 70; // これ未満はエラーとする下限温度
+    const RECOMMENDED_HOT_TEMP = 75; // 推奨温度（未満は警告）
+
+    const STORAGE_KEY = "formula-mixing-ratio-inputs";
+    const PERSIST_IDS = [
+      "simple-total",
+      "simple-target",
+      "simple-hot",
+      "simple-cool",
+      "detail-total",
+      "detail-target",
+      "detail-hot",
+      "detail-cool",
+      "detail-powder-mass",
+      "detail-powder-temp",
+      "detail-bottle-material",
+      "detail-bottle-mass",
+      "detail-bottle-temp",
+      "detail-room-temp",
+      "detail-mixing-time",
+      "detail-powder-temp-sync",
+      "detail-bottle-temp-sync",
+    ];
+
+    function saveInputs() {
+      const data: Record<string, string | boolean> = {};
+      for (const id of PERSIST_IDS) {
+        const el = document.getElementById(id) as
+          | HTMLInputElement
+          | HTMLSelectElement
+          | null;
+        if (!el) continue;
+        data[id] = el instanceof HTMLInputElement && el.type === "checkbox" ? el.checked : el.value;
+      }
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      } catch {
+        // プライベートブラウジング等でlocalStorageが使えない場合は何もしない
+      }
+    }
+
+    function restoreInputs() {
+      let raw: string | null = null;
+      try {
+        raw = localStorage.getItem(STORAGE_KEY);
+      } catch {
+        return;
+      }
+      if (!raw) return;
+      try {
+        const data = JSON.parse(raw) as Record<string, string | boolean>;
+        for (const id of PERSIST_IDS) {
+          if (!(id in data)) continue;
+          const el = document.getElementById(id) as
+            | HTMLInputElement
+            | HTMLSelectElement
+            | null;
+          if (!el) continue;
+          if (el instanceof HTMLInputElement && el.type === "checkbox") {
+            el.checked = Boolean(data[id]);
+          } else {
+            el.value = String(data[id]);
+          }
+        }
+      } catch {
+        // 壊れた保存データは無視する
+      }
+    }
+
+    function showMessage(el: HTMLElement, text: string) {
+      const span = el.querySelector("span");
+      if (span) span.textContent = text;
+      el.classList.remove("hidden");
+    }
+
+    function hideMessage(el: HTMLElement) {
+      el.classList.add("hidden");
+    }
+
+    function renderResult(
+      hotEl: HTMLElement,
+      coolEl: HTMLElement,
+      hot: number,
+      cool: number,
+    ) {
+      hotEl.textContent = hot.toFixed(1);
+      coolEl.textContent = cool.toFixed(1);
+    }
+
+    function clearResult(hotEl: HTMLElement, coolEl: HTMLElement) {
+      hotEl.textContent = "-";
+      coolEl.textContent = "-";
+    }
+
+    function num(id: string): number {
+      const el = document.getElementById(id) as HTMLInputElement | null;
+      return el ? parseFloat(el.value) : NaN;
+    }
+
+    function calcSimple() {
+      const total = num("simple-total");
+      const target = num("simple-target");
+      const hot = num("simple-hot");
+      const cool = num("simple-cool");
+
+      const warningEl = document.getElementById("simple-warning")!;
+      const errorEl = document.getElementById("simple-error")!;
+      const hotResultEl = document.getElementById("simple-result-hot")!;
+      const coolResultEl = document.getElementById("simple-result-cool")!;
+
+      hideMessage(warningEl);
+      hideMessage(errorEl);
+
+      if ([total, target, hot, cool].some((v) => Number.isNaN(v))) {
+        clearResult(hotResultEl, coolResultEl);
+        return;
+      }
+
+      if (hot <= cool) {
+        showMessage(errorEl, "お湯の温度は湯冷ましの温度より高くしてください。");
+        clearResult(hotResultEl, coolResultEl);
+        return;
+      }
+
+      if (hot < MIN_HOT_TEMP) {
+        showMessage(errorEl, `調乳のお湯は${MIN_HOT_TEMP}℃以上にしてください。`);
+        clearResult(hotResultEl, coolResultEl);
+        return;
+      }
+
+      const hotVolume = (total * (target - cool)) / (hot - cool);
+      const coolVolume = total - hotVolume;
+
+      if (hotVolume < 0 || coolVolume < 0) {
+        showMessage(
+          errorEl,
+          "この条件では計算できません。目標の温度が、お湯と湯冷ましの温度の範囲内になるようにしてください。",
+        );
+        clearResult(hotResultEl, coolResultEl);
+        return;
+      }
+
+      if (hot < RECOMMENDED_HOT_TEMP) {
+        showMessage(
+          warningEl,
+          `調乳では${RECOMMENDED_HOT_TEMP}℃以上のお湯を使うことが推奨されています。`,
+        );
+      }
+
+      renderResult(hotResultEl, coolResultEl, hotVolume, coolVolume);
+    }
+
+    function calcDetail() {
+      const total = num("detail-total");
+      const target = num("detail-target");
+      const hot = num("detail-hot");
+      const cool = num("detail-cool");
+      const powderMass = num("detail-powder-mass");
+      const powderTemp = num("detail-powder-temp");
+      const bottleMaterialEl = document.getElementById(
+        "detail-bottle-material",
+      ) as HTMLSelectElement | null;
+      const bottleCb = bottleMaterialEl ? parseFloat(bottleMaterialEl.value) : NaN;
+      const bottleMass = num("detail-bottle-mass");
+      const bottleTemp = num("detail-bottle-temp");
+      const roomTemp = num("detail-room-temp");
+      const mixingTime = num("detail-mixing-time");
+
+      const warningEl = document.getElementById("detail-warning")!;
+      const errorEl = document.getElementById("detail-error")!;
+      const hotResultEl = document.getElementById("detail-result-hot")!;
+      const coolResultEl = document.getElementById("detail-result-cool")!;
+
+      hideMessage(warningEl);
+      hideMessage(errorEl);
+
+      const values = [
+        total,
+        target,
+        hot,
+        cool,
+        powderMass,
+        powderTemp,
+        bottleCb,
+        bottleMass,
+        bottleTemp,
+        roomTemp,
+        mixingTime,
+      ];
+      if (values.some((v) => Number.isNaN(v))) {
+        clearResult(hotResultEl, coolResultEl);
+        return;
+      }
+
+      if (hot <= cool) {
+        showMessage(errorEl, "お湯の温度は湯冷ましの温度より高くしてください。");
+        clearResult(hotResultEl, coolResultEl);
+        return;
+      }
+
+      if (hot < MIN_HOT_TEMP) {
+        showMessage(errorEl, `調乳のお湯は${MIN_HOT_TEMP}℃以上にしてください。`);
+        clearResult(hotResultEl, coolResultEl);
+        return;
+      }
+
+      // 調乳中の放熱を見込み、混合直後は目標温度より少し高めを狙う
+      const adjustedTarget =
+        roomTemp + (target - roomTemp) * Math.exp(COOLING_K * mixingTime);
+
+      const powderHeat = powderMass * CP * (adjustedTarget - powderTemp);
+      const bottleHeat = bottleMass * bottleCb * (adjustedTarget - bottleTemp);
+
+      const hotVolume =
+        (total * CW * (adjustedTarget - cool) + powderHeat + bottleHeat) /
+        (CW * (hot - cool));
+      const coolVolume = total - hotVolume;
+
+      if (hotVolume < 0 || coolVolume < 0) {
+        showMessage(
+          errorEl,
+          "この条件では計算できません。お湯・湯冷ましの温度や、粉・哺乳瓶の温度と質量を見直してください。",
+        );
+        clearResult(hotResultEl, coolResultEl);
+        return;
+      }
+
+      if (hot < RECOMMENDED_HOT_TEMP) {
+        showMessage(
+          warningEl,
+          `調乳では${RECOMMENDED_HOT_TEMP}℃以上のお湯を使うことが推奨されています。`,
+        );
+      }
+
+      renderResult(hotResultEl, coolResultEl, hotVolume, coolVolume);
+    }
+
+    function setupRoomTempSync(checkboxId: string, targetId: string) {
+      const checkbox = document.getElementById(checkboxId) as HTMLInputElement | null;
+      const target = document.getElementById(targetId) as HTMLInputElement | null;
+      const roomTemp = document.getElementById("detail-room-temp") as HTMLInputElement | null;
+      if (!checkbox || !target || !roomTemp) return;
+
+      const sync = () => {
+        if (checkbox.checked) {
+          target.value = roomTemp.value;
+          target.disabled = true;
+        } else {
+          target.disabled = false;
+        }
+      };
+
+      checkbox.addEventListener("change", () => {
+        sync();
+        calcDetail();
+        saveInputs();
+      });
+      roomTemp.addEventListener("input", () => {
+        if (checkbox.checked) {
+          target.value = roomTemp.value;
+        }
+      });
+
+      sync();
+    }
+
+    restoreInputs();
+
+    setupRoomTempSync("detail-powder-temp-sync", "detail-powder-temp");
+    setupRoomTempSync("detail-bottle-temp-sync", "detail-bottle-temp");
+
+    document.getElementById("simple-form")?.addEventListener("input", () => {
+      calcSimple();
+      saveInputs();
+    });
+    document.getElementById("detail-form")?.addEventListener("input", () => {
+      calcDetail();
+      saveInputs();
+    });
+    document.getElementById("detail-bottle-material")?.addEventListener("change", () => {
+      calcDetail();
+      saveInputs();
+    });
+
+    calcSimple();
+    calcDetail();
+  </script>
+</BaseLayout>
