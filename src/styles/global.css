@@ -7,3 +7,20 @@
 .prose :is(h1, h2, h3, h4, h5, h6) {
   scroll-margin-top: 5rem;
 }
+
+.apps-dropdown .dropdown-content {
+  transition-property: opacity, scale, translate, display, overlay;
+  transition-duration: 0.25s;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  translate: 0 -0.5rem;
+}
+
+.apps-dropdown:focus-within .dropdown-content {
+  translate: 0 0;
+}
+
+@starting-style {
+  .apps-dropdown:focus-within .dropdown-content {
+    translate: 0 -0.5rem;
+  }
+}
