@@ -94,6 +94,19 @@ test.describe("簡易版", () => {
     await expect(page.locator("#simple-result-cool")).toHaveText("23.3");
     await expect(page.locator("#simple-cooling-info")).toBeHidden();
   });
+
+  test("TC-S11: 計算の根拠セクションは初期状態で閉じており、開くと計算式等が表示される", async ({
+    page,
+  }) => {
+    const details = page.locator("#simple-rationale");
+    await expect(details).toHaveJSProperty("open", false);
+
+    await details.locator("summary").click();
+    await expect(details).toHaveJSProperty("open", true);
+    await expect(details).toContainText("出来上がり量");
+    await expect(details).toContainText("7.5分");
+    await expect(details).toContainText("東京都水道局");
+  });
 });
 
 test.describe("簡易版（メーカー規定・追加冷却、8月に日付固定）", () => {
@@ -126,8 +139,8 @@ test.describe("詳細版", () => {
   });
 
   test("TC-D01: デフォルト値で正しい結果が表示される", async ({ page }) => {
-    await expect(page.locator("#detail-result-hot")).toHaveText("46.7");
-    await expect(page.locator("#detail-result-cool")).toHaveText("93.3");
+    await expect(page.locator("#detail-result-hot")).toHaveText("46.3");
+    await expect(page.locator("#detail-result-cool")).toHaveText("93.7");
   });
 
   test("TC-D07: 出来上がり量は20ml刻みのプルダウンになっている", async ({ page }) => {
@@ -149,8 +162,8 @@ test.describe("詳細版", () => {
     await page.locator("#detail-room-temp").fill("30");
     await expect(page.locator("#detail-powder-temp")).toHaveValue("30");
     await expect(page.locator("#detail-bottle-temp")).toHaveValue("30");
-    await expect(page.locator("#detail-result-hot")).toHaveText("43.8");
-    await expect(page.locator("#detail-result-cool")).toHaveText("96.2");
+    await expect(page.locator("#detail-result-hot")).toHaveText("43.5");
+    await expect(page.locator("#detail-result-cool")).toHaveText("96.5");
   });
 
   test("TC-D04: チェックを外すと編集可能になり、以後は室温変更の影響を受けない", async ({
@@ -198,11 +211,35 @@ test.describe("詳細版（メーカー規定・追加冷却、8月に日付固�
 
     const infoEl = page.locator("#detail-cooling-info");
     await expect(infoEl).toBeVisible();
-    await expect(page.locator("#detail-cooling-result-temp")).toHaveText("45.0");
-    await expect(page.locator("#detail-cooling-diff")).toHaveText("8.0");
+    await expect(page.locator("#detail-cooling-result-temp")).toHaveText("45.2");
+    await expect(page.locator("#detail-cooling-diff")).toHaveText("8.2");
     await expect(page.locator("#detail-cooling-tap-temp")).toHaveText("25.2");
-    await expect(page.locator("#detail-cooling-tap-minutes")).toHaveText("3.9");
+    await expect(page.locator("#detail-cooling-tap-minutes")).toHaveText("4.0");
     await expect(page.locator("#detail-cooling-ice-minutes")).toHaveText("1.5");
+  });
+});
+
+test.describe("詳細版（計算の根拠）", () => {
+  test.beforeEach(async ({ page }) => {
+    await gotoFresh(page);
+    await openDetailTab(page);
+  });
+
+  test("TC-D09: 計算の根拠セクションは初期状態で閉じており、開くと計算式等が表示される", async ({
+    page,
+  }) => {
+    const details = page.locator("#detail-rationale");
+    await expect(details).toHaveJSProperty("open", false);
+
+    await details.locator("summary").click();
+    await expect(details).toHaveJSProperty("open", true);
+    await expect(details).toContainText("熱量収支");
+    await expect(details).toContainText("調乳にかかる時間");
+    await expect(details).toContainText("4.186");
+    await expect(details).toContainText("1.52");
+    await expect(details).toContainText("0.80");
+    await expect(details).toContainText("7.5分");
+    await expect(details).toContainText("東京都水道局");
   });
 });
 

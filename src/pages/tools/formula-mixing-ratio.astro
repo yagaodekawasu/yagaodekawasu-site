@@ -84,6 +84,28 @@ const TOTAL_OPTIONS = Array.from({ length: 15 }, (_, i) => (i + 1) * 20);
           </p>
         </div>
       </div>
+
+      <details id="simple-rationale" class="collapse collapse-arrow border border-base-300 bg-base-100 mt-4 text-sm">
+        <summary class="collapse-title font-semibold">この計算の根拠を見る</summary>
+        <div class="collapse-content">
+          <h4 class="font-semibold mt-2 mb-2">基本の計算式</h4>
+          <p class="mb-3 leading-relaxed">お湯と湯冷ましを混ぜたときの温度は、量と温度の加重平均になります。これを目標温度になるよう逆算しています。</p>
+          <pre class="bg-base-300 border border-base-content/10 rounded-lg p-3 my-3 overflow-x-auto text-xs leading-6 whitespace-pre-wrap">お湯の量 = 出来上がり量 ×（目標温度 − 湯冷ましの温度）÷（お湯の温度 − 湯冷ましの温度）</pre>
+
+          <h4 class="font-semibold mt-6 mb-2">メーカー規定がある場合</h4>
+          <p class="mb-3 leading-relaxed">「お湯は出来上がり量の1/2以上」等の規定があるメーカーの粉ミルクでは、規定量に届かない場合はお湯の量を規定の最低量まで優先的に引き上げます。その結果、出来上がり時点の温度は目標より高くなります。</p>
+
+          <h4 class="font-semibold mt-6 mb-2">追加で冷やす時間の目安</h4>
+          <p class="mb-3 leading-relaxed">ニュートンの冷却法則（温度差に比例して冷める、という近似）をもとに算出しています。</p>
+          <pre class="bg-base-300 border border-base-content/10 rounded-lg p-3 my-3 overflow-x-auto text-xs leading-6 whitespace-pre-wrap">時間 = 7.5分 × ln((出来上がり温度 − 冷却水の温度) ÷（目標温度 − 冷却水の温度))</pre>
+          <p class="mb-3 leading-relaxed">「7.5分」は、育児メディアで紹介されている「流水で人肌程度まで冷やすには約5〜7分」という目安から逆算した値です。哺乳瓶の素材・太さ等で実際の冷え方は変わるため、あくまで目安としてご利用ください。</p>
+
+          <h4 class="font-semibold mt-6 mb-2">流水（水道水）の温度</h4>
+          <p class="leading-relaxed">
+            季節によって水道水の温度は大きく変わるため、<a href="https://www.waterworks.metro.tokyo.lg.jp/suigen/topic/03/" class="link" target="_blank" rel="noopener noreferrer">東京都水道局が公表している月別の平均水温</a>（都庁付近・実測値）を使い、現在の月に応じて自動的に切り替えています。氷水の場合は0℃として計算します。
+          </p>
+        </div>
+      </details>
     </div>
 
     <input
@@ -131,10 +153,10 @@ const TOTAL_OPTIONS = Array.from({ length: 15 }, (_, i) => (i + 1) * 20);
         <label class="form-control">
           <div class="label"><span class="label-text">哺乳瓶の材質</span></div>
           <select id="detail-bottle-material" class="select select-bordered">
-            <option value="0.84">ガラス</option>
-            <option value="1.9" selected>ポリプロピレン（PP）</option>
-            <option value="1.7">PPSU</option>
-            <option value="1.2">シリコーン</option>
+            <option value="0.80">ガラス</option>
+            <option value="1.8" selected>ポリプロピレン（PP）</option>
+            <option value="0.97">PPSU</option>
+            <option value="1.4">シリコーン</option>
           </select>
         </label>
         <label class="form-control">
@@ -168,7 +190,7 @@ const TOTAL_OPTIONS = Array.from({ length: 15 }, (_, i) => (i + 1) * 20);
       </form>
 
       <p class="text-xs text-base-content/50 mt-3">
-        粉ミルクの比熱・哺乳瓶材質の比熱・放熱の冷却係数は、いずれも一般的な目安値を固定で使用しています。実際の哺乳瓶の形状や環境によって誤差があります。
+        粉ミルクの比熱・哺乳瓶材質の比熱は出典を明記した近似値、放熱の冷却係数は目安値を、それぞれ固定で使用しています（詳しくは下の「計算の根拠」参照）。実際の哺乳瓶の形状や環境によって誤差があります。
       </p>
 
       <div id="detail-error" class="alert alert-error mt-4 hidden">
@@ -200,6 +222,105 @@ const TOTAL_OPTIONS = Array.from({ length: 15 }, (_, i) => (i + 1) * 20);
           </p>
         </div>
       </div>
+
+      <details id="detail-rationale" class="collapse collapse-arrow border border-base-300 bg-base-100 mt-4 text-sm">
+        <summary class="collapse-title font-semibold">この計算の根拠を見る</summary>
+        <div class="collapse-content">
+          <h4 class="font-semibold mt-2 mb-2">基本の考え方（熱量収支）</h4>
+          <p class="mb-3 leading-relaxed">詳細版では、お湯・湯冷ましの量だけでなく、粉ミルクや哺乳瓶自体が持つ熱も考慮した熱量収支の式で計算しています。</p>
+          <pre class="bg-base-300 border border-base-content/10 rounded-lg p-3 my-3 overflow-x-auto text-xs leading-6 whitespace-pre-wrap">お湯の量 × 水の比熱 ×（お湯の温度 − 湯冷ましの温度）
+  = 出来上がり量 × 水の比熱 ×（目標温度 − 湯冷ましの温度）
+  + 粉ミルクの質量 × 粉ミルクの比熱 ×（目標温度 − 粉ミルクの温度）
+  + 哺乳瓶の質量 × 哺乳瓶の比熱 ×（目標温度 − 哺乳瓶の温度）</pre>
+          <p class="mb-3 leading-relaxed">
+            この式をお湯の量について解いています。使用している比熱の値（単位はJ/g℃）のうち、水の4.186は物理定数です。それ以外は、次の根拠にもとづく近似値を固定で使用しています。
+          </p>
+          <div class="overflow-x-auto mt-2 mb-3 rounded-box border border-base-content/10">
+            <table class="table table-sm">
+              <thead>
+                <tr class="bg-base-200">
+                  <th>対象</th>
+                  <th>比熱</th>
+                  <th>根拠</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-base-content/10">
+                <tr>
+                  <td class="whitespace-nowrap">粉ミルク</td>
+                  <td class="font-mono text-right">1.52</td>
+                  <td>脱脂粉乳の組成データにSiebel式を適用した推定値<sup><a href="#fn-cp-powder" id="fnref-cp-powder" class="link">1</a></sup></td>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap">哺乳瓶（ガラス）</td>
+                  <td class="font-mono text-right">0.80</td>
+                  <td>耐熱ガラスの実測値2点の中央値<sup><a href="#fn-cp-glass" id="fnref-cp-glass" class="link">2</a></sup></td>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap">哺乳瓶（PP）</td>
+                  <td class="font-mono text-right">1.8</td>
+                  <td>ポリプロピレンの実測データ（温度依存）の中央値<sup><a href="#fn-cp-pp" id="fnref-cp-pp" class="link">3</a></sup></td>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap">哺乳瓶（PPSU）</td>
+                  <td class="font-mono text-right">0.97</td>
+                  <td>PPSUの実測値<sup><a href="#fn-cp-ppsu" id="fnref-cp-ppsu" class="link">4</a></sup></td>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap">哺乳瓶（シリコーン）</td>
+                  <td class="font-mono text-right">1.4</td>
+                  <td>シリコーンゴムの実測値幅の中央値<sup><a href="#fn-cp-silicone" id="fnref-cp-silicone" class="link">5</a></sup></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 class="font-semibold mt-6 mb-2">調乳中の放熱の考慮</h4>
+          <p class="mb-3 leading-relaxed">お湯・湯冷まし・粉ミルク・哺乳瓶を混ぜてから飲ませるまでの「調乳にかかる時間」の間、出来上がったミルクは室温に向かって少しずつ冷めていきます。そのため、混ぜた直後は目標よりやや高めの温度になるように調整しています。</p>
+          <pre class="bg-base-300 border border-base-content/10 rounded-lg p-3 my-3 overflow-x-auto text-xs leading-6 whitespace-pre-wrap">混ぜた直後に狙う温度 = 室温 + (目標温度 − 室温) × e^(冷却係数 × 調乳にかかる時間)</pre>
+          <p class="mb-3 leading-relaxed">冷却係数は目安値（0.03/分）を固定で使用しています。</p>
+
+          <h4 class="font-semibold mt-6 mb-2">メーカー規定がある場合</h4>
+          <p class="mb-3 leading-relaxed">「お湯は出来上がり量の1/2以上」等の規定があるメーカーの粉ミルクでは、規定量に届かない場合はお湯の量を規定の最低量まで優先的に引き上げます。詳細版では、上の熱量収支の式を「混ぜた直後の温度」について解き直し、そこからさらに調乳にかかる時間の分だけ室温側に冷めた後の温度を、出来上がり時点の温度として表示しています。</p>
+
+          <h4 class="font-semibold mt-6 mb-2">追加で冷やす時間の目安</h4>
+          <p class="mb-3 leading-relaxed">ニュートンの冷却法則（温度差に比例して冷める、という近似）をもとに算出しています。</p>
+          <pre class="bg-base-300 border border-base-content/10 rounded-lg p-3 my-3 overflow-x-auto text-xs leading-6 whitespace-pre-wrap">時間 = 7.5分 × ln((出来上がり温度 − 冷却水の温度) ÷（目標温度 − 冷却水の温度))</pre>
+          <p class="mb-3 leading-relaxed">「7.5分」は、育児メディアで紹介されている「流水で人肌程度まで冷やすには約5〜7分」という目安から逆算した値です。哺乳瓶の素材・太さ等で実際の冷え方は変わるため、あくまで目安としてご利用ください。</p>
+
+          <h4 class="font-semibold mt-6 mb-2">流水（水道水）の温度</h4>
+          <p class="leading-relaxed">
+            季節によって水道水の温度は大きく変わるため、<a href="https://www.waterworks.metro.tokyo.lg.jp/suigen/topic/03/" class="link" target="_blank" rel="noopener noreferrer">東京都水道局が公表している月別の平均水温</a>（都庁付近・実測値）を使い、現在の月に応じて自動的に切り替えています。氷水の場合は0℃として計算します。
+          </p>
+
+          <div class="mt-6 pt-3 border-t border-base-content/10">
+            <h4 class="font-semibold text-xs text-base-content/60 mb-2">注釈</h4>
+            <ol class="list-decimal list-outside pl-4 text-xs text-base-content/70 space-y-3">
+              <li id="fn-cp-powder">
+                粉ミルクそのものの比熱を報告した一次資料は見つからなかったため、組成から比熱を推定するSiebel式（食品工学で広く用いられる線形混合則モデル）を、組成が近い脱脂粉乳のデータに適用した。
+                <pre class="bg-base-300 border border-base-content/10 rounded-lg p-3 my-2 overflow-x-auto text-xs leading-6 whitespace-pre-wrap">cp = 4.180×水分割合 + 1.547×たんぱく質割合 + 1.672×脂質割合 + 1.42×炭水化物割合 + 0.836×灰分割合（J/g℃）</pre>
+                <a href="https://fooddb.mext.go.jp/details/details.pl?ITEM_NO=13_13010_7" class="link" target="_blank" rel="noopener noreferrer">文部科学省「食品成分表」脱脂粉乳データ</a>（可食部100gあたり 水分3.8g・たんぱく質34.0g・脂質1.0g・炭水化物53.3g・灰分7.9g）を代入すると cp ≈ 1.52 J/g℃。脱脂粉乳と育児用粉ミルク（調製粉乳）は乳糖・植物油脂・ミネラル等の添加により組成が完全には一致しないため、あくまで近似値である。
+                <a href="#fnref-cp-powder" class="link ml-1">↩</a>
+              </li>
+              <li id="fn-cp-glass">
+                哺乳瓶のガラスは一般的なソーダ石灰ガラスではなく耐熱ガラス（ホウケイ酸ガラス、Pyrex/Duran系統）。<a href="https://www.endmemo.com/chem/specificheatsearch.php?q=Pyrex+Glass" class="link" target="_blank" rel="noopener noreferrer">物性値データベース</a>にPyrex Glassの比熱として0.75 J/g・Kと0.84 J/g・Kの2値の記載があり、その中央値を採用した。
+                <a href="#fnref-cp-glass" class="link ml-1">↩</a>
+              </li>
+              <li id="fn-cp-pp">
+                <a href="https://materials.fsri.org/materialdetail/polypropylene-pp" class="link" target="_blank" rel="noopener noreferrer">FSRI（Fire Safety Research Institute）材料データベース</a>の熱流計実測データでは、ポリプロピレンの比熱は10〜40℃の範囲で1.69〜1.92 J/(g・K)と温度依存性を示す。その中央値（約1.8）は、本ツールが想定する室温付近（20〜30℃）の実測値ともおおむね一致する。
+                <a href="#fnref-cp-pp" class="link ml-1">↩</a>
+              </li>
+              <li id="fn-cp-ppsu">
+                PPSUの比熱は970 J/kg・K（＝0.97 J/g・K）と単一の実測値として報告されている。同族のポリスルホン系樹脂（PSU 0.91〜1.0、PES 1.1 J/g・K）とも整合する範囲にある。（出典: <a href="https://www.makeitfrom.com/material-properties/Polyphenylsulfone-PPSU" class="link" target="_blank" rel="noopener noreferrer">makeitfrom.com「Polyphenylsulfone (PPSU)」</a>）
+                <a href="#fnref-cp-ppsu" class="link ml-1">↩</a>
+              </li>
+              <li id="fn-cp-silicone">
+                シリコーンゴムの比熱は配合（充填剤・加硫条件）による差が大きく、複数資料でおよそ1.2〜1.6 J/g℃の幅が見られる。その中央値を採用した。（出典: <a href="https://www.makeitfrom.com/material-properties/Silicone-Rubber-PMQ-PVMQ-VMQ" class="link" target="_blank" rel="noopener noreferrer">makeitfrom.com「Silicone Rubber (PMQ, PVMQ, VMQ)」</a>）
+                <a href="#fnref-cp-silicone" class="link ml-1">↩</a>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </details>
     </div>
   </div>
 
@@ -211,7 +332,7 @@ const TOTAL_OPTIONS = Array.from({ length: 15 }, (_, i) => (i + 1) * 20);
 
   <script>
     const CW = 4.186; // 水の比熱 J/g℃
-    const CP = 1.67; // 粉ミルクの比熱 J/g℃（目安値）
+    const CP = 1.52; // 粉ミルクの比熱 J/g℃（MEXT脱脂粉乳データにSiebel式を適用した近似値）
     const COOLING_K = 0.03; // 調乳中の放熱を近似する冷却係数（1/分、目安値）
     const MIN_HOT_TEMP = 70; // これ未満はエラーとする下限温度（WHOのお湯70℃以上という目安に基づく）
 
