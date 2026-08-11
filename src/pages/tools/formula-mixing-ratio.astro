@@ -45,6 +45,14 @@ const TOTAL_OPTIONS = Array.from({ length: 15 }, (_, i) => (i + 1) * 20);
           <div class="label"><span class="label-text">湯冷ましの温度（℃）</span></div>
           <input type="number" step="any" id="simple-cool" class="input input-bordered" value="20" />
         </label>
+        <label class="form-control">
+          <div class="label"><span class="label-text">メーカー規定（お湯の最低割合）</span></div>
+          <select id="simple-regulation" class="select select-bordered">
+            <option value="">なし</option>
+            <option value="1/2">1/2以上</option>
+            <option value="2/3">2/3以上</option>
+          </select>
+        </label>
       </form>
 
       <div id="simple-error" class="alert alert-error mt-4 hidden">
@@ -60,6 +68,20 @@ const TOTAL_OPTIONS = Array.from({ length: 15 }, (_, i) => (i + 1) * 20);
           <div class="stat-title">湯冷まし</div>
           <div class="stat-value text-secondary" id="simple-result-cool">-</div>
           <div class="stat-desc">ml</div>
+        </div>
+      </div>
+      <div id="simple-cooling-info" class="alert alert-warning mt-4 hidden text-sm">
+        <div class="flex flex-col items-start gap-2">
+          <p>
+            メーカー規定によりお湯を多めにしたため、出来上がり時点で<span id="simple-cooling-result-temp" class="font-bold"></span>℃になります（目標より<span id="simple-cooling-diff" class="font-bold"></span>℃高め）。人肌まで冷ますには、以下を目安に追加で冷やしてください。
+          </p>
+          <ul class="list-disc list-inside">
+            <li>流水（水道水 約<span id="simple-cooling-tap-temp"></span>℃）で冷やす場合: 約<span id="simple-cooling-tap-minutes"></span>分</li>
+            <li>氷水（0℃）で冷やす場合: 約<span id="simple-cooling-ice-minutes"></span>分</li>
+          </ul>
+          <p class="text-xs text-base-content/60">
+            哺乳瓶の素材・太さ等で実際の時間は変わるため、あくまで目安です。こまめに確認してください。
+          </p>
         </div>
       </div>
     </div>
@@ -135,6 +157,14 @@ const TOTAL_OPTIONS = Array.from({ length: 15 }, (_, i) => (i + 1) * 20);
           <div class="label"><span class="label-text">調乳にかかる時間（分）</span></div>
           <input type="number" step="any" id="detail-mixing-time" class="input input-bordered" value="1" />
         </label>
+        <label class="form-control sm:col-span-2">
+          <div class="label"><span class="label-text">メーカー規定（お湯の最低割合）</span></div>
+          <select id="detail-regulation" class="select select-bordered">
+            <option value="">なし</option>
+            <option value="1/2">1/2以上</option>
+            <option value="2/3">2/3以上</option>
+          </select>
+        </label>
       </form>
 
       <p class="text-xs text-base-content/50 mt-3">
@@ -156,6 +186,20 @@ const TOTAL_OPTIONS = Array.from({ length: 15 }, (_, i) => (i + 1) * 20);
           <div class="stat-desc">ml</div>
         </div>
       </div>
+      <div id="detail-cooling-info" class="alert alert-warning mt-4 hidden text-sm">
+        <div class="flex flex-col items-start gap-2">
+          <p>
+            メーカー規定によりお湯を多めにしたため、出来上がり時点で<span id="detail-cooling-result-temp" class="font-bold"></span>℃になります（目標より<span id="detail-cooling-diff" class="font-bold"></span>℃高め）。人肌まで冷ますには、以下を目安に追加で冷やしてください。
+          </p>
+          <ul class="list-disc list-inside">
+            <li>流水（水道水 約<span id="detail-cooling-tap-temp"></span>℃）で冷やす場合: 約<span id="detail-cooling-tap-minutes"></span>分</li>
+            <li>氷水（0℃）で冷やす場合: 約<span id="detail-cooling-ice-minutes"></span>分</li>
+          </ul>
+          <p class="text-xs text-base-content/60">
+            哺乳瓶の素材・太さ等で実際の時間は変わるため、あくまで目安です。こまめに確認してください。
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -171,12 +215,22 @@ const TOTAL_OPTIONS = Array.from({ length: 15 }, (_, i) => (i + 1) * 20);
     const COOLING_K = 0.03; // 調乳中の放熱を近似する冷却係数（1/分、目安値）
     const MIN_HOT_TEMP = 70; // これ未満はエラーとする下限温度（WHOのお湯70℃以上という目安に基づく）
 
+    // メーカー規定によりお湯を規定量まで増やした際、流水・氷水での追加冷却時間をニュートンの冷却法則で近似する時定数（分）。
+    // 「流水で人肌程度まで冷やすには約5〜7分」という一般的な目安から逆算した値。
+    const NEWTON_TAU = 7.5;
+    const ICE_WATER_TEMP = 0; // 氷水を想定した冷却水温（℃）
+    // 東京都水道局が公開する月別平均水温（℃、都庁付近・令和5年度実測）。添字0=1月〜11=12月。
+    const TAP_WATER_MONTHLY_TEMP = [
+      8.9, 8.3, 10.6, 14.1, 18.2, 22.1, 25.3, 25.2, 21.8, 16.9, 12.8, 9.5,
+    ];
+
     const STORAGE_KEY = "formula-mixing-ratio-inputs";
     const PERSIST_IDS = [
       "simple-total",
       "simple-target",
       "simple-hot",
       "simple-cool",
+      "simple-regulation",
       "detail-total",
       "detail-target",
       "detail-hot",
@@ -188,6 +242,7 @@ const TOTAL_OPTIONS = Array.from({ length: 15 }, (_, i) => (i + 1) * 20);
       "detail-bottle-temp",
       "detail-room-temp",
       "detail-mixing-time",
+      "detail-regulation",
       "detail-powder-temp-sync",
       "detail-bottle-temp-sync",
     ];
@@ -267,6 +322,58 @@ const TOTAL_OPTIONS = Array.from({ length: 15 }, (_, i) => (i + 1) * 20);
       return el ? parseFloat(el.value) : NaN;
     }
 
+    function regulationFraction(id: string): number {
+      const el = document.getElementById(id) as HTMLSelectElement | null;
+      if (!el || !el.value) return 0;
+      const [n, d] = el.value.split("/").map(Number);
+      return n / d;
+    }
+
+    function currentTapWaterTemp(): number {
+      return TAP_WATER_MONTHLY_TEMP[new Date().getMonth()];
+    }
+
+    // ニュートンの冷却法則 T(t) = env + (from - env) * e^(-t/τ) を目標温度について解いた式。
+    // 目安の追加冷却時間（分）を返す。到達不能・不要な場合はnull/0を返す。
+    function coolingMinutes(from: number, target: number, env: number): number | null {
+      if (from <= target) return 0;
+      if (target <= env) return null;
+      const ratio = (from - env) / (target - env);
+      if (ratio <= 1) return 0;
+      return NEWTON_TAU * Math.log(ratio);
+    }
+
+    function hideCoolingInfo(prefix: string) {
+      document.getElementById(`${prefix}-cooling-info`)?.classList.add("hidden");
+    }
+
+    function renderCoolingInfo(prefix: string, resultTemp: number, target: number) {
+      const infoEl = document.getElementById(`${prefix}-cooling-info`);
+      if (!infoEl) return;
+
+      const diff = resultTemp - target;
+      if (diff <= 0.05) {
+        infoEl.classList.add("hidden");
+        return;
+      }
+
+      const tapTemp = currentTapWaterTemp();
+      const tapMinutes = coolingMinutes(resultTemp, target, tapTemp);
+      const iceMinutes = coolingMinutes(resultTemp, target, ICE_WATER_TEMP);
+
+      const setText = (id: string, text: string) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+      };
+      setText(`${prefix}-cooling-result-temp`, resultTemp.toFixed(1));
+      setText(`${prefix}-cooling-diff`, diff.toFixed(1));
+      setText(`${prefix}-cooling-tap-temp`, tapTemp.toFixed(1));
+      setText(`${prefix}-cooling-tap-minutes`, tapMinutes === null ? "-" : tapMinutes.toFixed(1));
+      setText(`${prefix}-cooling-ice-minutes`, iceMinutes === null ? "-" : iceMinutes.toFixed(1));
+
+      infoEl.classList.remove("hidden");
+    }
+
     function calcSimple() {
       const total = num("simple-total");
       const target = num("simple-target");
@@ -278,6 +385,7 @@ const TOTAL_OPTIONS = Array.from({ length: 15 }, (_, i) => (i + 1) * 20);
       const coolResultEl = document.getElementById("simple-result-cool")!;
 
       hideMessage(errorEl);
+      hideCoolingInfo("simple");
 
       if ([total, target, hot, cool].some((v) => Number.isNaN(v))) {
         clearResult(hotResultEl, coolResultEl);
@@ -308,7 +416,17 @@ const TOTAL_OPTIONS = Array.from({ length: 15 }, (_, i) => (i + 1) * 20);
         return;
       }
 
-      renderResult(hotResultEl, coolResultEl, hotVolume, coolVolume);
+      const minHot = total * regulationFraction("simple-regulation");
+      let finalHot = hotVolume;
+      let finalCool = coolVolume;
+      if (minHot > hotVolume) {
+        finalHot = minHot;
+        finalCool = total - finalHot;
+        const mixResultTemp = (finalHot * hot + finalCool * cool) / total;
+        renderCoolingInfo("simple", mixResultTemp, target);
+      }
+
+      renderResult(hotResultEl, coolResultEl, finalHot, finalCool);
     }
 
     function calcDetail() {
@@ -332,6 +450,7 @@ const TOTAL_OPTIONS = Array.from({ length: 15 }, (_, i) => (i + 1) * 20);
       const coolResultEl = document.getElementById("detail-result-cool")!;
 
       hideMessage(errorEl);
+      hideCoolingInfo("detail");
 
       const values = [
         total,
@@ -384,7 +503,24 @@ const TOTAL_OPTIONS = Array.from({ length: 15 }, (_, i) => (i + 1) * 20);
         return;
       }
 
-      renderResult(hotResultEl, coolResultEl, hotVolume, coolVolume);
+      const minHot = total * regulationFraction("detail-regulation");
+      let finalHot = hotVolume;
+      let finalCool = coolVolume;
+      if (minHot > hotVolume) {
+        finalHot = minHot;
+        finalCool = total - finalHot;
+        // 熱量収支式をadjustedTargetについて解き直し、規定量のお湯で混ぜた直後の温度を求める
+        const heatCapacitySum = total * CW + powderMass * CP + bottleMass * bottleCb;
+        const heatBase =
+          total * CW * cool + powderMass * CP * powderTemp + bottleMass * bottleCb * bottleTemp;
+        const immediateTemp = (finalHot * CW * (hot - cool) + heatBase) / heatCapacitySum;
+        // 調乳時間の経過による室温への自然放熱（adjustedTarget算出式の逆演算）を適用し、出来上がり時点の温度を求める
+        const resultTempAfterMixing =
+          roomTemp + (immediateTemp - roomTemp) * Math.exp(-COOLING_K * mixingTime);
+        renderCoolingInfo("detail", resultTempAfterMixing, target);
+      }
+
+      renderResult(hotResultEl, coolResultEl, finalHot, finalCool);
     }
 
     function setupRoomTempSync(checkboxId: string, targetId: string) {
@@ -438,6 +574,14 @@ const TOTAL_OPTIONS = Array.from({ length: 15 }, (_, i) => (i + 1) * 20);
       saveInputs();
     });
     document.getElementById("detail-total")?.addEventListener("change", () => {
+      calcDetail();
+      saveInputs();
+    });
+    document.getElementById("simple-regulation")?.addEventListener("change", () => {
+      calcSimple();
+      saveInputs();
+    });
+    document.getElementById("detail-regulation")?.addEventListener("change", () => {
       calcDetail();
       saveInputs();
     });
