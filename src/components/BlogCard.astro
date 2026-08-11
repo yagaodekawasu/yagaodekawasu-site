@@ -9,7 +9,7 @@ const { post } = Astro.props;
 const { title, description, pubDate, tags, ogpImage } = post.data;
 ---
 
-<a href={`/blog/${post.id}`} class="card bg-base-200 hover:shadow-lg transition-shadow overflow-hidden">
+<a href={`/blog/${post.id}/`} class="card bg-base-200 hover:shadow-lg transition-shadow overflow-hidden">
   {ogpImage ? (
     <figure class="h-40">
       <img src={ogpImage} alt={title} width="600" height="340" class="w-full h-full object-cover" />

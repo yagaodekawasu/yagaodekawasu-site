@@ -1,3 +1,5 @@
+node scripts/check-internal-links.mjs || exit 1
+
 if git diff --cached --name-only | grep -qE '^(src/pages/tools/formula-mixing-ratio\.astro|tests/formula-mixing-ratio\.spec\.ts)$'; then
   echo "formula-mixing-ratio関連の変更を検出したため、Playwrightテストを実行します..."
   npm run test:e2e
