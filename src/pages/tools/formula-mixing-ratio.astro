@@ -2,11 +2,29 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const TOTAL_OPTIONS = Array.from({ length: 15 }, (_, i) => (i + 1) * 20);
+
+const description = "調乳する際のお湯（70℃以上）と湯冷ましを、目標の温度・量になるよう混ぜる比率を計算するツール。哺乳瓶の材質や粉ミルクの温度まで考慮した詳細版もあります。";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "調乳ヘルパー",
+  description,
+  applicationCategory: "HealthApplication",
+  operatingSystem: "Any (Webブラウザ)",
+  inLanguage: "ja",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "JPY",
+  },
+};
 ---
 
 <BaseLayout
   title="調乳ヘルパー | 笶顔でかわす"
-  description="調乳する際のお湯（70℃以上）と湯冷ましを、目標の温度・量になるよう混ぜる比率を計算するツール。哺乳瓶の材質や粉ミルクの温度まで考慮した詳細版もあります。"
+  description={description}
+  jsonLd={jsonLd}
 >
   <h1 class="text-3xl font-bold mb-2">調乳ヘルパー</h1>
   <p class="text-base-content/70 mb-6">
