@@ -69,13 +69,33 @@ function extractMeta(html, url) {
   };
 }
 
+function detectCharset(buffer, contentType) {
+  const headerMatch = /charset=([^;]+)/i.exec(contentType || "");
+  if (headerMatch) return headerMatch[1].trim().toLowerCase();
+
+  const ascii = Buffer.from(buffer.slice(0, 2048)).toString("latin1");
+  const metaMatch =
+    /<meta[^>]+charset=["']?([^"'\s/>]+)/i.exec(ascii) ||
+    /<meta[^>]+content=["'][^"']*charset=([^"'\s;]+)/i.exec(ascii);
+  if (metaMatch) return metaMatch[1].trim().toLowerCase();
+
+  return "utf-8";
+}
+
 async function fetchMeta(url) {
   const res = await fetch(url, {
     signal: AbortSignal.timeout(10000),
     headers: { "User-Agent": "Mozilla/5.0 (compatible; yagaodekawasu-link-card-fetcher/1.0)" },
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const html = await res.text();
+  const buffer = await res.arrayBuffer();
+  const charset = detectCharset(buffer, res.headers.get("content-type"));
+  let html;
+  try {
+    html = new TextDecoder(charset).decode(buffer);
+  } catch {
+    html = new TextDecoder("utf-8").decode(buffer);
+  }
   return extractMeta(html, url);
 }
 
