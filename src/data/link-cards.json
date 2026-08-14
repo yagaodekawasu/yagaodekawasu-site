@@ -34,6 +34,11 @@
     "description": "ESPHomeとESP32でDIYスマートホームデバイスを作る方法。温湿度センサー、スマートスイッチ、人感センサーの作例を紹介。",
     "image": "https://images.jisaku.com/eyecatch/esphome-home-automation.jpg"
   },
+  "https://manabitimes.jp/math/1013": {
+    "title": "変数分離形の微分方程式の解法と例題 | 高校数学の美しい物語",
+    "description": "微分方程式について簡単に述べた後，微分方程式の最も基本的なパターンの一つ「変数分離形微分方程式」を解説します。数検1級や大学の期末試験でも頻出です。例題として空気抵抗がある場合の自由落下など。",
+    "image": "https://res.cloudinary.com/bend/image/upload/f_auto/v1615202183/manabitimes/original/thumbnail/note/1013_jsrkbn.png"
+  },
   "https://media.xsight.co.jp/article/663": {
     "title": "はじめてのHome Assistant｜特徴とインストール方法をわかりやすく紹介",
     "description": "スマートホーム化を検討している皆さん、「Home Assistant」という名前を耳にしたことはありますか？IoT機器が日々進化する中、それらを一元的に管理し、自分のライフスタイルに合わせた自動化（オートメーション）を構築できるオープンソー [&hellip;]",
@@ -43,6 +48,16 @@
     "title": "スマートホームの新規格「Matter」を解説。スマートホーム市場に与える影響とは - SpaceCore（スペースコア）",
     "description": "2022年10月4日に無線通信規格標準化団体（Connectivity Standards Alliance）は、「Matter（マター）」バージョン1.0と「Matter」認定プログラムをリリースしました。今回は、「Matter」とはどういったものなのか。「Matter」が必要になった背景やスマートホーム市場にどのような影響があるのかについて解説します。",
     "image": "https://space-core.jp/wp-content/uploads/2022/10/matterlogo.png"
+  },
+  "https://w3e.kanazawa-it.ac.jp/math/physics/high-school_index/thermodynamics/temperature_and_heat/henkan-tex.cgi?target=/math/physics/high-school_index/thermodynamics/temperature_and_heat/heat_capacity.html": {
+    "title": "比熱と熱容量",
+    "description": null,
+    "image": null
+  },
+  "https://w3e.kanazawa-it.ac.jp/math/physics/high-school_index/thermodynamics/temperature_and_heat/henkan-tex.cgi?target=/math/physics/high-school_index/thermodynamics/temperature_and_heat/quantity_of_heat.html&pcview=0": {
+    "title": "熱量",
+    "description": null,
+    "image": null
   },
   "https://www.eisbahn.jp/yoichiro/2025/03/web-serial-api.html": {
     "title": "Web Serial APIでブラウザからシリアルデバイスを操作する | 天使やカイザーと呼ばれて",
@@ -88,6 +103,11 @@
     "title": "SwitchBot製品 | ホームオートメーション",
     "description": "SwitchBotのホームオートメーションシリーズ。最新の技術とイノベーションで、あなたの家を次世代のスマートホームへ変革します。簡単なセットアップで、日常生活をより快適に、より便利に。スマートな生活の始まりを体験しましょう。",
     "image": "http://www.switchbot.jp/cdn/shop/collections/switchbotzhi-pin-sumatohomu-505835_1200x1200.webp?v=1655872817"
+  },
+  "https://www.waterworks.metro.tokyo.lg.jp/suigen/topic/03/": {
+    "title": "水道水の水温|水質に関するトピック|東京都水道局",
+    "description": "東京都水道局の水道水の水温(水質に関するトピック)のページです。",
+    "image": "https://www.waterworks.metro.tokyo.lg.jp/documents/158990/5052145/opg.png/3c79ba89-ab16-4589-4fad-b5b411615b25?version=1.1&t=1764164520819&imagePreview=1"
   },
   "https://zenn.dev/kanekonkon/articles/9df90ce20fbbee": {
     "title": "Docker composeの restart の設定のまとめ",
