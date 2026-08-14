@@ -3,7 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const TOTAL_OPTIONS = Array.from({ length: 15 }, (_, i) => (i + 1) * 20);
 
-const description = "調乳する際のお湯（70℃以上）と湯冷ましを、目標の温度・量になるよう混ぜる比率を計算するツール。哺乳瓶の材質や粉ミルクの温度まで考慮した詳細版もあります。";
+const description = "調乳する際のお湯（70℃以上）と湯冷ましを、目標の温度・量になるよう混ぜる比率を計算するツール。";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -31,315 +31,91 @@ const jsonLd = {
     お湯（70℃以上）と湯冷ましを混ぜて、目標の温度・出来上がり量にするための分量を計算します。
   </p>
 
-  <div role="tablist" class="tabs tabs-lifted mb-6">
-    <input
-      type="radio"
-      name="mode-tabs"
-      role="tab"
-      class="tab"
-      aria-label="簡易版"
-      id="tab-simple"
-      checked
-    />
-    <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
-      <form id="simple-form" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <label class="form-control">
-          <div class="label"><span class="label-text">出来上がり量（ml）</span></div>
-          <select id="simple-total" class="select select-bordered">
-            {TOTAL_OPTIONS.map((v) => (
-              <option value={v} selected={v === 140}>{v}</option>
-            ))}
-          </select>
-        </label>
-        <label class="form-control">
-          <div class="label"><span class="label-text">目標の温度（℃）</span></div>
-          <input type="number" step="any" id="simple-target" class="input input-bordered" value="37" />
-        </label>
-        <label class="form-control">
-          <div class="label"><span class="label-text">お湯の温度（℃）</span></div>
-          <input type="number" step="any" id="simple-hot" class="input input-bordered" value="80" />
-        </label>
-        <label class="form-control">
-          <div class="label"><span class="label-text">湯冷ましの温度（℃）</span></div>
-          <input type="number" step="any" id="simple-cool" class="input input-bordered" value="20" />
-        </label>
-        <label class="form-control">
-          <div class="label"><span class="label-text">メーカー規定（お湯の最低割合）</span></div>
-          <select id="simple-regulation" class="select select-bordered">
-            <option value="">なし</option>
-            <option value="1/2">1/2以上</option>
-            <option value="2/3">2/3以上</option>
-          </select>
-        </label>
-      </form>
+  <div class="bg-base-100 border border-base-300 rounded-box p-6 mb-6">
+    <form id="simple-form" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <label class="form-control">
+        <div class="label"><span class="label-text">出来上がり量（ml）</span></div>
+        <select id="simple-total" class="select select-bordered">
+          {TOTAL_OPTIONS.map((v) => (
+            <option value={v} selected={v === 140}>{v}</option>
+          ))}
+        </select>
+      </label>
+      <label class="form-control">
+        <div class="label"><span class="label-text">目標の温度（℃）</span></div>
+        <input type="number" step="any" id="simple-target" class="input input-bordered" value="37" />
+      </label>
+      <label class="form-control">
+        <div class="label"><span class="label-text">お湯の温度（℃）</span></div>
+        <input type="number" step="any" id="simple-hot" class="input input-bordered" value="80" />
+      </label>
+      <label class="form-control">
+        <div class="label"><span class="label-text">湯冷ましの温度（℃）</span></div>
+        <input type="number" step="any" id="simple-cool" class="input input-bordered" value="20" />
+      </label>
+      <label class="form-control">
+        <div class="label"><span class="label-text">メーカー規定（お湯の最低割合）</span></div>
+        <select id="simple-regulation" class="select select-bordered">
+          <option value="">なし</option>
+          <option value="1/2">1/2以上</option>
+          <option value="2/3">2/3以上</option>
+        </select>
+      </label>
+    </form>
 
-      <div id="simple-error" class="alert alert-error mt-4 hidden">
-        <span></span>
+    <div id="simple-error" class="alert alert-error mt-4 hidden">
+      <span></span>
+    </div>
+    <div id="simple-result" class="stats shadow mt-6 w-full">
+      <div class="stat">
+        <div class="stat-title">お湯</div>
+        <div class="stat-value text-primary" id="simple-result-hot">-</div>
+        <div class="stat-desc">ml</div>
       </div>
-      <div id="simple-result" class="stats shadow mt-6 w-full">
-        <div class="stat">
-          <div class="stat-title">お湯</div>
-          <div class="stat-value text-primary" id="simple-result-hot">-</div>
-          <div class="stat-desc">ml</div>
-        </div>
-        <div class="stat">
-          <div class="stat-title">湯冷まし</div>
-          <div class="stat-value text-secondary" id="simple-result-cool">-</div>
-          <div class="stat-desc">ml</div>
-        </div>
+      <div class="stat">
+        <div class="stat-title">湯冷まし</div>
+        <div class="stat-value text-secondary" id="simple-result-cool">-</div>
+        <div class="stat-desc">ml</div>
       </div>
-      <div id="simple-cooling-info" class="alert alert-warning mt-4 hidden text-sm">
-        <div class="flex flex-col items-start gap-2">
-          <p>
-            メーカー規定によりお湯を多めにしたため、出来上がり時点で<span id="simple-cooling-result-temp" class="font-bold"></span>℃になります（目標より<span id="simple-cooling-diff" class="font-bold"></span>℃高め）。人肌まで冷ますには、以下を目安に追加で冷やしてください。
-          </p>
-          <ul class="list-disc list-inside">
-            <li>流水（水道水 約<span id="simple-cooling-tap-temp"></span>℃）で冷やす場合: 約<span id="simple-cooling-tap-minutes"></span>分</li>
-            <li>氷水（0℃）で冷やす場合: 約<span id="simple-cooling-ice-minutes"></span>分</li>
-          </ul>
-          <p class="text-xs text-base-content/60">
-            哺乳瓶の素材・太さ等で実際の時間は変わるため、あくまで目安です。こまめに確認してください。
-          </p>
-        </div>
+    </div>
+    <div id="simple-cooling-info" class="alert alert-warning mt-4 hidden text-sm">
+      <div class="flex flex-col items-start gap-2">
+        <p>
+          メーカー規定によりお湯を多めにしたため、出来上がり時点で<span id="simple-cooling-result-temp" class="font-bold"></span>℃になります（目標より<span id="simple-cooling-diff" class="font-bold"></span>℃高め）。人肌まで冷ますには、以下を目安に追加で冷やしてください。
+        </p>
+        <ul class="list-disc list-inside">
+          <li>流水（水道水 約<span id="simple-cooling-tap-temp"></span>℃）で冷やす場合: 約<span id="simple-cooling-tap-minutes"></span>分</li>
+          <li>氷水（0℃）で冷やす場合: 約<span id="simple-cooling-ice-minutes"></span>分</li>
+        </ul>
+        <p class="text-xs text-base-content/60">
+          哺乳瓶の素材・太さ等で実際の時間は変わるため、あくまで目安です。こまめに確認してください。
+        </p>
       </div>
-
-      <details id="simple-rationale" class="collapse collapse-arrow border border-base-300 bg-base-100 mt-4 text-sm">
-        <summary class="collapse-title font-semibold">この計算の根拠を見る</summary>
-        <div class="collapse-content">
-          <h4 class="font-semibold mt-2 mb-2">基本の計算式</h4>
-          <p class="mb-3 leading-relaxed">お湯と湯冷ましを混ぜたときの温度は、量と温度の加重平均になります。これを目標温度になるよう逆算しています。</p>
-          <pre class="bg-base-300 border border-base-content/10 rounded-lg p-3 my-3 overflow-x-auto text-xs leading-6 whitespace-pre-wrap">お湯の量 = 出来上がり量 ×（目標温度 − 湯冷ましの温度）÷（お湯の温度 − 湯冷ましの温度）</pre>
-
-          <h4 class="font-semibold mt-6 mb-2">メーカー規定がある場合</h4>
-          <p class="mb-3 leading-relaxed">「お湯は出来上がり量の1/2以上」等の規定があるメーカーの粉ミルクでは、規定量に届かない場合はお湯の量を規定の最低量まで優先的に引き上げます。その結果、出来上がり時点の温度は目標より高くなります。</p>
-
-          <h4 class="font-semibold mt-6 mb-2">追加で冷やす時間の目安</h4>
-          <p class="mb-3 leading-relaxed">ニュートンの冷却法則（温度差に比例して冷める、という近似）をもとに算出しています。</p>
-          <pre class="bg-base-300 border border-base-content/10 rounded-lg p-3 my-3 overflow-x-auto text-xs leading-6 whitespace-pre-wrap">時間 = 7.5分 × ln((出来上がり温度 − 冷却水の温度) ÷（目標温度 − 冷却水の温度))</pre>
-          <p class="mb-3 leading-relaxed">「7.5分」は、育児メディアで紹介されている「流水で人肌程度まで冷やすには約5〜7分」という目安から逆算した値です。哺乳瓶の素材・太さ等で実際の冷え方は変わるため、あくまで目安としてご利用ください。</p>
-
-          <h4 class="font-semibold mt-6 mb-2">流水（水道水）の温度</h4>
-          <p class="leading-relaxed">
-            季節によって水道水の温度は大きく変わるため、<a href="https://www.waterworks.metro.tokyo.lg.jp/suigen/topic/03/" class="link" target="_blank" rel="noopener noreferrer">東京都水道局が公表している月別の平均水温</a>（都庁付近・実測値）を使い、現在の月に応じて自動的に切り替えています。氷水の場合は0℃として計算します。
-          </p>
-        </div>
-      </details>
     </div>
 
-    <input
-      type="radio"
-      name="mode-tabs"
-      role="tab"
-      class="tab"
-      aria-label="詳細版"
-      id="tab-detail"
-    />
-    <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
-      <form id="detail-form" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <label class="form-control">
-          <div class="label"><span class="label-text">出来上がり量（ml）</span></div>
-          <select id="detail-total" class="select select-bordered">
-            {TOTAL_OPTIONS.map((v) => (
-              <option value={v} selected={v === 140}>{v}</option>
-            ))}
-          </select>
-        </label>
-        <label class="form-control">
-          <div class="label"><span class="label-text">目標の温度（℃）</span></div>
-          <input type="number" step="any" id="detail-target" class="input input-bordered" value="37" />
-        </label>
-        <label class="form-control">
-          <div class="label"><span class="label-text">お湯の温度（℃）</span></div>
-          <input type="number" step="any" id="detail-hot" class="input input-bordered" value="80" />
-        </label>
-        <label class="form-control">
-          <div class="label"><span class="label-text">湯冷ましの温度（℃）</span></div>
-          <input type="number" step="any" id="detail-cool" class="input input-bordered" value="20" />
-        </label>
-        <label class="form-control">
-          <div class="label"><span class="label-text">粉ミルクの質量（g）</span></div>
-          <input type="number" step="any" id="detail-powder-mass" class="input input-bordered" value="18" />
-        </label>
-        <div class="form-control">
-          <div class="label"><span class="label-text">粉ミルクの温度（℃）</span></div>
-          <input type="number" step="any" id="detail-powder-temp" class="input input-bordered" value="25" disabled />
-          <label class="label cursor-pointer justify-start gap-2 mt-1">
-            <input type="checkbox" id="detail-powder-temp-sync" class="checkbox checkbox-sm" checked />
-            <span class="label-text">室温と同じにする</span>
-          </label>
-        </div>
-        <label class="form-control">
-          <div class="label"><span class="label-text">哺乳瓶の材質</span></div>
-          <select id="detail-bottle-material" class="select select-bordered">
-            <option value="0.80">ガラス</option>
-            <option value="1.8" selected>ポリプロピレン（PP）</option>
-            <option value="0.97">PPSU</option>
-            <option value="1.4">シリコーン</option>
-          </select>
-        </label>
-        <label class="form-control">
-          <div class="label"><span class="label-text">哺乳瓶の質量（g）</span></div>
-          <input type="number" step="any" id="detail-bottle-mass" class="input input-bordered" value="50" />
-        </label>
-        <div class="form-control">
-          <div class="label"><span class="label-text">哺乳瓶の温度（℃）</span></div>
-          <input type="number" step="any" id="detail-bottle-temp" class="input input-bordered" value="25" disabled />
-          <label class="label cursor-pointer justify-start gap-2 mt-1">
-            <input type="checkbox" id="detail-bottle-temp-sync" class="checkbox checkbox-sm" checked />
-            <span class="label-text">室温と同じにする</span>
-          </label>
-        </div>
-        <label class="form-control">
-          <div class="label"><span class="label-text">室温（℃）</span></div>
-          <input type="number" step="any" id="detail-room-temp" class="input input-bordered" value="25" />
-        </label>
-        <label class="form-control sm:col-span-2">
-          <div class="label"><span class="label-text">調乳にかかる時間（分）</span></div>
-          <input type="number" step="any" id="detail-mixing-time" class="input input-bordered" value="1" />
-        </label>
-        <label class="form-control sm:col-span-2">
-          <div class="label"><span class="label-text">メーカー規定（お湯の最低割合）</span></div>
-          <select id="detail-regulation" class="select select-bordered">
-            <option value="">なし</option>
-            <option value="1/2">1/2以上</option>
-            <option value="2/3">2/3以上</option>
-          </select>
-        </label>
-      </form>
+    <details id="simple-rationale" class="collapse collapse-arrow border border-base-300 bg-base-100 mt-4 text-sm">
+      <summary class="collapse-title font-semibold">この計算の根拠を見る</summary>
+      <div class="collapse-content">
+        <h4 class="font-semibold mt-2 mb-2">基本の計算式</h4>
+        <p class="mb-3 leading-relaxed">お湯と湯冷ましを混ぜたときの温度は、量と温度の加重平均になります。これを目標温度になるよう逆算しています。</p>
+        <pre class="bg-base-300 border border-base-content/10 rounded-lg p-3 my-3 overflow-x-auto text-xs leading-6 whitespace-pre-wrap">お湯の量 = 出来上がり量 ×（目標温度 − 湯冷ましの温度）÷（お湯の温度 − 湯冷ましの温度）</pre>
 
-      <p class="text-xs text-base-content/50 mt-3">
-        粉ミルクの比熱・哺乳瓶材質の比熱は出典を明記した近似値、放熱の冷却係数は目安値を、それぞれ固定で使用しています（詳しくは下の「計算の根拠」参照）。実際の哺乳瓶の形状や環境によって誤差があります。
-      </p>
+        <h4 class="font-semibold mt-6 mb-2">メーカー規定がある場合</h4>
+        <p class="mb-3 leading-relaxed">「お湯は出来上がり量の1/2以上」等の規定があるメーカーの粉ミルクでは、規定量に届かない場合はお湯の量を規定の最低量まで優先的に引き上げます。その結果、出来上がり時点の温度は目標より高くなります。</p>
 
-      <div id="detail-error" class="alert alert-error mt-4 hidden">
-        <span></span>
+        <h4 class="font-semibold mt-6 mb-2">追加で冷やす時間の目安</h4>
+        <p class="mb-3 leading-relaxed">ニュートンの冷却法則（温度差に比例して冷める、という近似）をもとに算出しています。時定数τは出来上がり量によって変わり、流水か氷水かによっても異なる値を使っています。</p>
+        <pre class="bg-base-300 border border-base-content/10 rounded-lg p-3 my-3 overflow-x-auto text-xs leading-6 whitespace-pre-wrap">時間 = τ(出来上がり量) × ln((出来上がり温度 − 冷却水の温度) ÷（目標温度 − 冷却水の温度))
+τ_流水(V) ≈ 0.269 × V^0.469 分
+τ_氷水(V) ≈ 0.512 × V^0.469 分（Vはmℓ）</pre>
+        <p class="mb-3 leading-relaxed">この式は、英国食品基準庁（FSA）の調乳冷却実験報告書「B13010」（2009年）の実測データから回帰したものです。流水側は実測条件（流水・水温19℃）に基づく値ですが、氷水側は同報告書の「静置水槽・水温19℃」条件のデータを近似として流用しており、氷水そのもの（水温0℃前後）を対象にした実測ではない点にご注意ください。導出の詳細は<a href="/blog/formula-mixing-ratio-cooling-tau-derivation/" class="link">別記事</a>にまとめています。哺乳瓶の素材・太さ等で実際の冷え方は変わるため、あくまで目安としてご利用ください。</p>
+
+        <h4 class="font-semibold mt-6 mb-2">流水（水道水）の温度</h4>
+        <p class="leading-relaxed">
+          季節によって水道水の温度は大きく変わるため、<a href="https://www.waterworks.metro.tokyo.lg.jp/suigen/topic/03/" class="link" target="_blank" rel="noopener noreferrer">東京都水道局が公表している月別の平均水温</a>（都庁付近・実測値）を使い、現在の月に応じて自動的に切り替えています。氷水の場合は0℃として計算します。
+        </p>
       </div>
-      <div id="detail-result" class="stats shadow mt-6 w-full">
-        <div class="stat">
-          <div class="stat-title">お湯</div>
-          <div class="stat-value text-primary" id="detail-result-hot">-</div>
-          <div class="stat-desc">ml</div>
-        </div>
-        <div class="stat">
-          <div class="stat-title">湯冷まし</div>
-          <div class="stat-value text-secondary" id="detail-result-cool">-</div>
-          <div class="stat-desc">ml</div>
-        </div>
-      </div>
-      <div id="detail-cooling-info" class="alert alert-warning mt-4 hidden text-sm">
-        <div class="flex flex-col items-start gap-2">
-          <p>
-            メーカー規定によりお湯を多めにしたため、出来上がり時点で<span id="detail-cooling-result-temp" class="font-bold"></span>℃になります（目標より<span id="detail-cooling-diff" class="font-bold"></span>℃高め）。人肌まで冷ますには、以下を目安に追加で冷やしてください。
-          </p>
-          <ul class="list-disc list-inside">
-            <li>流水（水道水 約<span id="detail-cooling-tap-temp"></span>℃）で冷やす場合: 約<span id="detail-cooling-tap-minutes"></span>分</li>
-            <li>氷水（0℃）で冷やす場合: 約<span id="detail-cooling-ice-minutes"></span>分</li>
-          </ul>
-          <p class="text-xs text-base-content/60">
-            哺乳瓶の素材・太さ等で実際の時間は変わるため、あくまで目安です。こまめに確認してください。
-          </p>
-        </div>
-      </div>
-
-      <details id="detail-rationale" class="collapse collapse-arrow border border-base-300 bg-base-100 mt-4 text-sm">
-        <summary class="collapse-title font-semibold">この計算の根拠を見る</summary>
-        <div class="collapse-content">
-          <h4 class="font-semibold mt-2 mb-2">基本の考え方（熱量収支）</h4>
-          <p class="mb-3 leading-relaxed">詳細版では、お湯・湯冷ましの量だけでなく、粉ミルクや哺乳瓶自体が持つ熱も考慮した熱量収支の式で計算しています。</p>
-          <pre class="bg-base-300 border border-base-content/10 rounded-lg p-3 my-3 overflow-x-auto text-xs leading-6 whitespace-pre-wrap">お湯の量 × 水の比熱 ×（お湯の温度 − 湯冷ましの温度）
-  = 出来上がり量 × 水の比熱 ×（目標温度 − 湯冷ましの温度）
-  + 粉ミルクの質量 × 粉ミルクの比熱 ×（目標温度 − 粉ミルクの温度）
-  + 哺乳瓶の質量 × 哺乳瓶の比熱 ×（目標温度 − 哺乳瓶の温度）</pre>
-          <p class="mb-3 leading-relaxed">
-            この式をお湯の量について解いています。使用している比熱の値（単位はJ/g℃）のうち、水の4.186は物理定数です。それ以外は、次の根拠にもとづく近似値を固定で使用しています。
-          </p>
-          <div class="overflow-x-auto mt-2 mb-3 rounded-box border border-base-content/10">
-            <table class="table table-sm">
-              <thead>
-                <tr class="bg-base-200">
-                  <th>対象</th>
-                  <th>比熱</th>
-                  <th>根拠</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-base-content/10">
-                <tr>
-                  <td class="whitespace-nowrap">粉ミルク</td>
-                  <td class="font-mono text-right">1.52</td>
-                  <td>脱脂粉乳の組成データにSiebel式を適用した推定値<sup><a href="#fn-cp-powder" id="fnref-cp-powder" class="link">1</a></sup></td>
-                </tr>
-                <tr>
-                  <td class="whitespace-nowrap">哺乳瓶（ガラス）</td>
-                  <td class="font-mono text-right">0.80</td>
-                  <td>耐熱ガラスの実測値2点の中央値<sup><a href="#fn-cp-glass" id="fnref-cp-glass" class="link">2</a></sup></td>
-                </tr>
-                <tr>
-                  <td class="whitespace-nowrap">哺乳瓶（PP）</td>
-                  <td class="font-mono text-right">1.8</td>
-                  <td>ポリプロピレンの実測データ（温度依存）の中央値<sup><a href="#fn-cp-pp" id="fnref-cp-pp" class="link">3</a></sup></td>
-                </tr>
-                <tr>
-                  <td class="whitespace-nowrap">哺乳瓶（PPSU）</td>
-                  <td class="font-mono text-right">0.97</td>
-                  <td>PPSUの実測値<sup><a href="#fn-cp-ppsu" id="fnref-cp-ppsu" class="link">4</a></sup></td>
-                </tr>
-                <tr>
-                  <td class="whitespace-nowrap">哺乳瓶（シリコーン）</td>
-                  <td class="font-mono text-right">1.4</td>
-                  <td>シリコーンゴムの実測値幅の中央値<sup><a href="#fn-cp-silicone" id="fnref-cp-silicone" class="link">5</a></sup></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h4 class="font-semibold mt-6 mb-2">調乳中の放熱の考慮</h4>
-          <p class="mb-3 leading-relaxed">お湯・湯冷まし・粉ミルク・哺乳瓶を混ぜてから飲ませるまでの「調乳にかかる時間」の間、出来上がったミルクは室温に向かって少しずつ冷めていきます。そのため、混ぜた直後は目標よりやや高めの温度になるように調整しています。</p>
-          <pre class="bg-base-300 border border-base-content/10 rounded-lg p-3 my-3 overflow-x-auto text-xs leading-6 whitespace-pre-wrap">混ぜた直後に狙う温度 = 室温 + (目標温度 − 室温) × e^(冷却係数 × 調乳にかかる時間)</pre>
-          <p class="mb-3 leading-relaxed">冷却係数は目安値（0.03/分）を固定で使用しています。</p>
-
-          <h4 class="font-semibold mt-6 mb-2">メーカー規定がある場合</h4>
-          <p class="mb-3 leading-relaxed">「お湯は出来上がり量の1/2以上」等の規定があるメーカーの粉ミルクでは、規定量に届かない場合はお湯の量を規定の最低量まで優先的に引き上げます。詳細版では、上の熱量収支の式を「混ぜた直後の温度」について解き直し、そこからさらに調乳にかかる時間の分だけ室温側に冷めた後の温度を、出来上がり時点の温度として表示しています。</p>
-
-          <h4 class="font-semibold mt-6 mb-2">追加で冷やす時間の目安</h4>
-          <p class="mb-3 leading-relaxed">ニュートンの冷却法則（温度差に比例して冷める、という近似）をもとに算出しています。</p>
-          <pre class="bg-base-300 border border-base-content/10 rounded-lg p-3 my-3 overflow-x-auto text-xs leading-6 whitespace-pre-wrap">時間 = 7.5分 × ln((出来上がり温度 − 冷却水の温度) ÷（目標温度 − 冷却水の温度))</pre>
-          <p class="mb-3 leading-relaxed">「7.5分」は、育児メディアで紹介されている「流水で人肌程度まで冷やすには約5〜7分」という目安から逆算した値です。哺乳瓶の素材・太さ等で実際の冷え方は変わるため、あくまで目安としてご利用ください。</p>
-
-          <h4 class="font-semibold mt-6 mb-2">流水（水道水）の温度</h4>
-          <p class="leading-relaxed">
-            季節によって水道水の温度は大きく変わるため、<a href="https://www.waterworks.metro.tokyo.lg.jp/suigen/topic/03/" class="link" target="_blank" rel="noopener noreferrer">東京都水道局が公表している月別の平均水温</a>（都庁付近・実測値）を使い、現在の月に応じて自動的に切り替えています。氷水の場合は0℃として計算します。
-          </p>
-
-          <div class="mt-6 pt-3 border-t border-base-content/10">
-            <h4 class="font-semibold text-xs text-base-content/60 mb-2">注釈</h4>
-            <ol class="list-decimal list-outside pl-4 text-xs text-base-content/70 space-y-3">
-              <li id="fn-cp-powder">
-                粉ミルクそのものの比熱を報告した一次資料は見つからなかったため、組成から比熱を推定するSiebel式（食品工学で広く用いられる線形混合則モデル）を、組成が近い脱脂粉乳のデータに適用した。
-                <pre class="bg-base-300 border border-base-content/10 rounded-lg p-3 my-2 overflow-x-auto text-xs leading-6 whitespace-pre-wrap">cp = 4.180×水分割合 + 1.547×たんぱく質割合 + 1.672×脂質割合 + 1.42×炭水化物割合 + 0.836×灰分割合（J/g℃）</pre>
-                <a href="https://fooddb.mext.go.jp/details/details.pl?ITEM_NO=13_13010_7" class="link" target="_blank" rel="noopener noreferrer">文部科学省「食品成分表」脱脂粉乳データ</a>（可食部100gあたり 水分3.8g・たんぱく質34.0g・脂質1.0g・炭水化物53.3g・灰分7.9g）を代入すると cp ≈ 1.52 J/g℃。脱脂粉乳と育児用粉ミルク（調製粉乳）は乳糖・植物油脂・ミネラル等の添加により組成が完全には一致しないため、あくまで近似値である。
-                <a href="#fnref-cp-powder" class="link ml-1">↩</a>
-              </li>
-              <li id="fn-cp-glass">
-                哺乳瓶のガラスは一般的なソーダ石灰ガラスではなく耐熱ガラス（ホウケイ酸ガラス、Pyrex/Duran系統）。<a href="https://www.endmemo.com/chem/specificheatsearch.php?q=Pyrex+Glass" class="link" target="_blank" rel="noopener noreferrer">物性値データベース</a>にPyrex Glassの比熱として0.75 J/g・Kと0.84 J/g・Kの2値の記載があり、その中央値を採用した。
-                <a href="#fnref-cp-glass" class="link ml-1">↩</a>
-              </li>
-              <li id="fn-cp-pp">
-                <a href="https://materials.fsri.org/materialdetail/polypropylene-pp" class="link" target="_blank" rel="noopener noreferrer">FSRI（Fire Safety Research Institute）材料データベース</a>の熱流計実測データでは、ポリプロピレンの比熱は10〜40℃の範囲で1.69〜1.92 J/(g・K)と温度依存性を示す。その中央値（約1.8）は、本ツールが想定する室温付近（20〜30℃）の実測値ともおおむね一致する。
-                <a href="#fnref-cp-pp" class="link ml-1">↩</a>
-              </li>
-              <li id="fn-cp-ppsu">
-                PPSUの比熱は970 J/kg・K（＝0.97 J/g・K）と単一の実測値として報告されている。同族のポリスルホン系樹脂（PSU 0.91〜1.0、PES 1.1 J/g・K）とも整合する範囲にある。（出典: <a href="https://www.makeitfrom.com/material-properties/Polyphenylsulfone-PPSU" class="link" target="_blank" rel="noopener noreferrer">makeitfrom.com「Polyphenylsulfone (PPSU)」</a>）
-                <a href="#fnref-cp-ppsu" class="link ml-1">↩</a>
-              </li>
-              <li id="fn-cp-silicone">
-                シリコーンゴムの比熱は配合（充填剤・加硫条件）による差が大きく、複数資料でおよそ1.2〜1.6 J/g℃の幅が見られる。その中央値を採用した。（出典: <a href="https://www.makeitfrom.com/material-properties/Silicone-Rubber-PMQ-PVMQ-VMQ" class="link" target="_blank" rel="noopener noreferrer">makeitfrom.com「Silicone Rubber (PMQ, PVMQ, VMQ)」</a>）
-                <a href="#fnref-cp-silicone" class="link ml-1">↩</a>
-              </li>
-            </ol>
-          </div>
-        </div>
-      </details>
-    </div>
+    </details>
   </div>
 
   <div class="alert mt-8 text-sm">
@@ -349,14 +125,17 @@ const jsonLd = {
   </div>
 
   <script>
-    const CW = 4.186; // 水の比熱 J/g℃
-    const CP = 1.52; // 粉ミルクの比熱 J/g℃（MEXT脱脂粉乳データにSiebel式を適用した近似値）
-    const COOLING_K = 0.03; // 調乳中の放熱を近似する冷却係数（1/分、目安値）
     const MIN_HOT_TEMP = 70; // これ未満はエラーとする下限温度（WHOのお湯70℃以上という目安に基づく）
 
-    // メーカー規定によりお湯を規定量まで増やした際、流水・氷水での追加冷却時間をニュートンの冷却法則で近似する時定数（分）。
-    // 「流水で人肌程度まで冷やすには約5〜7分」という一般的な目安から逆算した値。
-    const NEWTON_TAU = 7.5;
+    // メーカー規定によりお湯を規定量まで増やした際、流水・氷水での追加冷却時間をニュートンの冷却法則で近似する時定数τ（分）。
+    // 英国FSAの調乳冷却実験報告書「B13010」の実測データ（流水・静置水槽、いずれも水温19℃）から回帰した、出来上がり量V（mL）のべき乗式。
+    // 氷水側は静置水槽（19℃）のデータを氷水（0℃前後）の近似として流用しており、直接の実測値ではない（導出の詳細は別記事を参照）。
+    function tauTapWater(volumeMl: number): number {
+      return 0.269 * Math.pow(volumeMl, 0.469);
+    }
+    function tauIceWater(volumeMl: number): number {
+      return 0.512 * Math.pow(volumeMl, 0.469);
+    }
     const ICE_WATER_TEMP = 0; // 氷水を想定した冷却水温（℃）
     // 東京都水道局が公開する月別平均水温（℃、都庁付近・令和5年度実測）。添字0=1月〜11=12月。
     const TAP_WATER_MONTHLY_TEMP = [
@@ -370,20 +149,6 @@ const jsonLd = {
       "simple-hot",
       "simple-cool",
       "simple-regulation",
-      "detail-total",
-      "detail-target",
-      "detail-hot",
-      "detail-cool",
-      "detail-powder-mass",
-      "detail-powder-temp",
-      "detail-bottle-material",
-      "detail-bottle-mass",
-      "detail-bottle-temp",
-      "detail-room-temp",
-      "detail-mixing-time",
-      "detail-regulation",
-      "detail-powder-temp-sync",
-      "detail-bottle-temp-sync",
     ];
 
     function saveInputs() {
@@ -474,19 +239,19 @@ const jsonLd = {
 
     // ニュートンの冷却法則 T(t) = env + (from - env) * e^(-t/τ) を目標温度について解いた式。
     // 目安の追加冷却時間（分）を返す。到達不能・不要な場合はnull/0を返す。
-    function coolingMinutes(from: number, target: number, env: number): number | null {
+    function coolingMinutes(from: number, target: number, env: number, tau: number): number | null {
       if (from <= target) return 0;
       if (target <= env) return null;
       const ratio = (from - env) / (target - env);
       if (ratio <= 1) return 0;
-      return NEWTON_TAU * Math.log(ratio);
+      return tau * Math.log(ratio);
     }
 
     function hideCoolingInfo(prefix: string) {
       document.getElementById(`${prefix}-cooling-info`)?.classList.add("hidden");
     }
 
-    function renderCoolingInfo(prefix: string, resultTemp: number, target: number) {
+    function renderCoolingInfo(prefix: string, resultTemp: number, target: number, volumeMl: number) {
       const infoEl = document.getElementById(`${prefix}-cooling-info`);
       if (!infoEl) return;
 
@@ -497,8 +262,8 @@ const jsonLd = {
       }
 
       const tapTemp = currentTapWaterTemp();
-      const tapMinutes = coolingMinutes(resultTemp, target, tapTemp);
-      const iceMinutes = coolingMinutes(resultTemp, target, ICE_WATER_TEMP);
+      const tapMinutes = coolingMinutes(resultTemp, target, tapTemp, tauTapWater(volumeMl));
+      const iceMinutes = coolingMinutes(resultTemp, target, ICE_WATER_TEMP, tauIceWater(volumeMl));
 
       const setText = (id: string, text: string) => {
         const el = document.getElementById(id);
@@ -562,170 +327,27 @@ const jsonLd = {
         finalHot = minHot;
         finalCool = total - finalHot;
         const mixResultTemp = (finalHot * hot + finalCool * cool) / total;
-        renderCoolingInfo("simple", mixResultTemp, target);
+        renderCoolingInfo("simple", mixResultTemp, target, total);
       }
 
       renderResult(hotResultEl, coolResultEl, finalHot, finalCool);
-    }
-
-    function calcDetail() {
-      const total = num("detail-total");
-      const target = num("detail-target");
-      const hot = num("detail-hot");
-      const cool = num("detail-cool");
-      const powderMass = num("detail-powder-mass");
-      const powderTemp = num("detail-powder-temp");
-      const bottleMaterialEl = document.getElementById(
-        "detail-bottle-material",
-      ) as HTMLSelectElement | null;
-      const bottleCb = bottleMaterialEl ? parseFloat(bottleMaterialEl.value) : NaN;
-      const bottleMass = num("detail-bottle-mass");
-      const bottleTemp = num("detail-bottle-temp");
-      const roomTemp = num("detail-room-temp");
-      const mixingTime = num("detail-mixing-time");
-
-      const errorEl = document.getElementById("detail-error")!;
-      const hotResultEl = document.getElementById("detail-result-hot")!;
-      const coolResultEl = document.getElementById("detail-result-cool")!;
-
-      hideMessage(errorEl);
-      hideCoolingInfo("detail");
-
-      const values = [
-        total,
-        target,
-        hot,
-        cool,
-        powderMass,
-        powderTemp,
-        bottleCb,
-        bottleMass,
-        bottleTemp,
-        roomTemp,
-        mixingTime,
-      ];
-      if (values.some((v) => Number.isNaN(v))) {
-        clearResult(hotResultEl, coolResultEl);
-        return;
-      }
-
-      if (hot <= cool) {
-        showMessage(errorEl, "お湯の温度は湯冷ましの温度より高くしてください。");
-        clearResult(hotResultEl, coolResultEl);
-        return;
-      }
-
-      if (hot < MIN_HOT_TEMP) {
-        showMessage(errorEl, `調乳のお湯は${MIN_HOT_TEMP}℃以上にしてください。`);
-        clearResult(hotResultEl, coolResultEl);
-        return;
-      }
-
-      // 調乳中の放熱を見込み、混合直後は目標温度より少し高めを狙う
-      const adjustedTarget =
-        roomTemp + (target - roomTemp) * Math.exp(COOLING_K * mixingTime);
-
-      const powderHeat = powderMass * CP * (adjustedTarget - powderTemp);
-      const bottleHeat = bottleMass * bottleCb * (adjustedTarget - bottleTemp);
-
-      const hotVolume =
-        (total * CW * (adjustedTarget - cool) + powderHeat + bottleHeat) /
-        (CW * (hot - cool));
-      const coolVolume = total - hotVolume;
-
-      if (hotVolume < 0 || coolVolume < 0) {
-        showMessage(
-          errorEl,
-          "この条件では計算できません。お湯・湯冷ましの温度や、粉・哺乳瓶の温度と質量を見直してください。",
-        );
-        clearResult(hotResultEl, coolResultEl);
-        return;
-      }
-
-      const minHot = total * regulationFraction("detail-regulation");
-      let finalHot = hotVolume;
-      let finalCool = coolVolume;
-      if (minHot > hotVolume) {
-        finalHot = minHot;
-        finalCool = total - finalHot;
-        // 熱量収支式をadjustedTargetについて解き直し、規定量のお湯で混ぜた直後の温度を求める
-        const heatCapacitySum = total * CW + powderMass * CP + bottleMass * bottleCb;
-        const heatBase =
-          total * CW * cool + powderMass * CP * powderTemp + bottleMass * bottleCb * bottleTemp;
-        const immediateTemp = (finalHot * CW * (hot - cool) + heatBase) / heatCapacitySum;
-        // 調乳時間の経過による室温への自然放熱（adjustedTarget算出式の逆演算）を適用し、出来上がり時点の温度を求める
-        const resultTempAfterMixing =
-          roomTemp + (immediateTemp - roomTemp) * Math.exp(-COOLING_K * mixingTime);
-        renderCoolingInfo("detail", resultTempAfterMixing, target);
-      }
-
-      renderResult(hotResultEl, coolResultEl, finalHot, finalCool);
-    }
-
-    function setupRoomTempSync(checkboxId: string, targetId: string) {
-      const checkbox = document.getElementById(checkboxId) as HTMLInputElement | null;
-      const target = document.getElementById(targetId) as HTMLInputElement | null;
-      const roomTemp = document.getElementById("detail-room-temp") as HTMLInputElement | null;
-      if (!checkbox || !target || !roomTemp) return;
-
-      const sync = () => {
-        if (checkbox.checked) {
-          target.value = roomTemp.value;
-          target.disabled = true;
-        } else {
-          target.disabled = false;
-        }
-      };
-
-      checkbox.addEventListener("change", () => {
-        sync();
-        calcDetail();
-        saveInputs();
-      });
-      roomTemp.addEventListener("input", () => {
-        if (checkbox.checked) {
-          target.value = roomTemp.value;
-        }
-      });
-
-      sync();
     }
 
     restoreInputs();
 
-    setupRoomTempSync("detail-powder-temp-sync", "detail-powder-temp");
-    setupRoomTempSync("detail-bottle-temp-sync", "detail-bottle-temp");
-
     document.getElementById("simple-form")?.addEventListener("input", () => {
       calcSimple();
-      saveInputs();
-    });
-    document.getElementById("detail-form")?.addEventListener("input", () => {
-      calcDetail();
-      saveInputs();
-    });
-    document.getElementById("detail-bottle-material")?.addEventListener("change", () => {
-      calcDetail();
       saveInputs();
     });
     document.getElementById("simple-total")?.addEventListener("change", () => {
       calcSimple();
       saveInputs();
     });
-    document.getElementById("detail-total")?.addEventListener("change", () => {
-      calcDetail();
-      saveInputs();
-    });
     document.getElementById("simple-regulation")?.addEventListener("change", () => {
       calcSimple();
       saveInputs();
     });
-    document.getElementById("detail-regulation")?.addEventListener("change", () => {
-      calcDetail();
-      saveInputs();
-    });
 
     calcSimple();
-    calcDetail();
   </script>
 </BaseLayout>

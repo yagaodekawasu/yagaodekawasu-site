@@ -15,10 +15,6 @@ async function gotoFreshOnDate(page: Page, isoDate: string) {
   await page.reload();
 }
 
-async function openDetailTab(page: Page) {
-  await page.locator("#tab-detail").click();
-}
-
 test.describe("簡易版", () => {
   test.beforeEach(async ({ page }) => {
     await gotoFresh(page);
@@ -104,7 +100,7 @@ test.describe("簡易版", () => {
     await details.locator("summary").click();
     await expect(details).toHaveJSProperty("open", true);
     await expect(details).toContainText("出来上がり量");
-    await expect(details).toContainText("7.5分");
+    await expect(details).toContainText("B13010");
     await expect(details).toContainText("東京都水道局");
   });
 });
@@ -127,119 +123,8 @@ test.describe("簡易版（メーカー規定・追加冷却、8月に日付固�
     await expect(page.locator("#simple-cooling-result-temp")).toHaveText("50.0");
     await expect(page.locator("#simple-cooling-diff")).toHaveText("13.0");
     await expect(page.locator("#simple-cooling-tap-temp")).toHaveText("25.2");
-    await expect(page.locator("#simple-cooling-tap-minutes")).toHaveText("5.6");
-    await expect(page.locator("#simple-cooling-ice-minutes")).toHaveText("2.3");
-  });
-});
-
-test.describe("詳細版", () => {
-  test.beforeEach(async ({ page }) => {
-    await gotoFresh(page);
-    await openDetailTab(page);
-  });
-
-  test("TC-D01: デフォルト値で正しい結果が表示される", async ({ page }) => {
-    await expect(page.locator("#detail-result-hot")).toHaveText("46.3");
-    await expect(page.locator("#detail-result-cool")).toHaveText("93.7");
-  });
-
-  test("TC-D07: 出来上がり量は20ml刻みのプルダウンになっている", async ({ page }) => {
-    const select = page.locator("#detail-total");
-    await expect(select).toHaveJSProperty("tagName", "SELECT");
-    await expect(select).toHaveValue("140");
-  });
-
-  test("TC-D02: 室温同期チェックボックスは初期状態でチェック済み・入力欄は無効化されている", async ({
-    page,
-  }) => {
-    await expect(page.locator("#detail-powder-temp-sync")).toBeChecked();
-    await expect(page.locator("#detail-bottle-temp-sync")).toBeChecked();
-    await expect(page.locator("#detail-powder-temp")).toBeDisabled();
-    await expect(page.locator("#detail-bottle-temp")).toBeDisabled();
-  });
-
-  test("TC-D03: 室温を変更するとチェック中の項目が自動追従する", async ({ page }) => {
-    await page.locator("#detail-room-temp").fill("30");
-    await expect(page.locator("#detail-powder-temp")).toHaveValue("30");
-    await expect(page.locator("#detail-bottle-temp")).toHaveValue("30");
-    await expect(page.locator("#detail-result-hot")).toHaveText("43.5");
-    await expect(page.locator("#detail-result-cool")).toHaveText("96.5");
-  });
-
-  test("TC-D04: チェックを外すと編集可能になり、以後は室温変更の影響を受けない", async ({
-    page,
-  }) => {
-    await page.locator("#detail-powder-temp-sync").uncheck();
-    await expect(page.locator("#detail-powder-temp")).toBeEnabled();
-    await page.locator("#detail-powder-temp").fill("15");
-
-    await page.locator("#detail-room-temp").fill("35");
-    await expect(page.locator("#detail-powder-temp")).toHaveValue("15");
-    await expect(page.locator("#detail-bottle-temp")).toHaveValue("35");
-  });
-
-  test("TC-D05: 哺乳瓶の材質を変更すると結果が再計算される", async ({ page }) => {
-    const defaultHot = await page.locator("#detail-result-hot").textContent();
-    await page.locator("#detail-bottle-material").selectOption({ label: "ガラス" });
-    await expect(page.locator("#detail-result-hot")).not.toHaveText(defaultHot ?? "");
-  });
-
-  test("TC-D06: お湯が70℃未満でエラーになる", async ({ page }) => {
-    await page.locator("#detail-hot").fill("65");
-    await expect(page.locator("#detail-error")).toBeVisible();
-    await expect(page.locator("#detail-error span")).toHaveText(
-      "調乳のお湯は70℃以上にしてください。",
-    );
-    await expect(page.locator("#detail-result-hot")).toHaveText("-");
-    await expect(page.locator("#detail-result-cool")).toHaveText("-");
-  });
-});
-
-test.describe("詳細版（メーカー規定・追加冷却、8月に日付固定）", () => {
-  test.beforeEach(async ({ page }) => {
-    await gotoFreshOnDate(page, "2026-08-15T00:00:00");
-    await openDetailTab(page);
-  });
-
-  test("TC-D08: 規定未達の場合はお湯量が引き上げられ、追加冷却の案内が表示される", async ({
-    page,
-  }) => {
-    await page.locator("#detail-regulation").selectOption("1/2");
-
-    await expect(page.locator("#detail-result-hot")).toHaveText("70.0");
-    await expect(page.locator("#detail-result-cool")).toHaveText("70.0");
-
-    const infoEl = page.locator("#detail-cooling-info");
-    await expect(infoEl).toBeVisible();
-    await expect(page.locator("#detail-cooling-result-temp")).toHaveText("45.2");
-    await expect(page.locator("#detail-cooling-diff")).toHaveText("8.2");
-    await expect(page.locator("#detail-cooling-tap-temp")).toHaveText("25.2");
-    await expect(page.locator("#detail-cooling-tap-minutes")).toHaveText("4.0");
-    await expect(page.locator("#detail-cooling-ice-minutes")).toHaveText("1.5");
-  });
-});
-
-test.describe("詳細版（計算の根拠）", () => {
-  test.beforeEach(async ({ page }) => {
-    await gotoFresh(page);
-    await openDetailTab(page);
-  });
-
-  test("TC-D09: 計算の根拠セクションは初期状態で閉じており、開くと計算式等が表示される", async ({
-    page,
-  }) => {
-    const details = page.locator("#detail-rationale");
-    await expect(details).toHaveJSProperty("open", false);
-
-    await details.locator("summary").click();
-    await expect(details).toHaveJSProperty("open", true);
-    await expect(details).toContainText("熱量収支");
-    await expect(details).toContainText("調乳にかかる時間");
-    await expect(details).toContainText("4.186");
-    await expect(details).toContainText("1.52");
-    await expect(details).toContainText("0.80");
-    await expect(details).toContainText("7.5分");
-    await expect(details).toContainText("東京都水道局");
+    await expect(page.locator("#simple-cooling-tap-minutes")).toHaveText("2.0");
+    await expect(page.locator("#simple-cooling-ice-minutes")).toHaveText("1.6");
   });
 });
 
@@ -252,16 +137,5 @@ test.describe("入力値の永続化", () => {
     await expect(page.locator("#simple-total")).toHaveValue("200");
     await expect(page.locator("#simple-result-hot")).toHaveText("56.7");
     await expect(page.locator("#simple-result-cool")).toHaveText("143.3");
-  });
-
-  test("TC-P02: 詳細版のチェックボックス状態がリロード後も保持される", async ({ page }) => {
-    await gotoFresh(page);
-    await openDetailTab(page);
-    await page.locator("#detail-powder-temp-sync").uncheck();
-    await page.reload();
-    await openDetailTab(page);
-
-    await expect(page.locator("#detail-powder-temp-sync")).not.toBeChecked();
-    await expect(page.locator("#detail-powder-temp")).toBeEnabled();
   });
 });
