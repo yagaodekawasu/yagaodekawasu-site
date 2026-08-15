@@ -16,6 +16,10 @@ const { Content, headings } = await render(entry);
 const profiles = await getCollection("profile");
 const authorName = profiles[0]?.data.name;
 
+const shareUrl = new URL(Astro.url.pathname, Astro.site).toString();
+const shareText = `${title} | 笶顔でかわす`;
+const tweetIntentUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
@@ -55,6 +59,20 @@ const jsonLd = {
     )}
     <TableOfContents headings={headings} />
     <Content />
+    <div class="divider not-prose"></div>
+    <div class="not-prose">
+      <a
+        href={tweetIntentUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn btn-outline btn-sm gap-2"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+        </svg>
+        記事をシェア
+      </a>
+    </div>
   </article>
 
   <script>
