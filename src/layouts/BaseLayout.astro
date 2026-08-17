@@ -7,6 +7,7 @@ interface Props {
   ogImage?: string;
   ogType?: "website" | "article";
   jsonLd?: Record<string, unknown>;
+  wide?: boolean;
 }
 
 const {
@@ -15,6 +16,7 @@ const {
   ogImage = "/og-default.jpg",
   ogType = "website",
   jsonLd,
+  wide = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -113,7 +115,7 @@ const apps = [
       </button>
     </header>
 
-    <main class="flex-1 max-w-3xl w-full mx-auto px-4 py-8">
+    <main class={`flex-1 w-full mx-auto px-4 py-8 ${wide ? "max-w-[66rem]" : "max-w-3xl"}`}>
       <slot />
     </main>
 

@@ -12,6 +12,7 @@ const { entry } = Astro.props;
 const { title, description, pubDate, updatedDate, tags, ogpImage } = entry.data;
 
 const { Content, headings } = await render(entry);
+const tocItems = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 
 const profiles = await getCollection("profile");
 const authorName = profiles[0]?.data.name;
@@ -32,48 +33,58 @@ const jsonLd = {
 };
 ---
 
-<BaseLayout title={`${title} | 笶顔でかわす`} description={description} ogImage={ogpImage} ogType="article" jsonLd={jsonLd}>
-  <article class="prose max-w-none">
-    {tags.length > 0 && (
-      <div class="flex gap-2 mb-3 not-prose">
-        {tags.map((tag) => (
-          <span class="badge badge-outline">{tag}</span>
-        ))}
-      </div>
-    )}
-    <h1>{title}</h1>
-    <div class="text-sm text-base-content/60 mb-6">
-      <time datetime={pubDate.toISOString()}>
-        {pubDate.toLocaleDateString("ja-JP")}
-      </time>
-      {updatedDate && (
-        <span> (更新: {updatedDate.toLocaleDateString("ja-JP")})</span>
+<BaseLayout title={`${title} | 笶顔でかわす`} description={description} ogImage={ogpImage} ogType="article" jsonLd={jsonLd} wide>
+  <div class="lg:flex lg:gap-8">
+    <article class="prose max-w-none lg:max-w-3xl lg:flex-1 min-w-0">
+      {tags.length > 0 && (
+        <div class="flex gap-2 mb-3 not-prose">
+          {tags.map((tag) => (
+            <span class="badge badge-outline">{tag}</span>
+          ))}
+        </div>
       )}
-    </div>
-    {ogpImage && (
-      <img
-        src={ogpImage}
-        alt={title}
-        class="w-full h-auto rounded-lg mb-8 not-prose"
-      />
+      <h1>{title}</h1>
+      <div class="text-sm text-base-content/60 mb-6">
+        <time datetime={pubDate.toISOString()}>
+          {pubDate.toLocaleDateString("ja-JP")}
+        </time>
+        {updatedDate && (
+          <span> (更新: {updatedDate.toLocaleDateString("ja-JP")})</span>
+        )}
+      </div>
+      {ogpImage && (
+        <img
+          src={ogpImage}
+          alt={title}
+          class="w-full h-auto rounded-lg mb-8 not-prose"
+        />
+      )}
+      <TableOfContents headings={headings} variant="inline" />
+      <Content />
+      <div class="divider not-prose"></div>
+      <div class="not-prose">
+        <a
+          href={tweetIntentUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-outline btn-sm gap-2"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+          </svg>
+          記事をシェア
+        </a>
+      </div>
+    </article>
+
+    {tocItems.length > 1 && (
+      <aside class="hidden lg:block lg:w-64 lg:shrink-0">
+        <div class="sticky top-20">
+          <TableOfContents headings={headings} variant="sidebar" />
+        </div>
+      </aside>
     )}
-    <TableOfContents headings={headings} />
-    <Content />
-    <div class="divider not-prose"></div>
-    <div class="not-prose">
-      <a
-        href={tweetIntentUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="btn btn-outline btn-sm gap-2"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
-        </svg>
-        記事をシェア
-      </a>
-    </div>
-  </article>
+  </div>
 
   <dialog id="mermaid-modal" class="modal">
     <div class="modal-box w-11/12 max-w-5xl overflow-auto">
@@ -189,5 +200,49 @@ const jsonLd = {
     }
 
     renderMermaid();
+  </script>
+
+  <script>
+    function initTocHighlight() {
+      const links = Array.from(
+        document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]"),
+      );
+      if (links.length === 0) return;
+
+      const ACTIVE_CLASSES = ["bg-primary/10", "text-primary", "font-medium"];
+
+      const setActive = (slug: string | null) => {
+        links.forEach((link) => {
+          const isActive =
+            slug !== null && link.getAttribute("href") === `#${slug}`;
+          ACTIVE_CLASSES.forEach((cls) => link.classList.toggle(cls, isActive));
+        });
+      };
+
+      const slugToEl = new Map<string, HTMLElement>();
+      links.forEach((link) => {
+        const slug = link.getAttribute("href")?.slice(1);
+        if (!slug || slugToEl.has(slug)) return;
+        const el = document.getElementById(slug);
+        if (el) slugToEl.set(slug, el);
+      });
+
+      let activeSlug: string | null = null;
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              activeSlug = entry.target.id;
+            }
+          });
+          setActive(activeSlug);
+        },
+        { rootMargin: "-96px 0px -70% 0px", threshold: 0 },
+      );
+
+      slugToEl.forEach((el) => observer.observe(el));
+    }
+
+    initTocHighlight();
   </script>
 </BaseLayout>

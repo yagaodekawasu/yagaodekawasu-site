@@ -7,21 +7,22 @@ interface Heading {
 
 interface Props {
   headings: Heading[];
+  variant?: "inline" | "sidebar";
 }
 
-const { headings } = Astro.props;
+const { headings, variant = "inline" } = Astro.props;
 const items = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 ---
 
-{items.length > 1 && (
-  <div class="collapse collapse-arrow bg-base-200 border border-base-300 mb-8 not-prose">
+{items.length > 1 && variant === "inline" && (
+  <div class="collapse collapse-arrow bg-base-200 border border-base-300 mb-8 not-prose lg:hidden">
     <input type="checkbox" />
     <div class="collapse-title font-semibold">目次</div>
     <div class="collapse-content">
       <ul class="space-y-1">
         {items.map((heading) => (
           <li class={heading.depth === 3 ? "ml-4" : ""}>
-            <a href={`#${heading.slug}`} class="link link-hover text-sm">
+            <a href={`#${heading.slug}`} data-toc-link class="link link-hover text-sm">
               {heading.text}
             </a>
           </li>
@@ -29,4 +30,23 @@ const items = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
       </ul>
     </div>
   </div>
+)}
+
+{items.length > 1 && variant === "sidebar" && (
+  <nav class="not-prose bg-base-200 border border-base-300 rounded-box p-4 max-h-[calc(100vh-6rem)] overflow-y-auto">
+    <p class="font-semibold mb-2">目次</p>
+    <ul class="space-y-1 text-sm">
+      {items.map((heading) => (
+        <li class={heading.depth === 3 ? "ml-4" : ""}>
+          <a
+            href={`#${heading.slug}`}
+            data-toc-link
+            class="block rounded px-2 py-1 no-underline text-base-content/70 hover:text-base-content transition-colors"
+          >
+            {heading.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
 )}
