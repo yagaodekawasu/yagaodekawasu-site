@@ -245,4 +245,45 @@ const jsonLd = {
 
     initTocHighlight();
   </script>
+
+  <script>
+    function initCodeCopyButtons() {
+      const blocks = Array.from(
+        document.querySelectorAll<HTMLPreElement>(
+          'article pre.astro-code:not([data-language="mermaid"])',
+        ),
+      );
+
+      blocks.forEach((pre) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "code-block-wrapper group relative";
+        pre.replaceWith(wrapper);
+        wrapper.appendChild(pre);
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = "Copy";
+        button.className =
+          "absolute top-2 right-2 rounded bg-white/10 px-2 py-1 text-xs text-white/80 opacity-0 backdrop-blur-sm transition-opacity hover:bg-white/20 hover:text-white group-hover:opacity-100 group-focus-within:opacity-100";
+
+        let resetTimer: ReturnType<typeof setTimeout> | undefined;
+        button.addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText(pre.textContent ?? "");
+            button.textContent = "Copied!";
+          } catch {
+            button.textContent = "Failed";
+          }
+          clearTimeout(resetTimer);
+          resetTimer = setTimeout(() => {
+            button.textContent = "Copy";
+          }, 1500);
+        });
+
+        wrapper.appendChild(button);
+      });
+    }
+
+    initCodeCopyButtons();
+  </script>
 </BaseLayout>
