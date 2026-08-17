@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { markdownToHtml, defineMdastPlugin } from "satteri";
-import { findCardUrl } from "../src/lib/link-cards.mjs";
+import { findParagraphCardUrls } from "../src/lib/link-cards.mjs";
 
 const BLOG_DIR = fileURLToPath(new URL("../src/content/blog", import.meta.url));
 const CACHE_PATH = fileURLToPath(new URL("../src/data/link-cards.json", import.meta.url));
@@ -20,8 +20,7 @@ function collectUrls(markdown) {
   const collector = defineMdastPlugin({
     name: "link-card-collector",
     paragraph(node, ctx) {
-      const url = findCardUrl(node, ctx);
-      if (url) urls.add(url);
+      for (const url of findParagraphCardUrls(node, ctx)) urls.add(url);
     },
   });
   markdownToHtml(markdown, { mdastPlugins: [collector] });
@@ -82,6 +81,31 @@ function detectCharset(buffer, contentType) {
   return "utf-8";
 }
 
+// Cross-Origin-Resource-Policyがsame-origin/same-siteだと，このブログ（別オリジン・別サイト）の
+// <img>からは画像を読み込めずブラウザ上で壊れて見える。curlや素のfetch()はこの制限を評価しない
+// ためHTTP 200で取得できてしまい，事前フェッチ時には気づけない。og:imageのURL自体に軽くリクエストを
+// 送りヘッダーを見ることで，埋め込み不可な画像を採用時点で弾く。
+async function isImageEmbeddable(imageUrl) {
+  try {
+    let res = await fetch(imageUrl, {
+      method: "HEAD",
+      signal: AbortSignal.timeout(10000),
+      headers: { "User-Agent": "Mozilla/5.0 (compatible; yagaodekawasu-link-card-fetcher/1.0)" },
+    });
+    if (!res.ok && res.status !== 405) return true;
+    if (res.status === 405) {
+      res = await fetch(imageUrl, {
+        signal: AbortSignal.timeout(10000),
+        headers: { "User-Agent": "Mozilla/5.0 (compatible; yagaodekawasu-link-card-fetcher/1.0)" },
+      });
+    }
+    const corp = (res.headers.get("cross-origin-resource-policy") || "").toLowerCase();
+    return corp !== "same-origin" && corp !== "same-site";
+  } catch {
+    return true;
+  }
+}
+
 async function fetchMeta(url) {
   const res = await fetch(url, {
     signal: AbortSignal.timeout(10000),
@@ -96,7 +120,12 @@ async function fetchMeta(url) {
   } catch {
     html = new TextDecoder("utf-8").decode(buffer);
   }
-  return extractMeta(html, url);
+  const meta = extractMeta(html, url);
+  if (meta.image && !(await isImageEmbeddable(meta.image))) {
+    console.warn(`  image blocked by CORP, dropping: ${meta.image}`);
+    meta.image = null;
+  }
+  return meta;
 }
 
 async function main() {
