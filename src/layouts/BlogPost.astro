@@ -75,6 +75,24 @@ const jsonLd = {
     </div>
   </article>
 
+  <dialog id="mermaid-modal" class="modal">
+    <div class="modal-box w-11/12 max-w-5xl overflow-auto">
+      <form method="dialog">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+      </form>
+      <div class="flex items-center gap-1 mb-2 not-prose">
+        <button id="mermaid-zoom-out" type="button" class="btn btn-sm btn-circle btn-ghost" aria-label="縮小">－</button>
+        <span id="mermaid-zoom-level" class="text-sm tabular-nums w-12 text-center">100%</span>
+        <button id="mermaid-zoom-in" type="button" class="btn btn-sm btn-circle btn-ghost" aria-label="拡大">＋</button>
+        <button id="mermaid-zoom-reset" type="button" class="btn btn-sm btn-ghost">リセット</button>
+      </div>
+      <div id="mermaid-modal-content" class="flex justify-start"></div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+      <button>close</button>
+    </form>
+  </dialog>
+
   <script>
     async function renderMermaid() {
       const blocks = Array.from(
@@ -94,11 +112,62 @@ const jsonLd = {
       const containers = blocks.map((pre) => {
         const source = pre.textContent ?? "";
         const div = document.createElement("div");
-        div.className = "mermaid not-prose flex justify-center my-6";
+        div.className = "mermaid not-prose flex justify-center my-6 cursor-zoom-in";
         div.dataset.mermaidSource = source;
         div.textContent = source;
         pre.replaceWith(div);
         return div;
+      });
+
+      const modal = document.getElementById("mermaid-modal") as HTMLDialogElement | null;
+      const modalContent = document.getElementById("mermaid-modal-content");
+      const zoomInBtn = document.getElementById("mermaid-zoom-in");
+      const zoomOutBtn = document.getElementById("mermaid-zoom-out");
+      const zoomResetBtn = document.getElementById("mermaid-zoom-reset");
+      const zoomLevelLabel = document.getElementById("mermaid-zoom-level");
+
+      const ZOOM_STEP = 0.25;
+      const ZOOM_MIN = 0.5;
+      const ZOOM_MAX = 3;
+      let zoomLevel = 1;
+
+      const applyZoom = () => {
+        if (!modalContent) return;
+        modalContent.style.transform = `scale(${zoomLevel})`;
+        modalContent.style.transformOrigin = "top left";
+        if (zoomLevelLabel) {
+          zoomLevelLabel.textContent = `${Math.round(zoomLevel * 100)}%`;
+        }
+      };
+
+      zoomInBtn?.addEventListener("click", () => {
+        zoomLevel = Math.min(ZOOM_MAX, zoomLevel + ZOOM_STEP);
+        applyZoom();
+      });
+      zoomOutBtn?.addEventListener("click", () => {
+        zoomLevel = Math.max(ZOOM_MIN, zoomLevel - ZOOM_STEP);
+        applyZoom();
+      });
+      zoomResetBtn?.addEventListener("click", () => {
+        zoomLevel = 1;
+        applyZoom();
+      });
+
+      containers.forEach((div) => {
+        div.addEventListener("click", () => {
+          const svg = div.querySelector("svg");
+          if (!svg || !modal || !modalContent) return;
+          const clone = svg.cloneNode(true) as SVGElement;
+          clone.removeAttribute("width");
+          clone.removeAttribute("height");
+          clone.style.maxWidth = "none";
+          clone.style.width = "100%";
+          clone.style.height = "auto";
+          modalContent.replaceChildren(clone);
+          zoomLevel = 1;
+          applyZoom();
+          modal.showModal();
+        });
       });
 
       const draw = async () => {
