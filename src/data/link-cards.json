@@ -1,4 +1,9 @@
 {
+  "https://astro.build/blog/astro-7/?utm_source=chatgpt.com": {
+    "title": "Astro 7.0 | Astro",
+    "description": "Astro 7.0 brings faster builds with Vite 8, a new Rust compiler, Advanced Routing, background dev server support, and structured logging.",
+    "image": "https://astro.build/_astro/og-astro-7.BAGlEZn4.jpg"
+  },
   "https://developer.mozilla.org/ja/docs/Web/API/Web_Serial_API": {
     "title": "Web Serial API - Web API | MDN",
     "description": "Web Serial API は、ウェブサイトがシリアルデバイスからデータを受信したり、シリアルデバイスにデータを送信したりする方法を提供します。対象は、シリアルポートで接続されたデバイスのことも、シリアルポートとして振る舞う USB や Bluetooth のデバイスのこともあります。",
@@ -19,6 +24,21 @@
     "description": "How to start containers automatically",
     "image": "https://docs.docker.com/images/thumbnail.webp"
   },
+  "https://easegis.jp/blog/oxc-parser/": {
+    "title": "Oxc-Parserで爆速JavaScriptパース体験してきた話",
+    "description": "Rustで書かれた超高速JavaScriptパーサーOxc-Parserを解説。SWCより3倍速く、Babelより50倍速い。RolldownやNuxtも採用する次世代パーサーの実力とは。",
+    "image": "https://easegis.jp/og/blog/oxc-parser.png"
+  },
+  "https://en.wiktionary.org/wiki/-eri#Swedish": {
+    "title": "-eri - Wiktionary, the free dictionary",
+    "description": null,
+    "image": null
+  },
+  "https://en.wiktionary.org/wiki/s%C3%A4tta": {
+    "title": "sätta - Wiktionary, the free dictionary",
+    "description": null,
+    "image": null
+  },
   "https://esphome.io/": {
     "title": "ESPHome",
     "description": "Smart Home Made Simple. ESPHome turns ESP32, ESP8266, and RP2040 microcontrollers into fully-featured smart home devices.",
@@ -28,6 +48,26 @@
     "title": "WiFi Component",
     "description": "Instructions for setting up the WiFi configuration for your ESP node in ESPHome.",
     "image": "https://esphome.io/images/og.webp"
+  },
+  "https://formatarc.com/ja/blog/commonmark-vs-gfm/": {
+    "title": "CommonMark と GFM の違い (2026): テーブル拡張と 6 パーサー実測",
+    "description": "テーブルは GFM 拡張で CommonMark コア仕様にはありません。6 つのパーサーでテーブル・取り消し線・タスクリスト・裸の URL・脚注を実測し、各々が出力する HTML を記録しました。",
+    "image": null
+  },
+  "https://github.com/Ashish-CodeJourney/satteri-plugins": {
+    "title": "GitHub - Ashish-CodeJourney/satteri-plugins: Ports of remark and rehype plugins to Sätteri, the Rust markdown engine behind Astro 7.",
+    "description": "Ports of remark and rehype plugins to Sätteri, the Rust markdown engine behind Astro 7. - Ashish-CodeJourney/satteri-plugins",
+    "image": "https://opengraph.githubassets.com/f68e0b5143e947dbfadfc3c6212c25f90d0de1055f648eb53f98ae716598fb63/Ashish-CodeJourney/satteri-plugins"
+  },
+  "https://github.com/bruits/satteri": {
+    "title": "GitHub - bruits/satteri: High-performance Markdown and MDX processing for the JavaScript ecosystem",
+    "description": "High-performance Markdown and MDX processing for the JavaScript ecosystem - bruits/satteri",
+    "image": "https://opengraph.githubassets.com/a1f3af9d68cababcb687cad3588cb5b10838b47c10cbb2b0de042433cb7212f8/bruits/satteri"
+  },
+  "https://ja.react.dev/learn/writing-markup-with-jsx": {
+    "title": "JSX でマークアップを記述する – React",
+    "description": "The library for web and native user interfaces",
+    "image": "https://ja.react.dev/images/og-learn.png"
   },
   "https://jisaku.com/posts/esphome-home-automation": {
     "title": "【2026年】ESPHomeで始めるホームオートメーション｜ESP32でDIYスマートホーム",
@@ -44,10 +84,40 @@
     "description": "スマートホーム化を検討している皆さん、「Home Assistant」という名前を耳にしたことはありますか？IoT機器が日々進化する中、それらを一元的に管理し、自分のライフスタイルに合わせた自動化（オートメーション）を構築できるオープンソー [&hellip;]",
     "image": "https://media.xsight.co.jp/wp-content/uploads/2025/07/1-1.jpg"
   },
+  "https://oxc.rs/": {
+    "title": "The JavaScript Oxidation Compiler",
+    "description": "A collection of high-performance JavaScript tools written in Rust",
+    "image": "https://oxc.rs/og.jpg"
+  },
+  "https://qiita.com/Prof-Cheese/items/9629438b06aacc068c98": {
+    "title": "CommonMarkの仕様とか - Qiita",
+    "description": "CommonMarkの仕様とか CommonMarkとは Markdownの仕様が全然決まってないのにキレた人達で作った軽量マークアップ言語 Github Flavored Markdownで良くない？ 大本のMarkdownそのものはもう仕様が決まることはない...",
+    "image": "https://qiita-user-contents.imgix.net/https%3A%2F%2Fqiita-user-contents.imgix.net%2Fhttps%253A%252F%252Fcdn.qiita.com%252Fassets%252Fpublic%252Farticle-ogp-background-afbab5eb44e0b055cce1258705637a91.png%3Fixlib%3Drb-4.1.1%26w%3D1200%26blend64%3DaHR0cHM6Ly9xaWl0YS11c2VyLXByb2ZpbGUtaW1hZ2VzLmltZ2l4Lm5ldC9odHRwcyUzQSUyRiUyRnFpaXRhLWltYWdlLXN0b3JlLnMzLmFtYXpvbmF3cy5jb20lMkYwJTJGMTUwMTA0JTJGcHJvZmlsZS1pbWFnZXMlMkYxNDc5NTEyMDg3P2l4bGliPXJiLTQuMS4xJmFyPTElM0ExJmZpdD1jcm9wJm1hc2s9ZWxsaXBzZSZiZz1GRkZGRkYmZm09cG5nMzImcz1jZTBhNDM3NWQ0ODc4NWM0N2EwZWY3NGY1Y2I0NDMzNg%26blend-x%3D120%26blend-y%3D467%26blend-w%3D82%26blend-h%3D82%26blend-mode%3Dnormal%26s%3D34d0263f221ef9040e4a03ca1e35852a?ixlib=rb-4.1.1&w=1200&fm=jpg&mark64=aHR0cHM6Ly9xaWl0YS11c2VyLWNvbnRlbnRzLmltZ2l4Lm5ldC9-dGV4dD9peGxpYj1yYi00LjEuMSZ3PTk2MCZoPTMyNCZ0eHQ9Q29tbW9uTWFyayVFMyU4MSVBRSVFNCVCQiU5NSVFNiVBNyU5OCVFMyU4MSVBOCVFMyU4MSU4QiZ0eHQtYWxpZ249bGVmdCUyQ3RvcCZ0eHQtY29sb3I9JTIzMUUyMTIxJnR4dC1mb250PUhpcmFnaW5vJTIwU2FucyUyMFc2JnR4dC1zaXplPTU2JnR4dC1wYWQ9MCZzPTlkZDcxN2RmZWVlYWU1YTIzYTkzMTA3MjM2YTgyM2Qz&mark-x=120&mark-y=112&blend64=aHR0cHM6Ly9xaWl0YS11c2VyLWNvbnRlbnRzLmltZ2l4Lm5ldC9-dGV4dD9peGxpYj1yYi00LjEuMSZ3PTgzOCZoPTU4JnR4dD0lNDBQcm9mLUNoZWVzZSZ0eHQtY29sb3I9JTIzMUUyMTIxJnR4dC1mb250PUhpcmFnaW5vJTIwU2FucyUyMFc2JnR4dC1zaXplPTM2JnR4dC1wYWQ9MCZzPTE0MWQ5ZTc2ODg2MzQyZjBkN2NlYTIzNmRlNDk1NTQx&blend-x=242&blend-y=480&blend-w=838&blend-h=46&blend-fit=crop&blend-crop=left%2Cbottom&blend-mode=normal&s=3ac0576e1af2416dd41e3536b49507b4"
+  },
+  "https://qiita.com/k8o/items/563e99734850bb5b5723": {
+    "title": "次世代のWebプラットフォームSWCを学ぶ - Qiita",
+    "description": "はじめに SWCは多くのライブラリやランタイムで利用されています。 Next.js11.1のブログによるとBabelやTerserで行っていた処理をパフォーマンス改善のためにSWCを利用していると書かれています。 他にもDenoでTypescriptやTSX、JSXをJa...",
+    "image": "https://qiita-user-contents.imgix.net/https%3A%2F%2Fqiita-user-contents.imgix.net%2Fhttps%253A%252F%252Fcdn.qiita.com%252Fassets%252Fpublic%252Fadvent-calendar-ogp-background-7940cd1c8db80a7ec40711d90f43539e.jpg%3Fixlib%3Drb-4.1.1%26w%3D1200%26blend64%3DaHR0cHM6Ly9xaWl0YS11c2VyLXByb2ZpbGUtaW1hZ2VzLmltZ2l4Lm5ldC9odHRwcyUzQSUyRiUyRnFpaXRhLWltYWdlLXN0b3JlLnMzLmFwLW5vcnRoZWFzdC0xLmFtYXpvbmF3cy5jb20lMkYwJTJGNTkxMDY5JTJGcHJvZmlsZS1pbWFnZXMlMkYxNjg5Njc5NzI0P2l4bGliPXJiLTQuMS4xJmFyPTElM0ExJmZpdD1jcm9wJm1hc2s9ZWxsaXBzZSZiZz1GRkZGRkYmZm09cG5nMzImcz03OTdkZWRjYWVmMWMxNzkwNmNmYmE3OWY5ZTlmMjQ0Ng%26blend-x%3D120%26blend-y%3D467%26blend-w%3D82%26blend-h%3D82%26blend-mode%3Dnormal%26s%3D3dc69f7dfae35fda2880a82c5253f4dc?ixlib=rb-4.1.1&w=1200&fm=jpg&mark64=aHR0cHM6Ly9xaWl0YS11c2VyLWNvbnRlbnRzLmltZ2l4Lm5ldC9-dGV4dD9peGxpYj1yYi00LjEuMSZ3PTk2MCZoPTMyNCZ0eHQ9JUU2JUFDJUExJUU0JUI4JTk2JUU0JUJCJUEzJUUzJTgxJUFFV2ViJUUzJTgzJTk3JUUzJTgzJUE5JUUzJTgzJTgzJUUzJTgzJTg4JUUzJTgzJTk1JUUzJTgyJUE5JUUzJTgzJUJDJUUzJTgzJUEwU1dDJUUzJTgyJTkyJUU1JUFEJUE2JUUzJTgxJUI2JnR4dC1hbGlnbj1sZWZ0JTJDdG9wJnR4dC1jb2xvcj0lMjMzQTNDM0MmdHh0LWZvbnQ9SGlyYWdpbm8lMjBTYW5zJTIwVzYmdHh0LXNpemU9NTYmdHh0LXBhZD0wJnM9ZTdkOGE5MTU3ZWMxNjNkM2YwYTE4YmJlNjVlYzYzM2M&mark-x=120&mark-y=112&blend64=aHR0cHM6Ly9xaWl0YS11c2VyLWNvbnRlbnRzLmltZ2l4Lm5ldC9-dGV4dD9peGxpYj1yYi00LjEuMSZ3PTgzOCZoPTU4JnR4dD0lNDBrOG8mdHh0LWNvbG9yPSUyMzNBM0MzQyZ0eHQtZm9udD1IaXJhZ2lubyUyMFNhbnMlMjBXNiZ0eHQtc2l6ZT0zNiZ0eHQtcGFkPTAmcz03MjE2OTFmYjE5M2I3ZDIxYzY3ZjM4M2JkZmQ4OTBmZQ&blend-x=242&blend-y=480&blend-w=838&blend-h=46&blend-fit=crop&blend-crop=left%2Cbottom&blend-mode=normal&s=22be8daf25b6b3b79ea693401d928bdd"
+  },
+  "https://qiita.com/tk0miya/items/6b81e0e4563199037018": {
+    "title": "GitHub Flavored Markdown は何であって何でないか - Qiita",
+    "description": "のんびりしていたらこんなメンションをもらっていたので、ちょっとまとめてみようと思います。 そろそろ @tk0miya さんがアップしてくる頃。GFMはspecかっちりしてるんでしたっけ(markdown全く詳しくない— Aki Ariga (@chezou) Februa...",
+    "image": "https://qiita-user-contents.imgix.net/https%3A%2F%2Fqiita-user-contents.imgix.net%2Fhttps%253A%252F%252Fcdn.qiita.com%252Fassets%252Fpublic%252Farticle-ogp-background-afbab5eb44e0b055cce1258705637a91.png%3Fixlib%3Drb-4.1.1%26w%3D1200%26blend64%3DaHR0cHM6Ly9xaWl0YS11c2VyLXByb2ZpbGUtaW1hZ2VzLmltZ2l4Lm5ldC9odHRwcyUzQSUyRiUyRnFpaXRhLWltYWdlLXN0b3JlLnMzLmFtYXpvbmF3cy5jb20lMkYwJTJGNTc2NjElMkZwcm9maWxlLWltYWdlcyUyRjE0NzM2OTQzOTg_aXhsaWI9cmItNC4xLjEmYXI9MSUzQTEmZml0PWNyb3AmbWFzaz1lbGxpcHNlJmJnPUZGRkZGRiZmbT1wbmczMiZzPTE2YWJjYjcwN2UyYjY4NGRmY2MzYzA4ZWI1ZDI0ZGVh%26blend-x%3D120%26blend-y%3D462%26blend-w%3D90%26blend-h%3D90%26blend-mode%3Dnormal%26mark64%3DaHR0cHM6Ly9xaWl0YS1vcmdhbml6YXRpb24taW1hZ2VzLmltZ2l4Lm5ldC9odHRwcyUzQSUyRiUyRnMzLWFwLW5vcnRoZWFzdC0xLmFtYXpvbmF3cy5jb20lMkZxaWl0YS1vcmdhbml6YXRpb24taW1hZ2UlMkYzZjhmODgyYjQ5Nzg5ZTMwNzc5ZTM2OGEyN2VmMTUwMDFhYjVmZDdiJTJGb3JpZ2luYWwuanBnJTNGMTU4MTA2MTAwNj9peGxpYj1yYi00LjEuMSZ3PTQ0Jmg9NDQmZml0PWNyb3AmbWFzaz1jb3JuZXJzJmNvcm5lci1yYWRpdXM9OCZiZz1GRkZGRkYmYm9yZGVyPTIlMkNGRkZGRkYmZm09cG5nMzImcz1jOGVjNWU1YWE0Y2JlNTgxOWIwNWZmZmYwNjU4NTA0MA%26mark-x%3D186%26mark-y%3D515%26mark-w%3D40%26mark-h%3D40%26s%3D7c7a1424389685401257da07dad54e33?ixlib=rb-4.1.1&w=1200&fm=jpg&mark64=aHR0cHM6Ly9xaWl0YS11c2VyLWNvbnRlbnRzLmltZ2l4Lm5ldC9-dGV4dD9peGxpYj1yYi00LjEuMSZ3PTk2MCZoPTMyNCZ0eHQ9R2l0SHViJTIwRmxhdm9yZWQlMjBNYXJrZG93biUyMCVFMyU4MSVBRiVFNCVCRCU5NSVFMyU4MSVBNyVFMyU4MSU4MiVFMyU4MSVBMyVFMyU4MSVBNiVFNCVCRCU5NSVFMyU4MSVBNyVFMyU4MSVBQSVFMyU4MSU4NCVFMyU4MSU4QiZ0eHQtYWxpZ249bGVmdCUyQ3RvcCZ0eHQtY29sb3I9JTIzMUUyMTIxJnR4dC1mb250PUhpcmFnaW5vJTIwU2FucyUyMFc2JnR4dC1zaXplPTU2JnR4dC1wYWQ9MCZzPTZlM2M0ODZlNGVjNjMzMmExNzEyMGY5OWVhZWU0MmE2&mark-x=120&mark-y=112&blend64=aHR0cHM6Ly9xaWl0YS11c2VyLWNvbnRlbnRzLmltZ2l4Lm5ldC9-dGV4dD9peGxpYj1yYi00LjEuMSZ3PTgzOCZoPTU4JnR4dD0lNDB0azBtaXlhJnR4dC1jb2xvcj0lMjMxRTIxMjEmdHh0LWZvbnQ9SGlyYWdpbm8lMjBTYW5zJTIwVzYmdHh0LXNpemU9MzYmdHh0LXBhZD0wJnM9MzdiZTA1MjUyYjk5NjMzYjk1YThmM2NmNDcwYTliNWY&blend-x=242&blend-y=454&blend-w=838&blend-h=46&blend-fit=crop&blend-crop=left%2Cbottom&blend-mode=normal&txt64=5qCq5byP5Lya56S-44K_44Kk44Og44Kk44Oz44K_44O844Oh44OH44Kj44Ki&txt-x=242&txt-y=539&txt-width=838&txt-clip=end%2Cellipsis&txt-color=%231E2121&txt-font=Hiragino%20Sans%20W6&txt-size=28&s=a819355ddd910371a5d3b9afdc340bc8"
+  },
+  "https://runeberg.org/nfch/0078.html": {
+    "title": "119-120 (Nordisk familjebok / Uggleupplagan. 28. Syrten-vikarna - Tidsbestämning)",
+    "description": null,
+    "image": null
+  },
   "https://space-core.jp/media/10032/": {
     "title": "スマートホームの新規格「Matter」を解説。スマートホーム市場に与える影響とは - SpaceCore（スペースコア）",
     "description": "2022年10月4日に無線通信規格標準化団体（Connectivity Standards Alliance）は、「Matter（マター）」バージョン1.0と「Matter」認定プログラムをリリースしました。今回は、「Matter」とはどういったものなのか。「Matter」が必要になった背景やスマートホーム市場にどのような影響があるのかについて解説します。",
     "image": "https://space-core.jp/wp-content/uploads/2022/10/matterlogo.png"
+  },
+  "https://swc.rs/": {
+    "title": "Rust-based platform for the Web - SWC",
+    "description": "SWC is an extensible Rust-based platform for the next generation of fast developer tools. It",
+    "image": null
   },
   "https://w3e.kanazawa-it.ac.jp/math/physics/high-school_index/thermodynamics/temperature_and_heat/henkan-tex.cgi?target=/math/physics/high-school_index/thermodynamics/temperature_and_heat/heat_capacity.html": {
     "title": "比熱と熱容量",
@@ -109,6 +179,11 @@
     "description": "東京都水道局の水道水の水温(水質に関するトピック)のページです。",
     "image": "https://www.waterworks.metro.tokyo.lg.jp/documents/158990/5052145/opg.png/3c79ba89-ab16-4589-4fad-b5b411615b25?version=1.1&t=1764164520819&imagePreview=1"
   },
+  "https://zenn.dev/burizae/articles/c811cae767965a": {
+    "title": "Monorepoって何なのか？と関連アーキテクチャとの関係をまとめてみた",
+    "description": null,
+    "image": "https://res.cloudinary.com/zenn/image/upload/s--KuOJwkze--/c_fit%2Cg_north_west%2Cl_text:notosansjp-medium.otf_55:Monorepo%25E3%2581%25A3%25E3%2581%25A6%25E4%25BD%2595%25E3%2581%25AA%25E3%2581%25AE%25E3%2581%258B%25EF%25BC%259F%25E3%2581%25A8%25E9%2596%25A2%25E9%2580%25A3%25E3%2582%25A2%25E3%2583%25BC%25E3%2582%25AD%25E3%2583%2586%25E3%2582%25AF%25E3%2583%2581%25E3%2583%25A3%25E3%2581%25A8%25E3%2581%25AE%25E9%2596%25A2%25E4%25BF%2582%25E3%2582%2592%25E3%2581%25BE%25E3%2581%25A8%25E3%2582%2581%25E3%2581%25A6%25E3%2581%25BF%25E3%2581%259F%2Cw_1010%2Cx_90%2Cy_100/g_south_west%2Cl_text:notosansjp-medium.otf_37:iwaseshi%2Cx_203%2Cy_121/g_south_west%2Ch_90%2Cl_fetch:aHR0cHM6Ly9zdGF0aWMuemVubi5zdHVkaW8vdXNlci11cGxvYWQvYXZhdGFyL2Y1NzIzNGZiZmQuanBlZw==%2Cr_max%2Cw_90%2Cx_87%2Cy_95/v1627283836/default/og-base-w1200-v2.png?_a=BACMTiAE"
+  },
   "https://zenn.dev/kanekonkon/articles/9df90ce20fbbee": {
     "title": "Docker composeの restart の設定のまとめ",
     "description": null,
@@ -118,5 +193,10 @@
     "title": "Docker Composeのnetwork_mode解説",
     "description": null,
     "image": "https://res.cloudinary.com/zenn/image/upload/s--eFg2vvGq--/c_fit%2Cg_north_west%2Cl_text:notosansjp-medium.otf_55:Docker%2520Compose%25E3%2581%25AEnetwork_mode%25E8%25A7%25A3%25E8%25AA%25AC%2Cw_1010%2Cx_90%2Cy_100/g_south_west%2Cl_text:notosansjp-medium.otf_37:sakaki%2Cx_203%2Cy_121/g_south_west%2Ch_90%2Cl_fetch:aHR0cHM6Ly9zdGF0aWMuemVubi5zdHVkaW8vdXNlci11cGxvYWQvYXZhdGFyLzUzZWMyNjZjN2UuanBlZw==%2Cr_max%2Cw_90%2Cx_87%2Cy_95/v1627283836/default/og-base-w1200-v2.png?_a=BACMTiAE"
+  },
+  "https://zenn.dev/spring_raining/articles/3eb62ff93df1eb": {
+    "title": "Markdown を拡張する MDX はドキュメント作成の新たな可能性？",
+    "description": null,
+    "image": "https://res.cloudinary.com/zenn/image/upload/s--_FcZfDa4--/c_fit%2Cg_north_west%2Cl_text:notosansjp-medium.otf_55:Markdown%2520%25E3%2582%2592%25E6%258B%25A1%25E5%25BC%25B5%25E3%2581%2599%25E3%2582%258B%2520MDX%2520%25E3%2581%25AF%25E3%2583%2589%25E3%2582%25AD%25E3%2583%25A5%25E3%2583%25A1%25E3%2583%25B3%25E3%2583%2588%25E4%25BD%259C%25E6%2588%2590%25E3%2581%25AE%25E6%2596%25B0%25E3%2581%259F%25E3%2581%25AA%25E5%258F%25AF%25E8%2583%25BD%25E6%2580%25A7%25EF%25BC%259F%2Cw_1010%2Cx_90%2Cy_100/g_south_west%2Cl_text:notosansjp-medium.otf_37:spring-raining%2Cx_203%2Cy_121/g_south_west%2Ch_90%2Cl_fetch:aHR0cHM6Ly9zdGF0aWMuemVubi5zdHVkaW8vdXNlci11cGxvYWQvYXZhdGFyL2ZkNTEwOTdkZTkuanBlZw==%2Cr_max%2Cw_90%2Cx_87%2Cy_95/v1627283836/default/og-base-w1200-v2.png?_a=BACMTiAE"
   }
 }
