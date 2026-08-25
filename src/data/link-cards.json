@@ -24,6 +24,11 @@
     "description": "How to start containers automatically",
     "image": "https://docs.docker.com/images/thumbnail.webp"
   },
+  "https://e-words.jp/w/OGP.html": {
+    "title": "OGP（オープングラフプロトコル）とは - IT用語辞典 e-Words",
+    "description": "OGP（オープングラフプロトコル）とは、Webページにそのページについての情報(メタ情報)をコンピュータで自動処理できる形で記述するためのデータ形式の一つ。米メタ(Meta：旧フェイスブック)社が策定した。HTMLのヘッダ領域(head要素内)に任意のデータを記述できるmeta要素を追加し、そのページについての情報を記…",
+    "image": "https://p.e-words.jp/img/Placeholder-9498.webp"
+  },
   "https://easegis.jp/blog/oxc-parser/": {
     "title": "Oxc-Parserで爆速JavaScriptパース体験してきた話",
     "description": "Rustで書かれた超高速JavaScriptパーサーOxc-Parserを解説。SWCより3倍速く、Babelより50倍速い。RolldownやNuxtも採用する次世代パーサーの実力とは。",
@@ -57,12 +62,12 @@
   "https://github.com/Ashish-CodeJourney/satteri-plugins": {
     "title": "GitHub - Ashish-CodeJourney/satteri-plugins: Ports of remark and rehype plugins to Sätteri, the Rust markdown engine behind Astro 7.",
     "description": "Ports of remark and rehype plugins to Sätteri, the Rust markdown engine behind Astro 7. - Ashish-CodeJourney/satteri-plugins",
-    "image": "https://opengraph.githubassets.com/f68e0b5143e947dbfadfc3c6212c25f90d0de1055f648eb53f98ae716598fb63/Ashish-CodeJourney/satteri-plugins"
+    "image": "https://opengraph.githubassets.com/c8614c2a8616e1e7df794a6d932636e279a3bd15affeceaa502346ff65c8ce8d/Ashish-CodeJourney/satteri-plugins"
   },
   "https://github.com/bruits/satteri": {
     "title": "GitHub - bruits/satteri: High-performance Markdown and MDX processing for the JavaScript ecosystem",
     "description": "High-performance Markdown and MDX processing for the JavaScript ecosystem - bruits/satteri",
-    "image": "https://opengraph.githubassets.com/a1f3af9d68cababcb687cad3588cb5b10838b47c10cbb2b0de042433cb7212f8/bruits/satteri"
+    "image": "https://opengraph.githubassets.com/1a3556445f24b1aec7f0187b59497b3de97488ef7a8d221d8158499febbdd484/bruits/satteri"
   },
   "https://ja.react.dev/learn/writing-markup-with-jsx": {
     "title": "JSX でマークアップを記述する – React",
@@ -178,6 +183,11 @@
     "title": "水道水の水温|水質に関するトピック|東京都水道局",
     "description": "東京都水道局の水道水の水温(水質に関するトピック)のページです。",
     "image": "https://www.waterworks.metro.tokyo.lg.jp/documents/158990/5052145/opg.png/3c79ba89-ab16-4589-4fad-b5b411615b25?version=1.1&t=1764164520819&imagePreview=1"
+  },
+  "https://yagaodekawasu.com/blog/astro-satteri-overview/": {
+    "title": "Astro 7のデフォルトMarkdownエンジン「Sätteri」とは何か | 笶顔でかわす",
+    "description": "Astro 7でデフォルトのMarkdownプロセッサになったRust製の高速エンジン「Sätteri」の仕組み・アーキテクチャ・remark/rehypeとの違いをまとめた入門記事",
+    "image": "https://yagaodekawasu.com/uploads/astro-satteri-overview-ogp.png"
   },
   "https://zenn.dev/burizae/articles/c811cae767965a": {
     "title": "Monorepoって何なのか？と関連アーキテクチャとの関係をまとめてみた",

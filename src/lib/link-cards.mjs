@@ -1,16 +1,9 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { defineMdastPlugin } from "satteri";
+import { fetchMeta } from "./ogp-fetch.mjs";
 
-const CACHE_PATH = fileURLToPath(new URL("../data/link-cards.json", import.meta.url));
-
-function loadCache() {
-  try {
-    return JSON.parse(readFileSync(CACHE_PATH, "utf-8"));
-  } catch {
-    return {};
-  }
-}
+const DEFAULT_CACHE_PATH = fileURLToPath(new URL("../data/link-cards.json", import.meta.url));
 
 function escapeHtml(value) {
   return String(value)
@@ -40,12 +33,32 @@ export function domainOf(url) {
 
 // 本文直下（root直下）にリンク1つだけで構成された段落＝独立した参照リンクだけをカード化対象にする。
 // 文中のインラインリンク・箇条書き（参考リンク一覧）・脚注はrootの子ではないので自然に対象外。
-export function findCardUrl(node, ctx) {
+function findCardLink(node, ctx) {
   if (node.children?.length !== 1) return null;
   const child = node.children[0];
   if (child.type !== "link" || !isHttpUrl(child.url)) return null;
   if (ctx.parent(node)?.type !== "root") return null;
-  return child.url;
+  return child;
+}
+
+export function findCardUrl(node, ctx) {
+  return findCardLink(node, ctx)?.url ?? null;
+}
+
+// リンクノードの表示テキストを再帰的に平文化する。og:titleが取得できなかった場合の
+// フォールバック（renderCardHtmlのfallbackText）に使う。
+// 表示テキストがURL自体と同じ（＝著者が意味のある表示テキストを与えていないベタ書き
+// リンク）場合はtitleとして採用する価値が無いため，空文字を返してドメイン名への
+// フォールバックに委ねる。
+function linkNodeText(linkNode) {
+  const parts = [];
+  const walk = (n) => {
+    if (n.type === "text") parts.push(n.value);
+    else n.children?.forEach(walk);
+  };
+  linkNode.children.forEach(walk);
+  const text = parts.join("").replace(/\s+/g, " ").trim();
+  return text !== linkNode.url ? text : "";
 }
 
 // satteriは改行（ソフトブレイク）を独立したbreakノードではなく、隣接するtextノードの
@@ -71,12 +84,16 @@ function lineHasContent(lineNodes) {
   return lineNodes.some((n) => !(n.type === "text" && n.value.trim() === ""));
 }
 
-function lineCardUrl(lineNodes) {
+function lineCardLink(lineNodes) {
   const meaningful = lineNodes.filter((n) => !(n.type === "text" && n.value.trim() === ""));
   if (meaningful.length !== 1) return null;
   const only = meaningful[0];
   if (only.type !== "link" || !isHttpUrl(only.url)) return null;
-  return only.url;
+  return only;
+}
+
+function lineCardUrl(lineNodes) {
+  return lineCardLink(lineNodes)?.url ?? null;
 }
 
 // 段落全体がリンク単体のケース（findCardUrl）に加え、他のテキストと同じ段落内でも
@@ -92,16 +109,16 @@ export function findParagraphCardUrls(node, ctx) {
   return lines.map(lineCardUrl).filter((url) => url != null);
 }
 
-export function renderCardHtml(url, cache) {
+export function renderCardHtml(url, cache, fallbackText = "") {
   const meta = cache[url];
   const domain = domainOf(url);
   const favicon = `https://www.google.com/s2/favicons?sz=64&domain=${encodeURIComponent(domain)}`;
-  const title = meta?.title || domain;
+  const title = meta?.title || fallbackText || domain;
   const description = meta?.description || "";
   const image = meta?.image && isHttpUrl(meta.image) ? meta.image : null;
 
-  // rawHtmlのルート要素がphrasing content（<a>等）だとsatteriがブロック位置で<p>に包んでしまうため、
-  // ブロック要素の<div>をルートにして<a>をその中に置く。
+  // 外側のdivはprose用CSSの打ち消し・余白調整のためのスタイリング目的（{ type: "html" }で挿入するため、
+  // ルート要素がphrasing content(<a>等)であること自体はもう問題にならない）。
   return `<div class="not-prose my-6"><a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer nofollow" class="card sm:card-side bg-base-200 hover:shadow-lg transition-shadow overflow-hidden no-underline">${
     image
       ? `<figure class="sm:w-40 shrink-0 bg-base-300"><img src="${escapeHtml(image)}" alt="" class="w-full h-full object-cover" loading="lazy" /></figure>`
@@ -113,34 +130,93 @@ export function renderCardHtml(url, cache) {
   }<p class="text-xs text-base-content/50 flex items-center gap-1 m-0 mt-1"><img src="${escapeHtml(favicon)}" alt="" width="14" height="14" class="inline-block rounded-sm" />${escapeHtml(domain)}</p></div></a></div>`;
 }
 
-export const linkCardPlugin = defineMdastPlugin({
-  name: "link-card",
-  paragraph(node, ctx) {
-    const url = findCardUrl(node, ctx);
-    if (url) {
-      const cache = loadCache();
-      ctx.replaceNode(node, { rawHtml: renderCardHtml(url, cache) });
-      return;
-    }
+// キャッシュファイルのパスを引数化しているのはテスト用の特別対応ではなく，通常の依存性注入。
+// astro.config.mjsは引数無しでlinkCardPlugin（下記の単一インスタンス）をimportするだけでよい。
+export function createLinkCardPlugin({ cachePath = DEFAULT_CACHE_PATH } = {}) {
+  // ビルド中はディスクを読み直さず，このインメモリのcacheを唯一の正とする。
+  // astro buildもastro devも単一Nodeプロセス・単一スレッド内で動く（worker_threads未使用）ため，
+  // 複数のmdastPlugin visitorが並行実行されても，このオブジェクトへの読み書きに競合は生じない。
+  let cache = null;
 
-    if (ctx.parent(node)?.type !== "root") return;
-    if (!node.children.some((c) => c.type === "text" && c.value.includes("\n"))) return;
-    const lines = splitParagraphLines(node.children);
-    if (lines.length < 2) return;
-    const urls = lines.map(lineCardUrl);
-    if (!urls.some((u) => u != null)) return;
-
-    const cache = loadCache();
-    const replacements = [];
-    for (let i = 0; i < lines.length; i++) {
-      if (urls[i]) {
-        replacements.push({ rawHtml: renderCardHtml(urls[i], cache) });
-      } else if (lineHasContent(lines[i])) {
-        replacements.push({ type: "paragraph", children: lines[i] });
+  function getCache() {
+    if (cache === null) {
+      try {
+        cache = JSON.parse(readFileSync(cachePath, "utf-8"));
+      } catch {
+        cache = {};
       }
     }
-    if (replacements.length === 0) return;
-    ctx.insertBefore(node, replacements);
-    ctx.removeNode(node);
-  },
-});
+    return cache;
+  }
+
+  function flushCache() {
+    writeFileSync(cachePath, JSON.stringify(cache, null, 2) + "\n");
+  }
+
+  // 同じURLへの重複fetchを防ぐため，取得中のPromiseを共有する。get→setの間にawaitを挟まないので，
+  // 複数visitorが同時にこのURLの取得開始判定に来ても競合しない。
+  const pendingFetches = new Map();
+
+  async function ensureCardMeta(url) {
+    const cache = getCache();
+    if (cache[url]) return;
+
+    let promise = pendingFetches.get(url);
+    if (!promise) {
+      promise = fetchMeta(url)
+        .then((meta) => {
+          cache[url] = meta;
+          flushCache();
+        })
+        .catch((err) => {
+          console.warn(`[link-card] fetch failed, rendering fallback: ${url} — ${err.message}`);
+        })
+        .finally(() => pendingFetches.delete(url));
+      pendingFetches.set(url, promise);
+    }
+    await promise;
+  }
+
+  return defineMdastPlugin({
+    name: "link-card",
+    async paragraph(node, ctx) {
+      const link = findCardLink(node, ctx);
+      if (link) {
+        await ensureCardMeta(link.url);
+        ctx.replaceNode(node, {
+          type: "html",
+          value: renderCardHtml(link.url, getCache(), linkNodeText(link)),
+        });
+        return;
+      }
+
+      if (ctx.parent(node)?.type !== "root") return;
+      if (!node.children.some((c) => c.type === "text" && c.value.includes("\n"))) return;
+      const lines = splitParagraphLines(node.children);
+      if (lines.length < 2) return;
+      const links = lines.map(lineCardLink);
+      if (!links.some((l) => l != null)) return;
+
+      for (const l of links) {
+        if (l) await ensureCardMeta(l.url);
+      }
+      const cache = getCache();
+      const replacements = [];
+      for (let i = 0; i < lines.length; i++) {
+        if (links[i]) {
+          replacements.push({
+            type: "html",
+            value: renderCardHtml(links[i].url, cache, linkNodeText(links[i])),
+          });
+        } else if (lineHasContent(lines[i])) {
+          replacements.push({ type: "paragraph", children: lines[i] });
+        }
+      }
+      if (replacements.length === 0) return;
+      ctx.insertBefore(node, replacements);
+      ctx.removeNode(node);
+    },
+  });
+}
+
+export const linkCardPlugin = createLinkCardPlugin();

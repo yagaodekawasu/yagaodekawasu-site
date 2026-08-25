@@ -11,6 +11,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "fetch-link-cards": "node scripts/fetch-link-cards.mjs",
+    "test:unit": "node --test \"src/lib/*.test.mjs\"",
     "test:e2e": "playwright test",
     "prepare": "husky"
   },
