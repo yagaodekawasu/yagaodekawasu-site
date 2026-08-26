@@ -9,6 +9,10 @@
   scroll-margin-top: 5rem;
 }
 
+.prose figcaption {
+  text-align: center;
+}
+
 .callout {
   display: grid;
   grid-template-columns: auto 1fr;
