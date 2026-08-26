@@ -12,6 +12,9 @@ import { mathPlugin } from './src/lib/math.mjs';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://yagaodekawasu.com',
+  prefetch: {
+    prefetchAll: true
+  },
   integrations: [sitemap()],
   markdown: {
     processor: satteri({
