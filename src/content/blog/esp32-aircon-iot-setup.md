@@ -5,6 +5,10 @@ pubDate: 2026-08-08
 tags: [ESP32, Home Assistant, IoT, ESPHome, Docker]
 ogpImage: /uploads/esp32-aircon-iot-setup-ogp.png
 draft: false
+series:
+  name: "ESP32×Home AssistantによるエアコンのIoT化"
+  order: 2
+  label: "セットアップ編"
 ---
 ## この記事について
 

@@ -11,6 +11,10 @@ tags:
   - SwitchBot
 ogpImage: /uploads/esp32-aircon-iot-design-ogp.png
 draft: false
+series:
+  name: "ESP32×Home AssistantによるエアコンのIoT化"
+  order: 1
+  label: "設計編"
 ---
 ## この記事について
 

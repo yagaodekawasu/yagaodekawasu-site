@@ -3,16 +3,23 @@ import type { CollectionEntry } from "astro:content";
 import { render, getCollection } from "astro:content";
 import BaseLayout from "./BaseLayout.astro";
 import TableOfContents from "../components/TableOfContents.astro";
+import SeriesBox from "../components/SeriesBox.astro";
 
 interface Props {
   entry: CollectionEntry<"blog">;
 }
 
 const { entry } = Astro.props;
-const { title, description, pubDate, updatedDate, tags, ogpImage } = entry.data;
+const { title, description, pubDate, updatedDate, tags, ogpImage, series } = entry.data;
 
 const { Content, headings } = await render(entry);
 const tocItems = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+
+const seriesItems = series
+  ? (await getCollection("blog", ({ data }) => !data.draft && data.series?.name === series.name))
+      .map((post) => ({ id: post.id, order: post.data.series!.order, label: post.data.series!.label }))
+      .sort((a, b) => a.order - b.order)
+  : [];
 
 const profiles = await getCollection("profile");
 const authorName = profiles[0]?.data.name;
@@ -61,6 +68,7 @@ const jsonLd = {
       )}
       <TableOfContents headings={headings} variant="inline" />
       <Content />
+      {series && <SeriesBox seriesName={series.name} items={seriesItems} currentId={entry.id} />}
       <div class="divider not-prose"></div>
       <div class="not-prose">
         <a

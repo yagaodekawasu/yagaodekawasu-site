@@ -1,10 +1,14 @@
 ---
-title: "SätteriのプラグインAPIで数式（KaTeX）をレンダリングする"
+title: "Sätteriプラグイン開発 #2 数式のレンダリング"
 description: "Astro 7のRustネイティブMarkdownエンジンSätteriで，features.mathでパースした数式ノードをKaTeXでレンダリングするmdastPluginを実装した記事です。"
 pubDate: 2026-08-26
 tags: ["Sätteri", "Astro", "Markdown", "KaTeX"]
 ogpImage: /uploads/astro-satteri-plugin-katex-math-ogp.png
 draft: false
+series:
+  name: "Sätteriプラグイン開発"
+  order: 2
+  label: "数式のレンダリング"
 ---
 ## はじめに
 

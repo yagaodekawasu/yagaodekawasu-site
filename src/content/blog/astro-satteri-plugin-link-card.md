@@ -1,10 +1,14 @@
 ---
-title: SätteriのプラグインAPIで外部リンクをカード化する
+title: "Sätteriプラグイン開発 #1 OGPカード表示"
 description: Astro 7のRustネイティブMarkdownエンジンSätteriで，本文中の単独リンクだけをOGPカードに変換するmdastPluginを実装した方法について書きました。
 pubDate: 2026-08-25
 tags: [Sätteri, Astro, Markdown]
 ogpImage: /uploads/astro-satteri-plugin-link-card-ogp.png
 draft: false
+series:
+  name: "Sätteriプラグイン開発"
+  order: 1
+  label: "OGPカード表示"
 ---
 
 ## はじめに

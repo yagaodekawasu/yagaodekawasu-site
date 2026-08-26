@@ -1,0 +1,41 @@
+---
+interface SeriesItem {
+  id: string;
+  order: number;
+  label: string;
+}
+
+interface Props {
+  seriesName: string;
+  items: SeriesItem[];
+  currentId: string;
+}
+
+const { seriesName, items, currentId } = Astro.props;
+---
+
+<div class="card bg-base-200 not-prose my-8">
+  <div class="card-body">
+    <p class="text-sm text-base-content/60">この記事のシリーズ</p>
+    <h2 class="card-title">{seriesName}</h2>
+    <ul class="mt-2 divide-y divide-base-300">
+      {items.map((item) => (
+        <li>
+          {item.id === currentId ? (
+            <span class="flex items-center justify-between py-3 font-bold">
+              #{item.order} {item.label}
+            </span>
+          ) : (
+            <a
+              href={`/blog/${item.id}/`}
+              class="flex items-center justify-between py-3 hover:text-primary transition-colors"
+            >
+              <span>#{item.order} {item.label}</span>
+              <span aria-hidden="true">→</span>
+            </a>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>

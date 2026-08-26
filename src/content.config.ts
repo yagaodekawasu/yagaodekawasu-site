@@ -11,6 +11,13 @@ const blog = defineCollection({
     tags: z.array(z.string()).default([]),
     ogpImage: z.string().optional(),
     draft: z.boolean().default(false),
+    series: z
+      .object({
+        name: z.string(),
+        order: z.number(),
+        label: z.string(),
+      })
+      .optional(),
   }),
 });
 
