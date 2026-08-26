@@ -8,6 +8,7 @@ import { linkCardPlugin } from './src/lib/link-cards.mjs';
 import { externalLinkPlugin } from './src/lib/external-links.mjs';
 import { footnoteLabelPlugin } from './src/lib/footnote-label.mjs';
 import { mathPlugin } from './src/lib/math.mjs';
+import { calloutPlugin } from './src/lib/callout.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -18,9 +19,9 @@ export default defineConfig({
   integrations: [sitemap()],
   markdown: {
     processor: satteri({
-      mdastPlugins: [linkCardPlugin, mathPlugin],
+      mdastPlugins: [linkCardPlugin, mathPlugin, calloutPlugin],
       hastPlugins: [externalLinkPlugin, footnoteLabelPlugin],
-      features: { math: true }
+      features: { math: true, directive: true }
     })
   },
   vite: {
