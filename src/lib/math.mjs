@@ -5,7 +5,8 @@ export const mathPlugin = defineMdastPlugin({
   name: "math",
   math(node, ctx) {
     ctx.replaceNode(node, {
-      rawHtml: katex.renderToString(node.value, { displayMode: true, throwOnError: false }),
+      type: "html",
+      value: katex.renderToString(node.value, { displayMode: true, throwOnError: false }),
     });
   },
   inlineMath(node, ctx) {

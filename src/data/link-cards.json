@@ -4,6 +4,11 @@
     "description": "Astro 7.0 brings faster builds with Vite 8, a new Rust compiler, Advanced Routing, background dev server support, and structured logging.",
     "image": "https://astro.build/_astro/og-astro-7.BAGlEZn4.jpg"
   },
+  "https://blog.wtsnjp.com/2016/12/19/tex-and-latex/#fnref:4": {
+    "title": "TeXとLaTeXの違い | ラング・ラグー",
+    "description": null,
+    "image": null
+  },
   "https://developer.mozilla.org/ja/docs/Web/API/Web_Serial_API": {
     "title": "Web Serial API - Web API | MDN",
     "description": "Web Serial API は、ウェブサイトがシリアルデバイスからデータを受信したり、シリアルデバイスにデータを送信したりする方法を提供します。対象は、シリアルポートで接続されたデバイスのことも、シリアルポートとして振る舞う USB や Bluetooth のデバイスのこともあります。",
@@ -69,6 +74,11 @@
     "description": "High-performance Markdown and MDX processing for the JavaScript ecosystem - bruits/satteri",
     "image": "https://opengraph.githubassets.com/1a3556445f24b1aec7f0187b59497b3de97488ef7a8d221d8158499febbdd484/bruits/satteri"
   },
+  "https://github.com/remarkjs/remark-math/issues/74": {
+    "title": "The dollar sign is not showing in single $ quote · Issue #74 · remarkjs/remark-math",
+    "description": "Initial checklist I read the support docs I read the contributing guide I agree to follow the code of conduct I searched issues and couldn’t find anything (or linked relevant results below) Affecte...",
+    "image": "https://opengraph.githubassets.com/25a3a078b088dd1ec4ce8edb1ef3fc5ec151043230ddb23628d89c39cfe00596/remarkjs/remark-math/issues/74"
+  },
   "https://ja.react.dev/learn/writing-markup-with-jsx": {
     "title": "JSX でマークアップを記述する – React",
     "description": "The library for web and native user interfaces",
@@ -114,10 +124,25 @@
     "description": null,
     "image": null
   },
+  "https://satteri.bruits.org/docs/features/": {
+    "title": "Features — Sätteri",
+    "description": "Toggle and configure the Markdown extensions Sätteri",
+    "image": null
+  },
+  "https://satteri.bruits.org/docs/plugin-api/": {
+    "title": "Plugin API — Sätteri",
+    "description": "Visitor shapes, supported node types, and the mutation context passed to every plugin.",
+    "image": null
+  },
   "https://space-core.jp/media/10032/": {
     "title": "スマートホームの新規格「Matter」を解説。スマートホーム市場に与える影響とは - SpaceCore（スペースコア）",
     "description": "2022年10月4日に無線通信規格標準化団体（Connectivity Standards Alliance）は、「Matter（マター）」バージョン1.0と「Matter」認定プログラムをリリースしました。今回は、「Matter」とはどういったものなのか。「Matter」が必要になった背景やスマートホーム市場にどのような影響があるのかについて解説します。",
     "image": "https://space-core.jp/wp-content/uploads/2022/10/matterlogo.png"
+  },
+  "https://spec.commonmark.org/0.31.2/#html-blocks": {
+    "title": "CommonMark Spec",
+    "description": null,
+    "image": null
   },
   "https://swc.rs/": {
     "title": "Rust-based platform for the Web - SWC",
@@ -188,6 +213,16 @@
     "title": "Astro 7のデフォルトMarkdownエンジン「Sätteri」とは何か | 笶顔でかわす",
     "description": "Astro 7でデフォルトのMarkdownプロセッサになったRust製の高速エンジン「Sätteri」の仕組み・アーキテクチャ・remark/rehypeとの違いをまとめた入門記事",
     "image": "https://yagaodekawasu.com/uploads/astro-satteri-overview-ogp.png"
+  },
+  "https://yagaodekawasu.com/blog/astro-satteri-plugin-link-card/": {
+    "title": "SätteriのプラグインAPIで外部リンクをカード化する | 笶顔でかわす",
+    "description": "Astro 7のRustネイティブMarkdownエンジンSätteriで，本文中の単独リンクだけをOGPカードに変換するmdastPluginを実装した方法について書きました。",
+    "image": "https://yagaodekawasu.com/uploads/astro-satteri-plugin-link-card-ogp.png"
+  },
+  "https://yagaodekawasu.com/blog/formula-mixing-ratio-specific-heat-sources/": {
+    "title": "調乳ヘルパーの計算式解説① | 笶顔でかわす",
+    "description": "「調乳ヘルパー」の計算式の中身を解説。熱収支式を使ったお湯と湯冷ましの配分計算と，追加で冷やす時間をニュートンの冷却則で見積もる仕組みをまとめました。",
+    "image": "https://yagaodekawasu.com/uploads/formula-mixing-ratio-specific-heat-sources-ogp.png"
   },
   "https://zenn.dev/burizae/articles/c811cae767965a": {
     "title": "Monorepoって何なのか？と関連アーキテクチャとの関係をまとめてみた",
