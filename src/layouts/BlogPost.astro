@@ -4,13 +4,19 @@ import { render, getCollection } from "astro:content";
 import BaseLayout from "./BaseLayout.astro";
 import TableOfContents from "../components/TableOfContents.astro";
 import SeriesBox from "../components/SeriesBox.astro";
+import { formatDate, isLaterDay } from "../lib/date-format.mjs";
+import { getGitLastModified } from "../lib/git-last-modified.mjs";
 
 interface Props {
   entry: CollectionEntry<"blog">;
 }
 
 const { entry } = Astro.props;
-const { title, description, pubDate, updatedDate, tags, ogpImage, series } = entry.data;
+const { title, description, pubDate, tags, ogpImage, series } = entry.data;
+
+const gitLastModified = entry.filePath ? getGitLastModified(entry.filePath) : null;
+const updatedDate =
+  gitLastModified && isLaterDay(gitLastModified, pubDate) ? gitLastModified : undefined;
 
 const { Content, headings } = await render(entry);
 const tocItems = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
@@ -51,12 +57,20 @@ const jsonLd = {
         </div>
       )}
       <h1>{title}</h1>
-      <div class="text-sm text-base-content/60 mb-6">
-        <time datetime={pubDate.toISOString()}>
-          {pubDate.toLocaleDateString("ja-JP")}
-        </time>
+      <div class="flex items-center gap-3 text-sm text-base-content/60 mb-6">
+        <span class="inline-flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="h-3.5 w-3.5 shrink-0">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+        </span>
         {updatedDate && (
-          <span> (更新: {updatedDate.toLocaleDateString("ja-JP")})</span>
+          <span class="inline-flex items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="h-3.5 w-3.5 shrink-0">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            <time datetime={updatedDate.toISOString()}>{formatDate(updatedDate)}</time>
+          </span>
         )}
       </div>
       {ogpImage && (
