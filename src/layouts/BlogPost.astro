@@ -131,10 +131,19 @@ const jsonLd = {
       const containers = blocks.map((pre) => {
         const source = pre.textContent ?? "";
         const div = document.createElement("div");
-        div.className = "mermaid not-prose flex justify-center my-6 cursor-zoom-in";
+        div.className = "mermaid flex justify-center cursor-zoom-in";
         div.dataset.mermaidSource = source;
         div.textContent = source;
-        pre.replaceWith(div);
+
+        const figure = document.createElement("figure");
+        figure.className = "not-prose my-6";
+        figure.append(div);
+
+        const figcaption = document.createElement("figcaption");
+        figcaption.textContent = "（クリックで拡大表示できます）";
+        figure.append(figcaption);
+
+        pre.replaceWith(figure);
         return div;
       });
 
