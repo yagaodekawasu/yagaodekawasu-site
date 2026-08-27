@@ -13,6 +13,14 @@
   text-align: center;
 }
 
+.prose :where(code):not(pre code) {
+  background-color: color-mix(in oklab, var(--color-base-content) 10%, var(--color-base-100));
+  border-color: color-mix(in oklab, var(--color-base-content) 20%, var(--color-base-100));
+  margin-inline: 0.3em;
+  border-radius: 0.25em;
+  padding-block: 0.05em;
+}
+
 .callout {
   display: grid;
   grid-template-columns: auto 1fr;
