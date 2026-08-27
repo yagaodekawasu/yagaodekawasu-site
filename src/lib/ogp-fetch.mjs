@@ -57,7 +57,7 @@ function detectCharset(buffer, contentType) {
 // astro.config.mjsのsiteと一致させる。自サイトの画像はブラウザ側で常に同一オリジンでの
 // 読み込みになるため，CORPヘッダーの値に関わらず埋め込み可能（same-originのリクエストは
 // CORPで弾かれない）。将来自サイトにCORPヘッダーを付けても誤って弾かれないよう，ここで早期に判定する。
-const SITE_ORIGIN = "https://yagaodekawasu.com";
+export const SITE_ORIGIN = "https://yagaodekawasu.com";
 
 // Cross-Origin-Resource-Policyがsame-origin/same-siteだと，このブログ（別オリジン・別サイト）の
 // <img>からは画像を読み込めずブラウザ上で壊れて見える。curlや素のfetch()はこの制限を評価しない

@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { defineMdastPlugin } from "satteri";
-import { fetchMeta } from "./ogp-fetch.mjs";
+import { fetchMeta, SITE_ORIGIN } from "./ogp-fetch.mjs";
 
 const DEFAULT_CACHE_PATH = fileURLToPath(new URL("../data/link-cards.json", import.meta.url));
 
@@ -18,6 +18,16 @@ function isHttpUrl(url) {
   try {
     const parsed = new URL(url);
     return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+// 自サイト（SITE_ORIGIN）へのカードは同タブ遷移のままにしたいので，
+// target/rel属性はオリジンが自サイトと異なる場合だけ付与する。
+function isExternalUrl(url) {
+  try {
+    return new URL(url).origin !== SITE_ORIGIN;
   } catch {
     return false;
   }
@@ -127,10 +137,11 @@ export function renderCardHtml(url, cache, fallbackText = "") {
   const title = meta?.title || fallbackText || domain;
   const description = meta?.description || "";
   const image = meta?.image && isHttpUrl(meta.image) ? meta.image : null;
+  const linkAttrs = isExternalUrl(url) ? ` target="_blank" rel="noopener noreferrer nofollow"` : "";
 
   // 外側のdivはprose用CSSの打ち消し・余白調整のためのスタイリング目的（{ type: "html" }で挿入するため、
   // ルート要素がphrasing content(<a>等)であること自体はもう問題にならない）。
-  return `<div class="not-prose my-1"><a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer nofollow" class="card sm:card-side bg-base-200 hover:shadow-lg transition-shadow overflow-hidden no-underline">${
+  return `<div class="not-prose my-1"><a href="${escapeHtml(url)}"${linkAttrs} class="card sm:card-side bg-base-200 hover:shadow-lg transition-shadow overflow-hidden no-underline">${
     image
       ? `<figure class="sm:w-40 shrink-0 bg-base-300"><img src="${escapeHtml(image)}" alt="" class="w-full h-full object-cover" loading="lazy" /></figure>`
       : ""
