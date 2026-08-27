@@ -69,6 +69,47 @@
   --callout-accent: var(--color-warning);
 }
 
+.column {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.75rem;
+  align-items: start;
+  margin-block: 1.5rem;
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in oklab, var(--color-info) 40%, var(--color-base-100));
+  background-color: color-mix(in oklab, var(--color-info) 14%, var(--color-base-100));
+}
+
+.column-icon {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.5rem;
+  height: 1lh;
+  color: var(--color-info);
+}
+
+.column-icon svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  fill: currentColor;
+}
+
+.column > :not(.column-icon) {
+  grid-column: 2;
+}
+
+.column-icon + * {
+  margin-top: 0;
+}
+
+.column > *:last-child {
+  margin-bottom: 0;
+}
+
 .apps-dropdown .dropdown-content {
   transition-property: opacity, scale, translate, display, overlay;
   transition-duration: 0.25s;

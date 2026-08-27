@@ -31,13 +31,19 @@ export function domainOf(url) {
   }
 }
 
-// 本文直下（root直下）にリンク1つだけで構成された段落＝独立した参照リンクだけをカード化対象にする。
-// 文中のインラインリンク・箇条書き（参考リンク一覧）・脚注はrootの子ではないので自然に対象外。
+// 本文直下（root直下）、または:::columnブロック直下にリンク1つだけで構成された段落＝
+// 独立した参照リンクだけをカード化対象にする。文中のインラインリンク・箇条書き（参考リンク
+// 一覧）・脚注や、:::note/:::warningのような短い注記用ディレクティブの中はrootでも
+// columnコンテナでもないので自然に対象外。
+function isCardEligibleParent(parent) {
+  return parent?.type === "root" || (parent?.type === "containerDirective" && parent.name === "column");
+}
+
 function findCardLink(node, ctx) {
   if (node.children?.length !== 1) return null;
   const child = node.children[0];
   if (child.type !== "link" || !isHttpUrl(child.url)) return null;
-  if (ctx.parent(node)?.type !== "root") return null;
+  if (!isCardEligibleParent(ctx.parent(node))) return null;
   return child;
 }
 
@@ -100,7 +106,7 @@ function lineCardUrl(lineNodes) {
 // 改行だけで区切られた1行がリンク単体ならカード化対象に含める。この関数はOGP事前取得
 // （fetch-link-cards.mjs）とライブ描画（linkCardPlugin）の両方から共有で呼ばれる。
 export function findParagraphCardUrls(node, ctx) {
-  if (ctx.parent(node)?.type !== "root") return [];
+  if (!isCardEligibleParent(ctx.parent(node))) return [];
   const whole = findCardUrl(node, ctx);
   if (whole) return [whole];
   if (!node.children.some((c) => c.type === "text" && c.value.includes("\n"))) return [];
@@ -190,7 +196,7 @@ export function createLinkCardPlugin({ cachePath = DEFAULT_CACHE_PATH } = {}) {
         return;
       }
 
-      if (ctx.parent(node)?.type !== "root") return;
+      if (!isCardEligibleParent(ctx.parent(node))) return;
       if (!node.children.some((c) => c.type === "text" && c.value.includes("\n"))) return;
       const lines = splitParagraphLines(node.children);
       if (lines.length < 2) return;
