@@ -184,11 +184,11 @@ YAMLを書き終えたら，画面右下の「Install」をクリックして書
 
 ダイアログにも「初回はUSBケーブルが必要（1回だけ）。以降はワイヤレスでインストールできる」という案内が出ていますね。選択肢は次の4つです。
 
-- **Plug into this computer**: USB経由**←今回はこれを選択**
-- **On the network**: Wi-Fi経由
+- Plug into this computer: USB経由←今回はこれを選択
+- On the network: Wi-Fi経由
 - 「Advanced options」を開くと出てくる2つ
-  - **Device IP or hostname**: 自動検出されたアドレスの代わりに，任意のIP・ホスト名を指定して書き込む
-  - **Download firmware binary**: その場でビルドしてバイナリをダウンロードし，好きな書き込みツールで手動フラッシュする
+  - Device IP or hostname: 自動検出されたアドレスの代わりに，任意のIP・ホスト名を指定して書き込む
+  - Download firmware binary: その場でビルドしてバイナリをダウンロードし，好きな書き込みツールで手動フラッシュする
 
 「Plug into this computer」を選ぶと，ブラウザ標準のシリアルポート選択ダイアログが出るので，該当するCOMポート（わからない場合はデバイスマネージャーで確認）を選んで接続を許可します。これでビルドが始まり，完了すると自動的に書き込みが行われます。
 
