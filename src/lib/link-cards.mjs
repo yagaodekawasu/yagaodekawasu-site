@@ -31,12 +31,17 @@ export function domainOf(url) {
   }
 }
 
-// 本文直下（root直下）、または:::columnブロック直下にリンク1つだけで構成された段落＝
-// 独立した参照リンクだけをカード化対象にする。文中のインラインリンク・箇条書き（参考リンク
-// 一覧）・脚注や、:::note/:::warningのような短い注記用ディレクティブの中はrootでも
-// columnコンテナでもないので自然に対象外。
+// 本文直下（root直下）、または:::column/:::newbieブロック直下にリンク1つだけで構成された
+// 段落＝独立した参照リンクだけをカード化対象にする。文中のインラインリンク・箇条書き（参考
+// リンク一覧）・脚注や、:::note/:::warningのような短い注記用ディレクティブの中はrootでも
+// column系コンテナでもないので自然に対象外。
+const CARD_ELIGIBLE_DIRECTIVES = new Set(["column", "newbie"]);
+
 function isCardEligibleParent(parent) {
-  return parent?.type === "root" || (parent?.type === "containerDirective" && parent.name === "column");
+  return (
+    parent?.type === "root" ||
+    (parent?.type === "containerDirective" && CARD_ELIGIBLE_DIRECTIVES.has(parent.name))
+  );
 }
 
 function findCardLink(node, ctx) {
@@ -125,7 +130,7 @@ export function renderCardHtml(url, cache, fallbackText = "") {
 
   // 外側のdivはprose用CSSの打ち消し・余白調整のためのスタイリング目的（{ type: "html" }で挿入するため、
   // ルート要素がphrasing content(<a>等)であること自体はもう問題にならない）。
-  return `<div class="not-prose my-6"><a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer nofollow" class="card sm:card-side bg-base-200 hover:shadow-lg transition-shadow overflow-hidden no-underline">${
+  return `<div class="not-prose my-1"><a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer nofollow" class="card sm:card-side bg-base-200 hover:shadow-lg transition-shadow overflow-hidden no-underline">${
     image
       ? `<figure class="sm:w-40 shrink-0 bg-base-300"><img src="${escapeHtml(image)}" alt="" class="w-full h-full object-cover" loading="lazy" /></figure>`
       : ""

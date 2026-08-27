@@ -29,6 +29,18 @@ draft: false
 
 Astro本体とは別のリポジトリ・別の開発元で作られたプロジェクトが，Astroのコア依存に採用された，という成り立ちがまず面白いところです。
 
+:::newbie
+#### MDXって何？
+
+という私のような方は↓こちらの記事をご参照ください。
+[Markdown を拡張する MDX はドキュメント作成の新たな可能性？](https://zenn.dev/spring_raining/articles/3eb62ff93df1eb)
+
+「そもそもJSXがわからないんですが……」という私のような方は↓こちらの記事もご参照ください。
+[JSX でマークアップを記述する – React](https://ja.react.dev/learn/writing-markup-with-jsx)
+
+ざっくり言うと，Markdownの中にJavaScriptが書けて，更にその中にHTMLが書けるってことみたいですね。初めて知ったけど普通に面白そう。
+:::
+
 ### 名前の由来・読み方
 
 Sätteriは，「印刷所のうち，植字・組版が行われる部門」を意味するスウェーデン語の名詞 sätteri から来ているっぽいです（公式からの説明はなし）。sätteri は「原稿を活字に組む」という意味を持つ動詞 sätta に，動詞から職業を表す名詞を作る接尾辞 -eri （英語における bakery の -ery と同じ）が付いた派生語で，sätta は英語の set と同語源らしいです。
@@ -43,20 +55,6 @@ Sätteriは，「印刷所のうち，植字・組版が行われる部門」を
 
 読み方については，IPAの発音記号で \[ˌsɛtːəˈriː\] になる[^1]ので，カタカナ表記にするなら「セッテリー」になりそうです。
 
-:::column
-### コラム：MDXって何？
-
-という私のような方は↓こちらの記事をご参照ください。
-
-[Markdown を拡張する MDX はドキュメント作成の新たな可能性？](https://zenn.dev/spring_raining/articles/3eb62ff93df1eb)
-
-「そもそもJSXがわからないんですが……」という私のような方は↓こちらの記事もご参照ください。
-
-[JSX でマークアップを記述する – React](https://ja.react.dev/learn/writing-markup-with-jsx)
-
-ざっくり言うと，Markdownの中にJavaScriptが書けて，更にその中にHTMLが書けるってことみたいですね。初めて知ったけど普通に面白そう。
-:::
-
 ## なぜ生まれたのか
 
 これまでAstroのMarkdown処理は，unified／remark／rehypeというJavaScript製のエコシステムを使っていました。プラグインが豊富で柔軟な反面，Markdownを1つ処理するたびにJavaScript側で何段もの変換処理（プラグインチェーン）を走らせる必要があり，記事数の多いサイトほどビルドが遅くなりがちという課題がありました。
@@ -69,6 +67,14 @@ SätteriはRustとTypeScriptのモノレポで構成されています。
 
 [bruits/satteri: High-performance Markdown and MDX processing for the JavaScript ecosystem](https://github.com/bruits/satteri)
 
+:::newbie
+#### モノレポ……？
+
+↓ここで詳しく解説されてました。別で開発してるWebアプリがPolyrepoで管理がめんどくさいと思ってたところだったので，これを気にMonorepoに移行しても良いかも。
+
+[Monorepoって何なのか？と関連アーキテクチャとの関係をまとめてみた](https://zenn.dev/burizae/articles/c811cae767965a)
+:::
+
 主なクレート（≒ライブラリ），パッケージは次の通りです。
 
 - `satteri`: Rust側の高レベルAPI（parse・convert・compileの入口）。
@@ -78,6 +84,40 @@ SätteriはRustとTypeScriptのモノレポで構成されています。
 - `satteri-napi-binding`: RustからJavaScriptへ公開するためのNAPIバインディング
 - `satteri-pulldown-cmark`: CommonMarkパーサー（`pulldown-cmark`をMDX拡張対応にフォークしたもの）
 - `satteri-mdxjs-rs`: MDX→JavaScriptコンパイラ（`mdxjs-rs`をOXC対応にフォークしたもの）
+
+:::newbie
+#### CommonMark……？
+
+Markdownの標準仕様を定めるためのスペック（仕様）とのことです。↓こちらの記事が詳しいです。
+
+[CommonMarkの仕様とか #Markdown - Qiita](https://qiita.com/Prof-Cheese/items/9629438b06aacc068c98)
+
+CommonMarkには取り消し線など「Markdownに普通ありそう（主観）」な一部の機能が実装されていません。それを補うために，CommonMarkの拡張としてGFM（GitHub Flavored Markdown）などの「方言」が存在するということらしいです。↓この辺の記事が参考になりそう。
+
+[CommonMark と GFM の違い (2026): テーブル拡張と 6 パーサー実測 | FormatArc](https://formatarc.com/ja/blog/commonmark-vs-gfm/)
+
+[GitHub Flavored Markdown は何であって何でないか #CommonMark - Qiita](https://qiita.com/tk0miya/items/6b81e0e4563199037018)
+:::
+
+:::newbie
+#### SWC……？Oxc……？？
+
+どっちもRust製のJavaScript/TypeScriptコンパイラ（TypeScriptやJSXをJavaScriptに変換したり，JavaScriptを別のバージョンのJavaScriptに変換したりするツール）だそうです。
+
+SWC（Speedy Web Compiler）はRust製JavaScript/TypeScriptコンパイラの走り的存在で，名前の通りそれまでのJS製コンパイラよりめっちゃ速いってことで人気を博しているっぽいです。
+
+[Rust-based platform for the Web - SWC](https://swc.rs/)
+
+[次世代のWebプラットフォームSWCを学ぶ #TypeScript - Qiita](https://qiita.com/k8o/items/563e99734850bb5b5723)
+
+Oxc（Oxidation Compiler）は後発でSWCより更に速いそうです。「Oxidation（酸化）」は「Rust（錆）」と掛かっているんだと。オシャレですね。
+
+[The JavaScript Oxidation Compiler](https://oxc.rs/)
+
+[Oxc-Parserで爆速JavaScriptパース体験してきた話 | Easegis（イージース）](https://easegis.jp/blog/oxc-parser/)
+
+最近開発しているChrome拡張機能は esbuild でコンパイルしているので，もし可能ならSWCやOxcを使ってみようかしら。
+:::
 
 処理の流れを図にすると，次のようになります。
 
@@ -125,42 +165,6 @@ Markdownのパース処理は`satteri-pulldown-cmark`（Rust製の高速CommonMa
 プラグインの仕組みはMarkdown側と共通です。パース結果は`satteri-ast`が定義するmdast/hastのノード型として組み立てられ，`satteri-plugin-api`が提供するRust側のビジター（型付き走査ロジック）がノードを巡回します。mdast→hast変換や，hastからHTML文字列へのレンダリングも，ノード型定義と同じ`satteri-ast`クレート内に実装されています。
 
 プラグイン層がJavaScript側にある一方，AST自体は`satteri-arena`が確保するRust側のアリーナ（メモリ領域）上にバイナリ表現のまま保持され，`satteri-napi-binding`が用意するNode-API（旧称・N-API。Node.jsが提供する，JavaScriptからC/C++やRustなどで実装されたコードを呼び出すためのAPI）境界越しに必要な範囲だけJavaScriptとやり取りする作りになっています。この設計により，「JS側で書ける柔軟性」と「言語境界をまたぐコストの小ささ」を両立させているようです。
-
-### モノレポ……？
-
-↓ここで詳しく解説されてました。別で開発してるWebアプリがPolyrepoで管理がめんどくさいと思ってたところだったので，これを気にMonorepoに移行しても良いかも。
-
-[Monorepoって何なのか？と関連アーキテクチャとの関係をまとめてみた](https://zenn.dev/burizae/articles/c811cae767965a)
-
-### CommonMark……？
-
-Markdownの標準仕様を定めるためのスペック（仕様）とのことです。↓こちらの記事が詳しいです。
-
-[CommonMarkの仕様とか #Markdown - Qiita](https://qiita.com/Prof-Cheese/items/9629438b06aacc068c98)
-
-CommonMarkには取り消し線など「Markdownに普通ありそう（主観）」な一部の機能が実装されていません。それを補うために，CommonMarkの拡張としてGFM（GitHub Flavored Markdown）などの「方言」が存在するということらしいです。↓この辺の記事が参考になりそう。
-
-[CommonMark と GFM の違い (2026): テーブル拡張と 6 パーサー実測 | FormatArc](https://formatarc.com/ja/blog/commonmark-vs-gfm/)
-
-[GitHub Flavored Markdown は何であって何でないか #CommonMark - Qiita](https://qiita.com/tk0miya/items/6b81e0e4563199037018)
-
-### SWC……？Oxc……？？
-
-どっちもRust製のJavaScript/TypeScriptコンパイラ（TypeScriptやJSXをJavaScriptに変換したり，JavaScriptを別のバージョンのJavaScriptに変換したりするツール）だそうです。
-
-SWC（Speedy Web Compiler）はRust製JavaScript/TypeScriptコンパイラの走り的存在で，名前の通りそれまでのJS製コンパイラよりめっちゃ速いってことで人気を博しているっぽいです。
-
-[Rust-based platform for the Web - SWC](https://swc.rs/)
-
-[次世代のWebプラットフォームSWCを学ぶ #TypeScript - Qiita](https://qiita.com/k8o/items/563e99734850bb5b5723)
-
-Oxc（Oxidation Compiler）は後発でSWCより更に速いそうです。「Oxidation（酸化）」は「Rust（錆）」と掛かっているんだと。オシャレですね。
-
-[The JavaScript Oxidation Compiler](https://oxc.rs/)
-
-[Oxc-Parserで爆速JavaScriptパース体験してきた話 | Easegis（イージース）](https://easegis.jp/blog/oxc-parser/)
-
-最近開発しているChrome拡張機能は esbuild でコンパイルしているので，もし可能ならSWCやOxcを使ってみようかしら。
 
 ## remark/rehypeとの違い
 

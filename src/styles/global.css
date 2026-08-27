@@ -77,8 +77,8 @@
   margin-block: 1.5rem;
   padding: 1rem 1.25rem;
   border-radius: 1rem;
-  border: 1px solid color-mix(in oklab, var(--color-info) 40%, var(--color-base-100));
-  background-color: color-mix(in oklab, var(--color-info) 14%, var(--color-base-100));
+  border: 1px solid color-mix(in oklab, var(--column-accent, var(--color-info)) 40%, var(--color-base-100));
+  background-color: color-mix(in oklab, var(--column-accent, var(--color-info)) 14%, var(--color-base-100));
 }
 
 .column-icon {
@@ -89,7 +89,7 @@
   justify-content: center;
   height: 1.5rem;
   height: 1lh;
-  color: var(--color-info);
+  color: var(--column-accent, var(--color-info));
 }
 
 .column-icon svg {
@@ -108,6 +108,10 @@
 
 .column > *:last-child {
   margin-bottom: 0;
+}
+
+.newbie {
+  --column-accent: var(--color-success);
 }
 
 .apps-dropdown .dropdown-content {
