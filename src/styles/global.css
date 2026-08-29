@@ -114,6 +114,43 @@
   --column-accent: var(--color-success);
 }
 
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.gallery figure {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+
+  border: 2px solid
+    color-mix(in oklab, var(--color-base-content) 35%, transparent);
+  border-radius: 0.5rem;
+  overflow: hidden;
+
+  background: var(--color-base-100);
+}
+
+.gallery figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.gallery figcaption {
+  margin-top: auto;
+  padding: 0.65rem 0.75rem;
+
+  border-top: 2px solid
+    color-mix(in oklab, var(--color-base-content) 35%, transparent);
+  background: var(--color-base-200);
+
+  text-align: center;
+  font-size: 0.875rem;
+}
+
 .apps-dropdown .dropdown-content {
   transition-property: opacity, scale, translate, display, overlay;
   transition-duration: 0.25s;

@@ -248,5 +248,25 @@
     "title": "Astro 7.0 | Astro",
     "description": "Astro 7.0 brings faster builds with Vite 8, a new Rust compiler, Advanced Routing, background dev server support, and structured logging.",
     "image": "https://astro.build/_astro/og-astro-7.BAGlEZn4.jpg"
+  },
+  "https://developer.mozilla.org/ja/docs/Web/HTML/Reference/Elements/a#target": {
+    "title": "HTML <a> アンカー要素 - HTML | MDN",
+    "description": "<a> は HTML の要素（アンカー要素）で、href 属性を用いて、別のウェブページ、ファイル、メールアドレス、同一ページ内の場所、または他の URL へのハイパーリンクを作成します。",
+    "image": "https://developer.mozilla.org/mdn-social-image.46ac2375.png"
+  },
+  "https://developer.mozilla.org/ja/docs/Web/HTML/Reference/Attributes/rel": {
+    "title": "HTML rel 属性 - HTML | MDN",
+    "description": "rel 属性は、リンク先のリソースと現在の文書との関係を定義します。 <link>、<a>、<area>、<form> で有効で、対応する値は属性が見つかった要素に依存します。",
+    "image": "https://developer.mozilla.org/mdn-social-image.46ac2375.png"
+  },
+  "https://developer.mozilla.org/ja/docs/Web/HTML/Reference/Attributes/rel/noopener": {
+    "title": "rel=\"noopener\" - HTML | MDN",
+    "description": "noopener キーワードを rel 属性に指定すると、 <a>, <area>, <form> の各要素では、ターゲットリソースへ移動する際、開いた元の文書へのアクセスを新しい閲覧コンテキストに許可しないことをブラウザーに指示します。開かれたウィンドウの Window.opener プロパティプロパティは設定されません（null を返します）。",
+    "image": "https://developer.mozilla.org/mdn-social-image.46ac2375.png"
+  },
+  "https://tailwindcss.com/docs/margin#adding-vertical-margin": {
+    "title": "margin - Spacing",
+    "description": "Utilities for controlling an element&#x27;s margin.",
+    "image": "https://tailwindcss.com/api/og?path=/docs/margin"
   }
 }

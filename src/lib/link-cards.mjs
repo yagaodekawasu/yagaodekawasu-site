@@ -137,7 +137,7 @@ export function renderCardHtml(url, cache, fallbackText = "") {
   const title = meta?.title || fallbackText || domain;
   const description = meta?.description || "";
   const image = meta?.image && isHttpUrl(meta.image) ? meta.image : null;
-  const linkAttrs = isExternalUrl(url) ? ` target="_blank" rel="noopener noreferrer nofollow"` : "";
+  const linkAttrs = isExternalUrl(url) ? ` target="_blank"` : "";
 
   // 外側のdivはprose用CSSの打ち消し・余白調整のためのスタイリング目的（{ type: "html" }で挿入するため、
   // ルート要素がphrasing content(<a>等)であること自体はもう問題にならない）。
@@ -147,7 +147,7 @@ export function renderCardHtml(url, cache, fallbackText = "") {
       : ""
   }<div class="card-body p-4 gap-1"><p class="card-title text-base m-0">${escapeHtml(title)}</p>${
     description
-      ? `<p class="text-sm text-base-content/70 line-clamp-2 m-0">${escapeHtml(description)}</p>`
+      ? `<p class="text-sm text-base-content/70 line-clamp-2 max-h-10 m-0">${escapeHtml(description)}</p>`
       : ""
   }<p class="text-xs text-base-content/50 flex items-center gap-1 m-0 mt-1"><img src="${escapeHtml(favicon)}" alt="" width="14" height="14" class="inline-block rounded-sm" />${escapeHtml(domain)}</p></div></a></div>`;
 }

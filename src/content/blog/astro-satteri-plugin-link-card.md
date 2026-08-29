@@ -21,7 +21,7 @@ series:
 
 ## やりたいこと
 
-折角の自分の城だし，なるべくUIはリッチにしたいということで，外部リンクをOGPカード形式で表示する機能を実装することにしました。やっぱただのハイパーテキストじゃ味気ないですからね。
+折角の自分の城だし，なるべくUIはリッチにしたいということで，リンクをOGPカード形式で表示する機能を実装することにしました。やっぱただのハイパーテキストじゃ味気ないですからね。
 
 一方で，脚注や参考ブロックに貼るリンク一覧までカード形式にしてしまうとそれはそれでごちゃごちゃした見た目になると思ったので，そこはハイパーテキストのままにしたい，みたいな感じで要件をClaudeに伝えた結果，一旦段落の構造で自動判定するという方式に落ち着きました。ざっくり言うと，「リンクだけの段落はカード形式で表示する」という仕様ですね。
 
@@ -282,6 +282,16 @@ export function domainOf(url) {
   }
 }
 
+// 自サイト（SITE_ORIGIN）へのカードは同タブ遷移のままにしたいので，
+// target/rel属性はオリジンが自サイトと異なる場合だけ付与する。
+function isExternalUrl(url) {
+  try {
+    return new URL(url).origin !== SITE_ORIGIN;
+  } catch {
+    return false;
+  }
+}
+
 export function renderCardHtml(url, cache, fallbackText = "") {
   // ensureCardMetaが書き込んだ{ title, description, image }をキャッシュから取り出す
   // fetch失敗時はundefined
@@ -298,15 +308,16 @@ export function renderCardHtml(url, cache, fallbackText = "") {
   const description = meta?.description || "";
   // imageは画像URLが相対パスだったりした場合に備えてisHttpUrl判定を追加
   const image = meta?.image && isHttpUrl(meta.image) ? meta.image : null;
+  const linkAttrs = isExternalUrl(url) ? ` target="_blank"` : "";
 
   // 外側のdivはTailwindのprose用CSSの打ち消し・余白調整のためのスタイリング目的
-  return `<div class="not-prose my-6"><a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer nofollow" class="card sm:card-side bg-base-200 hover:shadow-lg transition-shadow overflow-hidden no-underline">${
+  return `<div class="not-prose my-1"><a href="${escapeHtml(url)}"${linkAttrs} class="card sm:card-side bg-base-200 hover:shadow-lg transition-shadow overflow-hidden no-underline">${
     image
       ? `<figure class="sm:w-40 shrink-0 bg-base-300"><img src="${escapeHtml(image)}" alt="" class="w-full h-full object-cover" loading="lazy" /></figure>`
       : ""
   }<div class="card-body p-4 gap-1"><p class="card-title text-base m-0">${escapeHtml(title)}</p>${
     description
-      ? `<p class="text-sm text-base-content/70 line-clamp-2 m-0">${escapeHtml(description)}</p>`
+      ? `<p class="text-sm text-base-content/70 line-clamp-2 max-h-10 m-0">${escapeHtml(description)}</p>`
       : ""
   }<p class="text-xs text-base-content/50 flex items-center gap-1 m-0 mt-1"><img src="${escapeHtml(favicon)}" alt="" width="14" height="14" class="inline-block rounded-sm" />${escapeHtml(domain)}</p></div></a></div>`;
 }
@@ -344,6 +355,58 @@ function linkNodeText(linkNode) {
 [Google Favicon API Documentation - Logo.dev](https://www.logo.dev/docs/google-favicon-api)
 
 最後の`return`で，ここまでに用意した値を埋め込んでカード全体のHTML文字列を組み立てます。`image`と`description`はそれぞれ三項演算子で「値があればその要素のHTMLを埋め込み，無ければ空文字」という分岐になっており，画像や説明文が無いOGPでもレイアウトが崩れないようにしています。また，値を埋め込む箇所はすべて`escapeHtml()`を通しています。`title`・`description`はOGPタグとして外部サイトが自由に設定できる値なので，エスケープを怠るとXSSの入口になります。
+
+#### HTML要素: アンカー
+
+`<a>`については，「内部リンクは同タブ，外部リンクは新規タブ」という設計にしているため，`isExternalUrl`で`SITE_ORIGIN`をチェックをし，外部サイトの場合だけ`target="_blank"`を付与するようにしています。
+
+:::newbie
+`<a>`要素の`target`属性は，リンク先のURLを表示する場所（タブ／ウィンドウ／`<iframe>`といった閲覧コンテキスト）を指定するためのものです。デフォルトは`_self`（現在の閲覧コンテキスト）で，例えばiframeの名前を指定することで特定のiframeで表示したりも出来るようです。
+
+[HTML <a> アンカー要素 - HTML | MDN](https://developer.mozilla.org/ja/docs/Web/HTML/Reference/Elements/a#target)
+:::
+
+`target="_blank"`について調べると，「`target="_blank"`をセットする場合は`rel="noopener"`を付けるのがマスト」みたいな記事がよくヒットしますが，ここでは特に指定していません。
+
+:::newbie
+`rel`属性は「リンク先のリソースと現在の文書との関係を定義」するためのものです。といってもただの「参考情報」ではなく，リンク先に何を渡す／渡さないを表すパラメータとしても機能しています。
+
+[HTML rel 属性 - HTML | MDN](https://developer.mozilla.org/ja/docs/Web/HTML/Reference/Attributes/rel)
+:::
+
+`noopener`とは，新規で開いた閲覧コンテキスト（ここでは新規タブ）で`Window.opener`を`null`にする，つまりリンク元の閲覧コンテキストで開くURLを書き換えられないようにするための設定です。以前は`target="_blank"`をセットする場合は`noopener`を付けるのがマストで，これがないと悪意あるサイトのリンクをうっかり新規タブで開いてしまった時に，元のタブでフィッシングサイトなどが開かれてしまうリスク（アダルトサイトとかで見る）がありましたが，現在は`rel=opener`を付けない限り`Window.opener=null`になるのがデフォルトになっているので，わざわざ古いバージョンのブラウザを使っている閲覧者のことまで考慮する必要もないかなと思い，`rel`なしという選択をしました。
+
+[rel="noopener" - HTML | MDN](https://developer.mozilla.org/ja/docs/Web/HTML/Reference/Attributes/rel/noopener)
+
+#### HTML要素: Tailwind関連
+
+全部説明しているとキリがないので，調整が必要だったところだけ説明する形にさせていただきます。
+
+1. 外側の`<div>`の余白は`my-1`にしています。最初は`my-6`にしてたんですが，前の段落との距離が遠いと関連性が薄れてしまう感じがしたので詰めました。
+
+:::gallery
+
+![外側divの余白がmy-6の場合の表示](/uploads/astro-satteri-plugin-link-card/02-margin-my-6.png "my-6（変更前）")
+
+![外側divの余白がmy-1の場合の表示](/uploads/astro-satteri-plugin-link-card/01-margin-my-1.png "my-1（変更後）")
+
+:::
+
+:::newbie
+`my-1`の「my」は「margin y」の略です。margin-topとmargin-bottom（縦方向のmargin）をまとめて指定するTailwindの記法になっています。
+
+[margin - Spacing - Tailwind CSS](https://tailwindcss.com/docs/margin#adding-vertical-margin)
+:::
+
+2. サイト説明文の`<p>`要素は，2行目以降を省略するため`line-clamp-2`を付けているんですが，CSS Grid内でこの`<p>`の高さが変わることによって省略されるはずの3行目が見切れてしまう問題が発生したため，`max-h-10`を付けて`<p>`の高さを固定することで解決しました。
+
+:::gallery{columns=1}
+
+![max-h-10を付ける前の表示。3行目が見切れている](/uploads/astro-satteri-plugin-link-card/03-line-clamp-before.png "修正前：3行目が見切れている")
+
+![max-h-10を付けた後の表示。2行で綺麗に省略されている](/uploads/astro-satteri-plugin-link-card/04-line-clamp-after.png "修正後：2行で綺麗に省略される")
+
+:::
 
 ### プラグイン定義
 
