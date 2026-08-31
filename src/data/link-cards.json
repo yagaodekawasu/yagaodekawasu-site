@@ -1,4 +1,9 @@
 {
+  "https://astro.build/blog/astro-7/": {
+    "title": "Astro 7.0 | Astro",
+    "description": "Astro 7.0 brings faster builds with Vite 8, a new Rust compiler, Advanced Routing, background dev server support, and structured logging.",
+    "image": "https://astro.build/_astro/og-astro-7.BAGlEZn4.jpg"
+  },
   "https://astro.build/blog/astro-7/?utm_source=chatgpt.com": {
     "title": "Astro 7.0 | Astro",
     "description": "Astro 7.0 brings faster builds with Vite 8, a new Rust compiler, Advanced Routing, background dev server support, and structured logging.",
@@ -9,9 +14,29 @@
     "description": null,
     "image": null
   },
+  "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Creating_links": {
+    "title": "Creating links - Learn web development | MDN",
+    "description": "Links (also known as hyperlinks) are really important — they are what makes the Web a web.\nThis article shows the syntax required to make a link, and discusses link best practices.",
+    "image": "https://developer.mozilla.org/mdn-social-image.46ac2375.png"
+  },
   "https://developer.mozilla.org/ja/docs/Web/API/Web_Serial_API": {
     "title": "Web Serial API - Web API | MDN",
     "description": "Web Serial API は、ウェブサイトがシリアルデバイスからデータを受信したり、シリアルデバイスにデータを送信したりする方法を提供します。対象は、シリアルポートで接続されたデバイスのことも、シリアルポートとして振る舞う USB や Bluetooth のデバイスのこともあります。",
+    "image": "https://developer.mozilla.org/mdn-social-image.46ac2375.png"
+  },
+  "https://developer.mozilla.org/ja/docs/Web/HTML/Reference/Attributes/rel": {
+    "title": "HTML rel 属性 - HTML | MDN",
+    "description": "rel 属性は、リンク先のリソースと現在の文書との関係を定義します。 <link>、<a>、<area>、<form> で有効で、対応する値は属性が見つかった要素に依存します。",
+    "image": "https://developer.mozilla.org/mdn-social-image.46ac2375.png"
+  },
+  "https://developer.mozilla.org/ja/docs/Web/HTML/Reference/Attributes/rel/noopener": {
+    "title": "rel=\"noopener\" - HTML | MDN",
+    "description": "noopener キーワードを rel 属性に指定すると、 <a>, <area>, <form> の各要素では、ターゲットリソースへ移動する際、開いた元の文書へのアクセスを新しい閲覧コンテキストに許可しないことをブラウザーに指示します。開かれたウィンドウの Window.opener プロパティプロパティは設定されません（null を返します）。",
+    "image": "https://developer.mozilla.org/mdn-social-image.46ac2375.png"
+  },
+  "https://developer.mozilla.org/ja/docs/Web/HTML/Reference/Elements/a#target": {
+    "title": "HTML <a> アンカー要素 - HTML | MDN",
+    "description": "<a> は HTML の要素（アンカー要素）で、href 属性を用いて、別のウェブページ、ファイル、メールアドレス、同一ページ内の場所、または他の URL へのハイパーリンクを作成します。",
     "image": "https://developer.mozilla.org/mdn-social-image.46ac2375.png"
   },
   "https://diysmartmatter.com/archives/3106": {
@@ -73,6 +98,11 @@
     "title": "GitHub - bruits/satteri: High-performance Markdown and MDX processing for the JavaScript ecosystem",
     "description": "High-performance Markdown and MDX processing for the JavaScript ecosystem - bruits/satteri",
     "image": "https://opengraph.githubassets.com/1a3556445f24b1aec7f0187b59497b3de97488ef7a8d221d8158499febbdd484/bruits/satteri"
+  },
+  "https://github.com/felixicaza/satteri-plugins": {
+    "title": "GitHub - felixicaza/satteri-plugins: 📝 A collection of plugins for Satteri",
+    "description": "📝 A collection of plugins for Satteri. Contribute to felixicaza/satteri-plugins development by creating an account on GitHub.",
+    "image": "https://opengraph.githubassets.com/e05818e439388020f3d43dc3ff44bb11c52e65792c32e04a6ed25c13da749dea/felixicaza/satteri-plugins"
   },
   "https://github.com/remarkjs/remark-math/issues/74": {
     "title": "The dollar sign is not showing in single $ quote · Issue #74 · remarkjs/remark-math",
@@ -149,6 +179,11 @@
     "description": "SWC is an extensible Rust-based platform for the next generation of fast developer tools. It",
     "image": null
   },
+  "https://tailwindcss.com/docs/margin#adding-vertical-margin": {
+    "title": "margin - Spacing",
+    "description": "Utilities for controlling an element&#x27;s margin.",
+    "image": "https://tailwindcss.com/api/og?path=/docs/margin"
+  },
   "https://w3e.kanazawa-it.ac.jp/math/physics/high-school_index/thermodynamics/temperature_and_heat/henkan-tex.cgi?target=/math/physics/high-school_index/thermodynamics/temperature_and_heat/heat_capacity.html": {
     "title": "比熱と熱容量",
     "description": null,
@@ -214,6 +249,11 @@
     "description": "Astro 7でデフォルトのMarkdownプロセッサになったRust製の高速エンジン「Sätteri」の仕組み・アーキテクチャ・remark/rehypeとの違いをまとめた入門記事",
     "image": "https://yagaodekawasu.com/uploads/astro-satteri-overview-ogp.png"
   },
+  "https://yagaodekawasu.com/blog/astro-satteri-plugin-katex-math/": {
+    "title": "Sätteriプラグイン開発 #2 数式のレンダリング | 笶顔でかわす",
+    "description": "Astro 7のRustネイティブMarkdownエンジンSätteriで，features.mathでパースした数式ノードをKaTeXでレンダリングするmdastPluginを実装した記事です。",
+    "image": "https://yagaodekawasu.com/uploads/astro-satteri-plugin-katex-math-ogp.png"
+  },
   "https://yagaodekawasu.com/blog/astro-satteri-plugin-link-card/": {
     "title": "SätteriのプラグインAPIで外部リンクをカード化する | 笶顔でかわす",
     "description": "Astro 7のRustネイティブMarkdownエンジンSätteriで，本文中の単独リンクだけをOGPカードに変換するmdastPluginを実装した方法について書きました。",
@@ -243,30 +283,5 @@
     "title": "Markdown を拡張する MDX はドキュメント作成の新たな可能性？",
     "description": null,
     "image": "https://res.cloudinary.com/zenn/image/upload/s--_FcZfDa4--/c_fit%2Cg_north_west%2Cl_text:notosansjp-medium.otf_55:Markdown%2520%25E3%2582%2592%25E6%258B%25A1%25E5%25BC%25B5%25E3%2581%2599%25E3%2582%258B%2520MDX%2520%25E3%2581%25AF%25E3%2583%2589%25E3%2582%25AD%25E3%2583%25A5%25E3%2583%25A1%25E3%2583%25B3%25E3%2583%2588%25E4%25BD%259C%25E6%2588%2590%25E3%2581%25AE%25E6%2596%25B0%25E3%2581%259F%25E3%2581%25AA%25E5%258F%25AF%25E8%2583%25BD%25E6%2580%25A7%25EF%25BC%259F%2Cw_1010%2Cx_90%2Cy_100/g_south_west%2Cl_text:notosansjp-medium.otf_37:spring-raining%2Cx_203%2Cy_121/g_south_west%2Ch_90%2Cl_fetch:aHR0cHM6Ly9zdGF0aWMuemVubi5zdHVkaW8vdXNlci11cGxvYWQvYXZhdGFyL2ZkNTEwOTdkZTkuanBlZw==%2Cr_max%2Cw_90%2Cx_87%2Cy_95/v1627283836/default/og-base-w1200-v2.png?_a=BACMTiAE"
-  },
-  "https://astro.build/blog/astro-7/": {
-    "title": "Astro 7.0 | Astro",
-    "description": "Astro 7.0 brings faster builds with Vite 8, a new Rust compiler, Advanced Routing, background dev server support, and structured logging.",
-    "image": "https://astro.build/_astro/og-astro-7.BAGlEZn4.jpg"
-  },
-  "https://developer.mozilla.org/ja/docs/Web/HTML/Reference/Elements/a#target": {
-    "title": "HTML <a> アンカー要素 - HTML | MDN",
-    "description": "<a> は HTML の要素（アンカー要素）で、href 属性を用いて、別のウェブページ、ファイル、メールアドレス、同一ページ内の場所、または他の URL へのハイパーリンクを作成します。",
-    "image": "https://developer.mozilla.org/mdn-social-image.46ac2375.png"
-  },
-  "https://developer.mozilla.org/ja/docs/Web/HTML/Reference/Attributes/rel": {
-    "title": "HTML rel 属性 - HTML | MDN",
-    "description": "rel 属性は、リンク先のリソースと現在の文書との関係を定義します。 <link>、<a>、<area>、<form> で有効で、対応する値は属性が見つかった要素に依存します。",
-    "image": "https://developer.mozilla.org/mdn-social-image.46ac2375.png"
-  },
-  "https://developer.mozilla.org/ja/docs/Web/HTML/Reference/Attributes/rel/noopener": {
-    "title": "rel=\"noopener\" - HTML | MDN",
-    "description": "noopener キーワードを rel 属性に指定すると、 <a>, <area>, <form> の各要素では、ターゲットリソースへ移動する際、開いた元の文書へのアクセスを新しい閲覧コンテキストに許可しないことをブラウザーに指示します。開かれたウィンドウの Window.opener プロパティプロパティは設定されません（null を返します）。",
-    "image": "https://developer.mozilla.org/mdn-social-image.46ac2375.png"
-  },
-  "https://tailwindcss.com/docs/margin#adding-vertical-margin": {
-    "title": "margin - Spacing",
-    "description": "Utilities for controlling an element&#x27;s margin.",
-    "image": "https://tailwindcss.com/api/og?path=/docs/margin"
   }
 }
