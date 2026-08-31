@@ -4,8 +4,9 @@ import { mkdtempSync, writeFileSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createServer } from "node:http";
-import { markdownToHtml } from "satteri";
-import { createLinkCardPlugin, domainOf } from "./link-cards.mjs";
+import { markdownToHtml, defineMdastPlugin } from "satteri";
+import { createLinkCardPlugin, domainOf, findParagraphCardUrls } from "./link-cards.mjs";
+import { SITE_ORIGIN } from "./ogp-fetch.mjs";
 
 // ネットワークに一切触れないはずの経路で万一fetchが試みられた場合に，
 // 実サーバーへの誤アクセスやタイムアウト待ちを避けるため，即座に接続拒否される
@@ -197,4 +198,66 @@ test("対象外の段落: インラインリンクやhttp(s)以外のリンク�
     });
     assert.doesNotMatch(mailto.html, /card sm:card-side/);
   });
+});
+
+test("ルート相対リンク: 単独行なら自サイトのカードになり，targetは付かない", async () => {
+  await withTempCacheDir(async (cachePath) => {
+    const absolute = `${SITE_ORIGIN}/blog/xxx/`;
+    writeFileSync(
+      cachePath,
+      JSON.stringify({
+        [absolute]: { title: "自サイト記事タイトル", description: null, image: null },
+      }),
+    );
+
+    const plugin = createLinkCardPlugin({ cachePath });
+    const { html } = await markdownToHtml("[過去記事](/blog/xxx/)", { mdastPlugins: [plugin] });
+
+    assert.match(html, /card sm:card-side/);
+    assert.match(html, /自サイト記事タイトル/);
+    // キャッシュキーもhrefも絶対URLに正規化される（キャッシュヒットしている＝fetchは走っていない）
+    assert.ok(html.includes(`href="${absolute}"`), `absolute hrefが出力されていない: ${html}`);
+    // 自サイトなので同タブ遷移のまま
+    assert.doesNotMatch(html, /target="_blank"/);
+  });
+});
+
+test("対象外の相対参照: インラインの相対リンク・ページ内アンカー・プロトコル相対はカード化されない", async () => {
+  await withTempCacheDir(async (cachePath) => {
+    writeFileSync(cachePath, "{}");
+    const plugin = createLinkCardPlugin({ cachePath });
+
+    const inline = await markdownToHtml("詳しくは[こちら](/blog/xxx/)を参照してください。", {
+      mdastPlugins: [plugin],
+    });
+    assert.doesNotMatch(inline.html, /card sm:card-side/);
+
+    // new URL()はベースを渡すと"#..."も解決してしまうため，"/"始まりに限定できているかの回帰テスト。
+    const anchor = await markdownToHtml("[脚注に戻る](#user-content-fn-1)", {
+      mdastPlugins: [plugin],
+    });
+    assert.doesNotMatch(anchor.html, /card sm:card-side/);
+
+    // "//"始まりは別サイトを指しうるので，自サイトのルート相対パスとして扱わない。
+    const protocolRelative = await markdownToHtml("[プロトコル相対](//example.com/foo)", {
+      mdastPlugins: [plugin],
+    });
+    assert.doesNotMatch(protocolRelative.html, /card sm:card-side/);
+  });
+});
+
+test("findParagraphCardUrls: ルート相対パスを絶対URLに正規化して返す（事前取得スクリプトの前提）", async () => {
+  const urls = [];
+  const collector = defineMdastPlugin({
+    name: "test-card-url-collector",
+    paragraph(node, ctx) {
+      urls.push(...findParagraphCardUrls(node, ctx));
+    },
+  });
+
+  await markdownToHtml("[過去記事](/blog/xxx/)\n\nhttps://example.com/foo", {
+    mdastPlugins: [collector],
+  });
+
+  assert.deepEqual(urls, [`${SITE_ORIGIN}/blog/xxx/`, "https://example.com/foo"]);
 });

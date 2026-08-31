@@ -15,9 +15,9 @@ series:
 
 前回の記事で，Sätteriのアーキテクチャとremark/rehypeとの違いを解説しました。その実践編として，今後何回かに分けて，実際にブログを育てていく過程で（バイブコーディングで）作成したSätteriプラグインを1本ずつ紹介していこうと思います。
 
-[Astro 7のデフォルトMarkdownエンジン「Sätteri」とは何か | 笶顔でかわす](https://yagaodekawasu.com/blog/astro-satteri-overview/)
+[Astro 7のデフォルトMarkdownエンジン「Sätteri」とは何か | 笶顔でかわす](/blog/astro-satteri-overview/)
 
-最初に作ったのは，本文中に単独で貼った外部リンクをOGPカード形式に変換する`mdastPlugin`でした。
+最初に作ったのは，本文中に単独で貼った外部リンクを:gloss[OGP]{term=OGP}カード形式に変換する`mdastPlugin`でした。
 
 ## やりたいこと
 

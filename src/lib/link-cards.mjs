@@ -24,13 +24,30 @@ function isHttpUrl(url) {
 }
 
 // 自サイト（SITE_ORIGIN）へのカードは同タブ遷移のままにしたいので，
-// target/rel属性はオリジンが自サイトと異なる場合だけ付与する。
+// target属性はオリジンが自サイトと異なる場合だけ付与する。
 function isExternalUrl(url) {
   try {
     return new URL(url).origin !== SITE_ORIGIN;
   } catch {
     return false;
   }
+}
+
+// カード化対象のURL判定。絶対URL（http/https）に加えて，自サイト内リンク用にルート相対パスも
+// 受け付ける。自サイトを絶対URLで書かなくて済むようにするためで，こうしておくと地の文の
+// 外部リンク判定（external-links.mjs）が「絶対URLかどうか」だけで済む。
+// "//example.com"はプロトコル相対＝別サイトを指しうるので従来通り対象外にする。
+function isCardEligibleUrl(url) {
+  if (url.startsWith("/")) return !url.startsWith("//");
+  return isHttpUrl(url);
+}
+
+// キャッシュキー・OGP取得・ドメイン表示・target判定はいずれも絶対URLを前提にしているので，
+// カード化すると決まった時点でここに寄せる。以降の処理は相対パスの存在を知らなくてよい。
+// new URL()はベースを渡すと"#anchor"や"./foo"まで解決してしまうため，"/"始まりの判定
+// （isCardEligibleUrl）を通ったURLにだけ適用すること。
+function toAbsoluteUrl(url) {
+  return url.startsWith("/") ? new URL(url, SITE_ORIGIN).href : url;
 }
 
 export function domainOf(url) {
@@ -57,13 +74,14 @@ function isCardEligibleParent(parent) {
 function findCardLink(node, ctx) {
   if (node.children?.length !== 1) return null;
   const child = node.children[0];
-  if (child.type !== "link" || !isHttpUrl(child.url)) return null;
+  if (child.type !== "link" || !isCardEligibleUrl(child.url)) return null;
   if (!isCardEligibleParent(ctx.parent(node))) return null;
   return child;
 }
 
 export function findCardUrl(node, ctx) {
-  return findCardLink(node, ctx)?.url ?? null;
+  const link = findCardLink(node, ctx);
+  return link ? toAbsoluteUrl(link.url) : null;
 }
 
 // リンクノードの表示テキストを再帰的に平文化する。og:titleが取得できなかった場合の
@@ -109,12 +127,13 @@ function lineCardLink(lineNodes) {
   const meaningful = lineNodes.filter((n) => !(n.type === "text" && n.value.trim() === ""));
   if (meaningful.length !== 1) return null;
   const only = meaningful[0];
-  if (only.type !== "link" || !isHttpUrl(only.url)) return null;
+  if (only.type !== "link" || !isCardEligibleUrl(only.url)) return null;
   return only;
 }
 
 function lineCardUrl(lineNodes) {
-  return lineCardLink(lineNodes)?.url ?? null;
+  const link = lineCardLink(lineNodes);
+  return link ? toAbsoluteUrl(link.url) : null;
 }
 
 // 段落全体がリンク単体のケース（findCardUrl）に加え、他のテキストと同じ段落内でも
@@ -204,10 +223,11 @@ export function createLinkCardPlugin({ cachePath = DEFAULT_CACHE_PATH } = {}) {
     async paragraph(node, ctx) {
       const link = findCardLink(node, ctx);
       if (link) {
-        await ensureCardMeta(link.url);
+        const url = toAbsoluteUrl(link.url);
+        await ensureCardMeta(url);
         ctx.replaceNode(node, {
           type: "html",
-          value: renderCardHtml(link.url, getCache(), linkNodeText(link)),
+          value: renderCardHtml(url, getCache(), linkNodeText(link)),
         });
         return;
       }
@@ -220,7 +240,7 @@ export function createLinkCardPlugin({ cachePath = DEFAULT_CACHE_PATH } = {}) {
       if (!links.some((l) => l != null)) return;
 
       for (const l of links) {
-        if (l) await ensureCardMeta(l.url);
+        if (l) await ensureCardMeta(toAbsoluteUrl(l.url));
       }
       const cache = getCache();
       const replacements = [];
@@ -228,7 +248,7 @@ export function createLinkCardPlugin({ cachePath = DEFAULT_CACHE_PATH } = {}) {
         if (links[i]) {
           replacements.push({
             type: "html",
-            value: renderCardHtml(links[i].url, cache, linkNodeText(links[i])),
+            value: renderCardHtml(toAbsoluteUrl(links[i].url), cache, linkNodeText(links[i])),
           });
         } else if (lineHasContent(lines[i])) {
           replacements.push({ type: "paragraph", children: lines[i] });

@@ -14,11 +14,11 @@ series:
 
 前回の記事では，`defineMdastPlugin`を使って本文中の単独リンクをOGPカードに変換するプラグイン実装した話をしました。
 
-[SätteriのプラグインAPIで外部リンクをカード化する | 笶顔でかわす](https://yagaodekawasu.com/blog/astro-satteri-plugin-link-card/)
+[SätteriのプラグインAPIで外部リンクをカード化する | 笶顔でかわす](/blog/astro-satteri-plugin-link-card/)
 
 それに続いて，今回は↓この記事を書くために実装した数式をレンダリングするプラグインの話をしようと思います。
 
-[調乳ヘルパーの計算式解説① | 笶顔でかわす](https://yagaodekawasu.com/blog/formula-mixing-ratio-specific-heat-sources/)
+[調乳ヘルパーの計算式解説① | 笶顔でかわす](/blog/formula-mixing-ratio-specific-heat-sources/)
 
 Sätteri向けにKaTeXレンダリングを行うコミュニティ製プラグインもあるにはあるものの実績（GitHubリポジトリのスター数とか）が薄く，且つKaTeXでのレンダリング処理自体は`katex`パッケージを使うだけで完結するシンプルな処理なので，外部依存を1つ増やすコストには見合わないなーと思い，結局自前で実装することにしました。
 
@@ -52,7 +52,7 @@ TeXとLaTexの違いについては↓こちらが参考になりました。
 
 「Sätteriとは」の記事で見たように，レンダリングする時はまずRustでマークダウンをパースしてASTを作り，そのASTのノードを各プラグインに渡して処理していくという仕組みなので，プラグインが数式を処理するためには，パーサーが数式を数式としてパース出来る必要があります。
 
-[Astro 7のデフォルトMarkdownエンジン「Sätteri」とは何か | 笶顔でかわす](https://yagaodekawasu.com/blog/astro-satteri-overview/)
+[Astro 7のデフォルトMarkdownエンジン「Sätteri」とは何か | 笶顔でかわす](/blog/astro-satteri-overview/)
 
 「数式なんてみんな使ってる（認知の歪み）し，特別な設定とか要らないっしょ」なんて思ってたんですが，実際は`features.math`という組み込みオプションを有効化しないと`$$ ... $$`（ディスプレイ数式）や`$ ... $`（インライン数式）といった記法をパースしてくれない仕様になっていました。オプションの設定方法は↓こんな感じです。
 
