@@ -27,3 +27,6 @@ pnpm-debug.log*
 test-results/
 playwright-report/
 blob-report/
+
+# 動作確認用のスクラッチ置き場
+.tmp/
