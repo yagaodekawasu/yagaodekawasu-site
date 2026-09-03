@@ -6,7 +6,6 @@ import sitemap from '@astrojs/sitemap';
 import { satteri } from '@astrojs/markdown-satteri';
 import { linkCardPlugin } from './src/lib/link-cards.mjs';
 import { externalLinkPlugin } from './src/lib/external-links.mjs';
-import { footnoteLabelPlugin } from './src/lib/footnote-label.mjs';
 import { mathPlugin } from './src/lib/math.mjs';
 import { calloutPlugin } from './src/lib/callout.mjs';
 import { imageCaptionPlugin } from './src/lib/image-caption.mjs';
@@ -22,8 +21,14 @@ export default defineConfig({
   markdown: {
     processor: satteri({
       mdastPlugins: [linkCardPlugin, mathPlugin, calloutPlugin, imageCaptionPlugin, glossaryPlugin],
-      hastPlugins: [externalLinkPlugin, footnoteLabelPlugin],
-      features: { math: true, directive: true }
+      hastPlugins: [externalLinkPlugin],
+      // 脚注セクションの見出しはremark-rehype由来の既定値「Footnotes」が入るため，
+      // Sätteri組み込みのi18nオプションで日本語に差し替える。
+      features: {
+        math: true,
+        directive: true,
+        gfm: { footnotes: { label: '注釈' } }
+      }
     })
   },
   vite: {
