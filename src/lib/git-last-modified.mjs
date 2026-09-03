@@ -6,14 +6,19 @@ import { execFileSync } from "node:child_process";
 // から自前でパスを組み立てると変換後の解決先がずれることがあるため，Astro側が計算済みの
 // パスをそのまま使う。git履歴が取れない環境（shallow clone等）でもビルドを壊さないよう，
 // 失敗時はnullを返し呼び出し側でpubDateのみの表示にフォールバックさせる。
+//
+// コミットが1件しかない記事はnullを返す。初回コミットは定義上「更新」ではないため，
+// pubDateより後の日付でコミットしただけの新規記事に更新日が付くのを防ぐ。
 export function getGitLastModified(filePath) {
   try {
     const output = execFileSync(
       "git",
-      ["log", "-1", "--format=%aI", "--", filePath],
+      ["log", "--format=%aI", "--", filePath],
       { cwd: process.cwd(), encoding: "utf-8" },
     ).trim();
-    return output ? new Date(output) : null;
+    if (!output) return null;
+    const dates = output.split("\n");
+    return dates.length >= 2 ? new Date(dates[0]) : null;
   } catch {
     return null;
   }

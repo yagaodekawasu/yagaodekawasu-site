@@ -1,7 +1,7 @@
 ---
 title: "Astro + Tailwindで脚注を書いたら勝手に「Footnotes」と出る"
 description: Astro 7のMarkdownエンジンSätteriで脚注を書くと，本来は非表示のはずの「Footnotes」という英語見出しが表示されてしまう問題の原因と対処についての記事です。
-pubDate: 2026-09-01
+pubDate: 2026-09-03
 tags: [Astro, Sätteri, Markdown, Tailwind CSS]
 ogpImage: /uploads/astro-tailwind-footnotes-label-visible-ogp.png
 draft: false
