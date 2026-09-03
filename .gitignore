@@ -30,3 +30,7 @@ blob-report/
 
 # 動作確認用のスクラッチ置き場
 .tmp/
+
+# AIコーディングエージェント向けの指示書（CLAUDE.mdはAGENTS.mdへのシンボリックリンク）
+AGENTS.md
+CLAUDE.md
